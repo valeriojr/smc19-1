@@ -9,15 +9,15 @@ function updateElementIndex(el, prefix, ndx) {
 function cloneMore(selector, prefix) {
     var newElement = $(selector).clone(true);
     var total = $("#id_" + prefix + "-TOTAL_FORMS").val();
-    newElement.find(":input:not([type=button]):not([type=submit]):not([type=reset])").each(function() {
-        if($(this).attr("name") === "csrfmiddlewaretoken"){
+    newElement.find(":input:not([type=button]):not([type=submit]):not([type=reset])").each(function () {
+        if ($(this).attr("name") === "csrfmiddlewaretoken") {
             return;
         }
-        var name = $(this).attr('name').replace('-' + (total-1) + '-', '-' + total + '-');
+        var name = $(this).attr('name').replace('-' + (total - 1) + '-', '-' + total + '-');
         var id = 'id_' + name;
         $(this).attr({'name': name, 'id': id}).val('').removeAttr('checked');
     });
-    newElement.find('label').each(function() {
+    newElement.find('label').each(function () {
         var forValue = $(this).attr('for');
         if (forValue) {
             forValue = forValue.replace('-' + (total - 1) + '-', '-' + total + '-');
