@@ -5,55 +5,60 @@ function updateElementIndex(el, prefix, ndx) {
     if (el.id) el.id = el.id.replace(id_regex, replacement);
     if (el.name) el.name = el.name.replace(id_regex, replacement);
 }
+
 function cloneMore(selector, prefix) {
     var newElement = $(selector).clone(true);
     var total = $("#id_" + prefix + "-TOTAL_FORMS").val();
-    newElement.find(":input:not([type=button]):not([type=submit]):not([type=reset])").each(function() {
-        if($(this).attr("name") === "csrfmiddlewaretoken"){
+    newElement.find(":input:not([type=button]):not([type=submit]):not([type=reset])").each(function () {
+        if ($(this).attr("name") === "csrfmiddlewaretoken") {
             return;
         }
-        var name = $(this).attr('name').replace('-' + (total-1) + '-', '-' + total + '-');
+        var name = $(this).attr('name').replace('-' + (total - 1) + '-', '-' + total + '-');
         var id = 'id_' + name;
         $(this).attr({'name': name, 'id': id}).val('').removeAttr('checked');
     });
-    newElement.find('label').each(function() {
+    newElement.find('label').each(function () {
         var forValue = $(this).attr('for');
         if (forValue) {
-          forValue = forValue.replace('-' + (total-1) + '-', '-' + total + '-');
-          $(this).attr({'for': forValue});
+            forValue = forValue.replace('-' + (total - 1) + '-', '-' + total + '-');
+            $(this).attr({'for': forValue});
         }
     });
     total++;
     $('#id_' + prefix + '-TOTAL_FORMS').val(total);
     $(selector).after(newElement);
     var conditionRow = $('.form-row:not(:last)');
-    conditionRow.find('.btn.add-form-row')
-    .removeClass('btn-success').addClass('btn-danger')
-    .removeClass('add-form-row').addClass('remove-form-row')
-    .html('<span class="" aria-hidden="true">-</span>');
+    conditionRow.find('.btn.' + prefix + '-add-form-row')
+        .removeClass('btn-success').addClass('btn-danger')
+        .removeClass(prefix + '-add-form-row').addClass(prefix + '-remove-form-row')
+        .html('<span class="" aria-hidden="true">-</span>');
     return false;
 }
+
 function deleteForm(prefix, btn) {
     var total = parseInt($('#id_' + prefix + '-TOTAL_FORMS').val());
-    if (total > 1){
-        btn.closest('.form-row').remove();
+    if (total > 1) {
+        btn.closest('.' + prefix + '-form-row').remove();
         var forms = $('.form-row');
         $('#id_' + prefix + '-TOTAL_FORMS').val(forms.length);
-        for (var i=0, formCount=forms.length; i<formCount; i++) {
-            $(forms.get(i)).find(':input').each(function() {
+        for (var i = 0, formCount = forms.length; i < formCount; i++) {
+            $(forms.get(i)).find(':input').each(function () {
                 updateElementIndex(this, prefix, i);
             });
         }
     }
     return false;
 }
-$(document).on('click', '.add-form-row', function(e){
-    e.preventDefault();
-    cloneMore('.form-row:last', formPrefix);
-    return false;
-});
-$(document).on('click', '.remove-form-row', function(e){
-    e.preventDefault();
-    deleteForm(formPrefix, $(this));
-    return false;
-});
+
+function setupDynamicFormset(formPrefix) {
+    $(document).on('click', '.' + formPrefix + '-add-form-row', function (e) {
+        e.preventDefault();
+        cloneMore('.' + formPrefix + '-form-row:last', formPrefix);
+        return false;
+    });
+    $(document).on('click', '.' + formPrefix + '-remove-form-row', function (e) {
+        e.preventDefault();
+        deleteForm(formPrefix, $(this));
+        return false;
+    });
+}

@@ -48,15 +48,13 @@ symptoms = [
 ]
 
 intensities = [
-    ('L', 'Baixa'),
-    ('M', 'Média'),
-    ('H', 'Alta'),
+    ('L', 'Leve'),
+    ('M', 'Moderada'),
+    ('H', 'Grave'),
 ]
 
 comorbidities = [
-    ('H', 'Doença arterial coronariana'),
-    ('A', 'Fibrilação atrial'),
-    ('S', 'AVC'),
+    ('H', 'Doença cardíacas'),
     ('T', 'Hipertensão'),
     ('D', 'Diabetes'),
     ('E', 'Demência'),
@@ -64,4 +62,17 @@ comorbidities = [
     ('N', 'Câncer'),
     ('L', 'Doença crônica no fígado'),
     ('R', 'Doença renal crônica'),
+    ('A', 'Asma'),
+    ('P', 'Doença pulmonar crônica'),
+    ('R', 'Doenças reumáticas'),
+    ('O', 'Outras doenças')
+]
+
+drugs = [
+    ('', 'Anti hipertensivo'),
+    ('', 'Imunossupressores'),
+    ('', 'Anti diabéticos'),
+    ('', 'Antibióticos'),
+    ('', 'Corticoide'),
+    ('', 'Anti inflamatório')
 ]

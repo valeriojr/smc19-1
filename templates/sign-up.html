@@ -7,44 +7,77 @@
     <form id="sign-up-form" method="post">
         {% csrf_token %}
         <h5 class="row-col">Dados pessoais</h5>
+        {{ form|crispy }}
 
         <div class="row">
-            <div class="col-5">{{ form.first_name|as_crispy_field }}</div>
-            <div class="col">{{ form.last_name|as_crispy_field }}</div>
+            <h5 class="col-9">Endereços</h5>
+            <div id="add-address" class="btn btn-success col-3">Adicionar</div>
         </div>
-
-        <div class="row">
-            <div class="col">{{ form.cpf|as_crispy_field }}</div>
-        </div>
-
-        <div class="row">
-            <div class="col">{{ form.birth_date|as_crispy_field }}</div>
-            <div class="col">{{ form.gender|as_crispy_field }}</div>
-        </div>
-
-        <div class="row">
-            <div class="col">{{ form.username|as_crispy_field }}</div>
-            <div class="col">{{ form.password|as_crispy_field }}</div>
-        </div>
-
-        <h5 class="row-col">Endereço</h5>
-
         {{ address_form.management_form }}
-        {% for form in address_form %}
-            <div class="row">
-                <div class="col-lg form-row">
-                    {% crispy form %}
-                    <button type="button" class="btn btn-success add-form-row">+</button>
-                </div>
+        <div id="addresses" class="row">
+            <div class="form-group col">
+                {{ address_form.empty_form|crispy }}
             </div>
-        {% endfor %}
+        </div>
 
         <div class="row">
+            <h5 class="col-9">Viagens recentes</h5>
+            <div id="add-trip" class="col-3 btn btn-success ">Adicionar</div>
+        </div>
+        {{ trip_form.management_form }}
+        <div id="trips" class="row form-group">
+        </div>
+
+        <div class="row">
+            <h5 class="col-9">Sintomas</h5>
+            <div id="add-symptom" class="col-3 btn btn-success ">Adicionar</div>
+        </div>
+        {{ symptom_form.management_form }}
+        <div id="symptoms" class="row-col form-group">
+        </div>
+
+        <div class="row justify-content-center form-group">
             <div class="col-4">
                 <input type="submit" form="sign-up-form" class="btn btn-success" value="Cadastrar"/>
             </div>
         </div>
     </form>
-    <script>const formPrefix = "address_set";</script>
     <script src="{% static 'scripts/dynamic_formset.js' %}"></script>
+    <script>
+        $("#add-symptom").on("click", function () {
+            const totalForms = $("#id_symptom_set-TOTAL_FORMS");
+            const n = parseInt(totalForms.val()) + 1;
+            totalForms.val(n);
+            const form = '<div class="col-12">{{ symptom_form.empty_form|crispy|escapejs }}</div>';
+            $("#symptoms").append(form.replace(/__prefix__/g, '' + n));
+        });
+        $("#add-trip").on("click", function () {
+            const totalForms = $("#id_trip_set-TOTAL_FORMS");
+            const n = parseInt(totalForms.val()) + 1;
+            totalForms.val(n);
+            const form = '<div class="col-12">{{ trip_form.empty_form|crispy|escapejs }}</div>';
+            $("#trips").append(form.replace(/__prefix__/g, '' + n));
+        });
+        $("#add-address").on("click", function () {
+            const totalForms = $("#id_address_set-TOTAL_FORMS");
+            const n = parseInt(totalForms.val()) + 1;
+            totalForms.val(n);
+            const form = '<div class="col-12">{{ address_form.empty_form|crispy|escapejs }}</div>';
+            $("#addresses").append(form.replace(/__prefix__/g, '' + n));
+        });
+    </script>
 {% endblock %}
+
+<div class="col">
+    <div class="row">
+        <div class="col">{{ form.symptom|as_crispy_field }}</div>
+        <div class="col">{{ form.intensity|as_crispy_field }}</div>
+        <div class="col">{{ form.onset|as_crispy_field }}</div>
+    </div>
+
+    <div class="row">
+        <div class="col">
+            <button type="button" class="btn btn-success symptom_form-add-form-row">Adicionar sintoma</button>
+        </div>
+    </div>
+</div>
