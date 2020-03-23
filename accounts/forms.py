@@ -26,3 +26,4 @@ SymptomFormset = inlineformset_factory(models.Profile, models.Symptom, fields='_
                                        widgets={
                                            'onset': forms.DateInput(attrs={'type': 'date'})
                                        })
+ComorbidityFormset = inlineformset_factory(models.Profile, models.Comorbidity, fields='__all__', extra=0, can_delete=False)

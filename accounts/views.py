@@ -20,10 +20,12 @@ class SignUp(generic.CreateView):
             context['address_form'] = forms.AddressFormset(self.request.POST, instance=self.object)
             context['trip_form'] = forms.TripFormset(self.request.POST, instance=self.object)
             context['symptom_form'] = forms.SymptomFormset(self.request.POST, instance=self.object)
+            context['comorbidity_form'] = forms.ComorbidityFormset(self.request.POST, instance=self.object)
         else:
             context['address_form'] = forms.AddressFormset()
             context['trip_form'] = forms.TripFormset()
             context['symptom_form'] = forms.SymptomFormset()
+            context['comorbidity_form'] = forms.ComorbidityFormset()
 
         return context
 
@@ -33,8 +35,9 @@ class SignUp(generic.CreateView):
         address_formset = context['address_form']
         trip_formset = context['trip_form']
         symptom_formset = context['symptom_form']
+        comorbidity_formset = context['comorbidity_form']
 
-        if form.is_valid() and address_formset.is_valid() and trip_formset.is_valid():
+        if form.is_valid() and address_formset.is_valid() and trip_formset.is_valid() and comorbidity_formset.is_valid():
             self.object = form.save(commit=False)
             self.object.set_password(form.cleaned_data['password'])
             self.object.save()
@@ -53,6 +56,11 @@ class SignUp(generic.CreateView):
             for symptom in symptoms:
                 symptom.profile = self.object
                 symptom.save()
+
+            comorbidities = comorbidity_formset.save(commit=False)
+            for comorbidity in comorbidities:
+                comorbidity.profile = self.object
+                comorbidity.save()
 
         messages.success(self.request, form.errors)
 

@@ -36,6 +36,14 @@
         <div id="symptoms" class="row-col form-group">
         </div>
 
+        <div class="row">
+            <h5 class="col-9">Comorbidades</h5>
+            <div id="add-comorbidity" class="col-3 btn btn-success">Adicionar</div>
+        </div>
+        {{ comorbidity_form.management_form }}
+        <div id="comorbidities" class="row-col form-group">
+        </div>
+
         <div class="row justify-content-center form-group">
             <div class="col-4">
                 <input type="submit" form="sign-up-form" class="btn btn-success" value="Cadastrar"/>
@@ -64,6 +72,13 @@
             totalForms.val(n);
             const form = '<div class="col-12">{{ address_form.empty_form|crispy|escapejs }}</div>';
             $("#addresses").append(form.replace(/__prefix__/g, '' + n));
+        });
+        $("#add-comorbidity").on("click", function () {
+            const totalForms = $("#id_comorbidity_set-TOTAL_FORMS");
+            const n = parseInt(totalForms.val()) + 1;
+            totalForms.val(n);
+            const form = '<div class="col-12">{{ comorbidity_form.empty_form|crispy|escapejs }}</div>';
+            $("#comorbidities").append(form.replace(/__prefix__/g, '' + n));
         });
     </script>
 {% endblock %}
