@@ -1,0 +1,1 @@
+web: gunicorn smc19.wsgi
