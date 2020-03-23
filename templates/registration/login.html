@@ -1,0 +1,22 @@
+{% extends 'base.html' %}
+
+{% load crispy_forms_tags %}
+
+{% block content %}
+    <div class="container">
+        <form method="post" class="row-col">
+            {% csrf_token %}
+            <div class="row justify-content-center">
+                <div class="col-8">
+                    {{ form|crispy }}
+                </div>
+            </div>
+            <div class="row justify-content-center">
+                <div class="col-8 row justify-content-between">
+                    <button type="submit" class="col-4 btn btn-success">Entrar</button>
+                    <a href="{% url 'accounts:sign-up' %}" class="col-4 align-middle">Cadastro</a>
+                </div>
+            </div>
+        </form>
+    </div>
+{% endblock %}
