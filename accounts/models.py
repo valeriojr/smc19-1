@@ -20,7 +20,6 @@ class Profile(AbstractUser):
     gender = models.CharField(verbose_name='Sexo', max_length=1, choices=choices.genders, blank=True, default='')
     phone_number = models.CharField(verbose_name='Número de telefone', max_length=11, blank=True, default='')
 
-    REQUIRED_FIELDS = ['password1', 'password2']
     USERNAME_FIELD = 'cpf'
 
     def __str__(self):
