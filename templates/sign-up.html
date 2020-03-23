@@ -1,0 +1,50 @@
+{% extends 'base.html' %}
+
+{% load static %}
+{% load crispy_forms_tags %}
+
+{% block content %}
+    <form id="sign-up-form" method="post">
+        {% csrf_token %}
+        <h5 class="row-col">Dados pessoais</h5>
+
+        <div class="row">
+            <div class="col-5">{{ form.first_name|as_crispy_field }}</div>
+            <div class="col">{{ form.last_name|as_crispy_field }}</div>
+        </div>
+
+        <div class="row">
+            <div class="col">{{ form.cpf|as_crispy_field }}</div>
+        </div>
+
+        <div class="row">
+            <div class="col">{{ form.birth_date|as_crispy_field }}</div>
+            <div class="col">{{ form.gender|as_crispy_field }}</div>
+        </div>
+
+        <div class="row">
+            <div class="col">{{ form.username|as_crispy_field }}</div>
+            <div class="col">{{ form.password|as_crispy_field }}</div>
+        </div>
+
+        <h5 class="row-col">Endereço</h5>
+
+        {{ address_form.management_form }}
+        {% for form in address_form %}
+            <div class="row">
+                <div class="col-lg form-row">
+                    {% crispy form %}
+                    <button type="button" class="btn btn-success add-form-row">+</button>
+                </div>
+            </div>
+        {% endfor %}
+
+        <div class="row">
+            <div class="col-4">
+                <input type="submit" form="sign-up-form" class="btn btn-success" value="Cadastrar"/>
+            </div>
+        </div>
+    </form>
+    <script>const formPrefix = "address_set";</script>
+    <script src="{% static 'scripts/dynamic_formset.js' %}"></script>
+{% endblock %}
