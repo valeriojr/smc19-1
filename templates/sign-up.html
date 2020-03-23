@@ -1,7 +1,7 @@
 {% extends 'base.html' %}
 
 {% load static %}
-{% load crispy_forms_tags %}
+{% load crispy_forms_filters %}
 
 {% block content %}
     <form id="sign-up-form" method="post">
@@ -37,7 +37,7 @@
         </div>
 
         <div class="row">
-            <h5 class="col-9">Comorbidades</h5>
+            <h5 class="col-9">Outras doenças</h5>
             <div id="add-comorbidity" class="col-3 btn btn-success">Adicionar</div>
         </div>
         {{ comorbidity_form.management_form }}

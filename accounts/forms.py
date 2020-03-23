@@ -16,14 +16,33 @@ class ProfileCreationForm(forms.ModelForm):
     field_order = ['cpf', 'password', 'full_name', 'mother_name']
 
 
-AddressFormset = inlineformset_factory(models.Profile, models.Address, fields='__all__', extra=1, can_delete=False)
-TripFormset = inlineformset_factory(models.Profile, models.Trip, fields='__all__', extra=0, can_delete=False,
+AddressFormset = inlineformset_factory(models.Profile,
+                                       models.Address,
+                                       fields='__all__',
+                                       extra=1,
+                                       can_delete=False)
+
+TripFormset = inlineformset_factory(models.Profile,
+                                    models.Trip,
+                                    fields='__all__',
+                                    extra=0,
+                                    can_delete=False,
                                     widgets={
                                         'departure_date': forms.DateInput(attrs={'type': 'date'}),
                                         'return_date': forms.DateInput(attrs={'type': 'date'})
                                     })
-SymptomFormset = inlineformset_factory(models.Profile, models.Symptom, fields='__all__', extra=0, can_delete=False,
+
+SymptomFormset = inlineformset_factory(models.Profile,
+                                       models.Symptom,
+                                       fields='__all__',
+                                       extra=0,
+                                       can_delete=False,
                                        widgets={
                                            'onset': forms.DateInput(attrs={'type': 'date'})
                                        })
-ComorbidityFormset = inlineformset_factory(models.Profile, models.Comorbidity, fields='__all__', extra=0, can_delete=False)
+
+ComorbidityFormset = inlineformset_factory(models.Profile,
+                                           models.Comorbidity,
+                                           fields='__all__',
+                                           extra=0,
+                                           can_delete=False)
