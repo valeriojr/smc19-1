@@ -21,6 +21,10 @@
     <orderEntry type="library" name="d3-geo.v1" level="application" />
     <orderEntry type="library" name="d3-array.v1" level="application" />
     <orderEntry type="library" name="d3-geo-projection.v2" level="application" />
+    <orderEntry type="library" name="d3" level="application" />
+    <orderEntry type="library" name="inputmask" level="application" />
+    <orderEntry type="library" name="jquery.inputmask.bundle" level="application" />
+    <orderEntry type="library" name="jquery.mask" level="application" />
   </component>
   <component name="TemplatesService">
     <option name="TEMPLATE_CONFIGURATION" value="Django" />

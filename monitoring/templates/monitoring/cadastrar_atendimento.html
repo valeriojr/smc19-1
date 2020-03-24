@@ -1,0 +1,70 @@
+{% extends 'base.html' %}
+
+{% load static %}
+{% load crispy_forms_filters %}
+
+{% block content %}
+    <form id="sign-up-form" method="post">
+        {% csrf_token %}
+
+
+    </form>
+
+    <script src="{% static 'dynamic_formsets/jquery.formset.js' %}" type="text/javascript"></script>
+
+    <script>
+        function addressQuery(row, formCount) {
+            const input = $(this);
+            const maxlength = parseInt(input.attr('maxlength'));
+
+            if (maxlength === input.val().length) {
+                console.log("Consultando CEP...");
+                var xhr = new XMLHttpRequest();
+                xhr.open("GET", "http://cep.la/" + input.val(), true);
+                xhr.setRequestHeader("Accept", "application/json");
+                xhr.onreadystatechange = function () {
+                    if ((xhr.readyState === 0 || xhr.readyState === 4) && xhr.status === 200) {
+                        const response = JSON.parse(xhr.responseText);
+                        console.log(xhr.responseText);
+                        let prefix, id;
+
+                        prefix = input.attr("id").split("-")[0];
+                        id = input.attr("id").split("-")[1];
+
+                        console.log(prefix, " ", id);
+
+                        $(`#${prefix}-${id}-street_name`).val(response.logradouro);
+                        $(`#${prefix}-${id}-neighbourhood`).val(response.bairro);
+                        $(`#${prefix}-${id}-city`).val(response.cidade);
+                    }
+                };
+                xhr.send(null);
+            }
+        }
+
+        $(".individual-form").formset({
+            prefix: "{{ address_formset.prefix }}",
+            callbacks: {
+                onAdd: function (row, formCount) {
+                    row = $(row);
+
+                    row.find("h6").html(`Endereço ${row.siblings().length + 1}`);
+                    row.find(".postal-code-field").on('input', addressQuery);
+                },
+                onRemove: function (row) {
+                    $(".dynamic-form").each(function (i, formRow) {
+                        $(formRow).find("h6").html(`Endereço ${i + 1}`);
+                    });
+                }
+            },
+            uiText: {
+                addPrompt: "Adicionar outro endereço",
+                removePrompt: "Remover"
+            }
+        });
+
+        $(document).ready(function () {
+            $(".postal-code-field").on('input', addressQuery);
+        });
+    </script>
+{% endblock %}
