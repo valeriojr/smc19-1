@@ -6,93 +6,70 @@
 {% block content %}
     <form id="sign-up-form" method="post">
         {% csrf_token %}
-        <h5 class="row-col">Dados pessoais</h5>
-        {{ form|crispy }}
-
-        <div class="row">
-            <h5 class="col-9">Endereços</h5>
-            <div id="add-address" class="btn btn-success col-3">Adicionar</div>
-        </div>
-        {{ address_form.management_form }}
-        <div id="addresses" class="row">
-            <div class="form-group col">
-                {{ address_form|crispy }}
+        <h5>Dados pessoais</h5>
+        <div>
+            <div class="form-row">
+                <div class="form-group col mb-0">{{ form.cpf|as_crispy_field }}</div>
+            </div>
+            <div class="form-row">
+                <div class="form-group col mb-0">{{ form.password|as_crispy_field }}</div>
+            </div>
+            <div class="form-row">
+                <div class="form-group col mb-0">{{ form.full_name|as_crispy_field }}</div>
+            </div>
+            <div class="form-row">
+                <div class="form-group col mb-0">{{ form.mother_name|as_crispy_field }}</div>
+            </div>
+            <div class="form-row">
+                <div class="form-group col-6 mb-0">{{ form.birth_date|as_crispy_field }}</div>
+                <div class="form-group col-6 mb-0">{{ form.gender|as_crispy_field }}</div>
+            </div>
+            <div class="form-row">
+                <div class="form-group col-6 mb-0">{{ form.sus_number|as_crispy_field }}</div>
+                <div class="form-group col-6 mb-0">{{ form.phone_number|as_crispy_field }}</div>
             </div>
         </div>
 
-        <div class="row">
-            <h5 class="col-9">Viagens recentes</h5>
-            <div id="add-trip" class="col-3 btn btn-success ">Adicionar</div>
-        </div>
-        {{ trip_form.management_form }}
-        <div id="trips" class="row form-group">
-        </div>
-
-        <div class="row">
-            <h5 class="col-9">Sintomas</h5>
-            <div id="add-symptom" class="col-3 btn btn-success ">Adicionar</div>
-        </div>
-        {{ symptom_form.management_form }}
-        <div id="symptoms" class="row-col form-group">
-        </div>
-
-        <div class="row">
-            <h5 class="col-9">Outras doenças</h5>
-            <div id="add-comorbidity" class="col-3 btn btn-success">Adicionar</div>
-        </div>
-        {{ comorbidity_form.management_form }}
-        <div id="comorbidities" class="row-col form-group">
-        </div>
-
-        <div class="row justify-content-center form-group">
-            <div class="col-4">
-                <input type="submit" form="sign-up-form" class="btn btn-success" value="Cadastrar"/>
+        <h5>Endereço</h5>
+        {{ address_formset.management_form }}
+        {% with address_form=address_formset.forms.0 %}
+            <div class="individual-form">
+                <div>
+                    <h6>Endereço 1</h6>
+                    {{ address_form.profile }}
+                    <div class="form-row">
+                        <div class="form-group col-6 mb-0">{{ address_form.type|as_crispy_field }}</div>
+                        <div class="form-group col-6 mb-0">{{ address_form.postal_code|as_crispy_field }}</div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group col-8 mb-0">{{ address_form.street_name|as_crispy_field }}</div>
+                        <div class="form-group col-4 mb-0">{{ address_form.number|as_crispy_field }}</div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group col-12 mb-0">{{ address_form.complement|as_crispy_field }}</div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group col-4 mb-0">{{ address_form.neighbourhood|as_crispy_field }}</div>
+                        <div class="form-group col-4 mb-0">{{ address_form.city|as_crispy_field }}</div>
+                        <div class="form-group col-4 mb-0">{{ address_form.people|as_crispy_field }}</div>
+                    </div>
+                </div>
             </div>
+        {% endwith %}
+        <div class="form-row justify-content-end">
+            <div class="form-group"><input type="submit" class="btn btn-primary" value="Cadastrar"></div>
         </div>
     </form>
-    <script src="{% static 'scripts/dynamic_formset.js' %}"></script>
+
+    <script src="{% static 'dynamic_formsets/jquery.formset.js' %}" type="text/javascript"></script>
+
     <script>
-        $("#add-symptom").on("click", function () {
-            const totalForms = $("#id_symptom_set-TOTAL_FORMS");
-            const n = parseInt(totalForms.val()) + 1;
-            totalForms.val(n);
-            const form = '<div class="col-12">{{ symptom_form.empty_form|crispy|escapejs }}</div>';
-            $("#symptoms").append(form.replace(/__prefix__/g, '' + n));
-        });
-        $("#add-trip").on("click", function () {
-            const totalForms = $("#id_trip_set-TOTAL_FORMS");
-            const n = parseInt(totalForms.val()) + 1;
-            totalForms.val(n);
-            const form = '<div class="col-12">{{ trip_form.empty_form|crispy|escapejs }}</div>';
-            $("#trips").append(form.replace(/__prefix__/g, '' + n));
-        });
-        $("#add-address").on("click", function () {
-            const totalForms = $("#id_address_set-TOTAL_FORMS");
-            const n = parseInt(totalForms.val()) + 1;
-            totalForms.val(n);
-            const form = '<div class="col-12">{{ address_form.empty_form|crispy|escapejs }}</div>';
-            $("#addresses").append(form.replace(/__prefix__/g, '' + n));
-        });
-        $("#add-comorbidity").on("click", function () {
-            const totalForms = $("#id_comorbidity_set-TOTAL_FORMS");
-            const n = parseInt(totalForms.val()) + 1;
-            totalForms.val(n);
-            const form = '<div class="col-12">{{ comorbidity_form.empty_form|crispy|escapejs }}</div>';
-            $("#comorbidities").append(form.replace(/__prefix__/g, '' + n));
+        $(".individual-form").formset({
+            prefix: "{{ address_formset.prefix }}",
+            uiText: {
+                addPrompt: "Adicionar outro endereço",
+                removePrompt: "Remover"
+            }
         });
     </script>
 {% endblock %}
-
-<div class="col">
-    <div class="row">
-        <div class="col">{{ form.symptom|as_crispy_field }}</div>
-        <div class="col">{{ form.intensity|as_crispy_field }}</div>
-        <div class="col">{{ form.onset|as_crispy_field }}</div>
-    </div>
-
-    <div class="row">
-        <div class="col">
-            <button type="button" class="btn btn-success symptom_form-add-form-row">Adicionar sintoma</button>
-        </div>
-    </div>
-</div>

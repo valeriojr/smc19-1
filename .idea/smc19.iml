@@ -18,6 +18,9 @@
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
+    <orderEntry type="library" name="d3-geo.v1" level="application" />
+    <orderEntry type="library" name="d3-array.v1" level="application" />
+    <orderEntry type="library" name="d3-geo-projection.v2" level="application" />
   </component>
   <component name="TemplatesService">
     <option name="TEMPLATE_CONFIGURATION" value="Django" />

@@ -5,7 +5,7 @@ from django.contrib.auth import mixins
 
 
 class Home(mixins.LoginRequiredMixin, mixins.UserPassesTestMixin, generic.TemplateView):
-    template_name = 'smcovid19/home.html'
+    template_name = 'monitoring/home.html'
 
     def test_func(self):
         return self.request.user is not None

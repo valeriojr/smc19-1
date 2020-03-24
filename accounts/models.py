@@ -14,6 +14,7 @@ class Profile(AbstractUser):
     first_name = None
     last_name = None
     cpf = models.CharField(verbose_name='CPF', max_length=11, unique=True)
+    sus_number = models.CharField(verbose_name='Cartão do SUS', max_length=15, blank=True, null=True)
     full_name = models.CharField(verbose_name='Nome completo', max_length=100, blank=True, default='')
     mother_name = models.CharField(verbose_name='Nome da mãe', max_length=100, blank=True, default='')
     birth_date = models.DateField(verbose_name='Data de nascimento', null=True, blank=True)
