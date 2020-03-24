@@ -40,8 +40,6 @@ class Account(AbstractUser):
 
 
 class Profile(models.Model):
-
-
     full_name = models.CharField(verbose_name='Nome completo', max_length=100, blank=True, default='')
     mother_name = models.CharField(verbose_name='Nome da mãe', max_length=100, blank=True, default='')
     birth_date = models.DateField(verbose_name='Data de nascimento', null=True, blank=True)
@@ -49,6 +47,7 @@ class Profile(models.Model):
     gender = models.CharField(verbose_name='Sexo', max_length=1, choices=choices.genders, blank=True, default='')
     phone_number = models.CharField(verbose_name='Número de telefone', max_length=11, blank=True, default='')
     vaccinated = models.BooleanField(verbose_name='Vacinado', blank=True, default=False)
+    oxygen = models.BooleanField(verbose_name='Já precisou de oxigênio', blank=True, default=False)
 
     def __str__(self):
         return self.full_name

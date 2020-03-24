@@ -3,5 +3,6 @@
 {% load static %}
 
 {% block content %}
+    <a class="btn btn-primary" href="{% url 'monitoring:new_profile' %}">Novo paciente</a>
     <a class="btn btn-primary" href="{% url 'monitoring:cadastrar_atendimento' %}">Nova consulta</a>
 {% endblock %}

@@ -6,8 +6,29 @@
 {% block content %}
     <form id="sign-up-form" method="post">
         {% csrf_token %}
+        {{ form|crispy }}
 
+        <h6>Sintomas</h6>
+        {{ symptom_formset.management_form }}
+        <div id="symptoms">
+            <div>{{ symptom_formset.empty_form|crispy }}</div>
+        </div>
 
+        <h6>Histórico de viagens</h6>
+        {{ trip_formset.management_form }}
+        <div id="trips">
+            <div>{{ trip_formset.empty_form|crispy }}</div>
+        </div>
+
+        <h6>Outras doenças</h6>
+        {{ comorbidity_formset.management_form }}
+        <div id="comorbidities">
+            <div>{{ comorbidity_formset.empty_form|crispy }}</div>
+        </div>
+
+        <div class="form-row">
+            <div class="form-group col"><input type="submit" class="btn btn-primary align-right" value="Salvar"></div>
+        </div>
     </form>
 
     <script src="{% static 'dynamic_formsets/jquery.formset.js' %}" type="text/javascript"></script>
@@ -42,29 +63,47 @@
             }
         }
 
-        $(".individual-form").formset({
-            prefix: "{{ address_formset.prefix }}",
-            callbacks: {
-                onAdd: function (row, formCount) {
-                    row = $(row);
-
-                    row.find("h6").html(`Endereço ${row.siblings().length + 1}`);
-                    row.find(".postal-code-field").on('input', addressQuery);
-                },
-                onRemove: function (row) {
-                    $(".dynamic-form").each(function (i, formRow) {
-                        $(formRow).find("h6").html(`Endereço ${i + 1}`);
-                    });
-                }
+        $.each([
+            {
+                selector: "#symptoms",
+                prefix: "{{ symptom_formset.prefix }}",
+                label: "Sintoma",
+                template: $.parseHTML("{{ symptom_formset.empty_form|crispy|escapejs }}")
             },
-            uiText: {
-                addPrompt: "Adicionar outro endereço",
-                removePrompt: "Remover"
+            {
+                selector: "#trips",
+                prefix: "{{ trip_formset.prefix }}",
+                label: "Viagens",
+                template: $.parseHTML("{{ trip_formset.empty_form|crispy|escapejs }}")
+            },
+            {
+                selector: "#comorbidities",
+                prefix: "{{ comorbidity_formset.prefix }}",
+                label: "Outras doenças",
+                template: $.parseHTML("{{ comorbidity_formset.empty_form|crispy|escapejs }}")
             }
-        });
+        ], function (i, d) {
+            $(d.selector).formset({
+                prefix: d.prefix,
+                allowEmptyFormset: true,
+                formCssClass: "dynamic-form-" + d.label[0],
+                callbacks: {
+                    onAdd: function (row, formCount) {
+                        row = $(row);
 
-        $(document).ready(function () {
-            $(".postal-code-field").on('input', addressQuery);
+                        row.find("h6").html(`${d.label} ${row.siblings().length + 1}`);
+                    },
+                    onRemove: function (row) {
+                        $(".dynamic-form-" + d.label).each(function (i, formRow) {
+                            $(formRow).find("h6").html(`${d.label} ${i + 1}`);
+                        });
+                    }
+                },
+                uiText: {
+                    addPrompt: "Adicionar",
+                    removePrompt: "Remover"
+                }
+            });
         });
     </script>
 {% endblock %}
