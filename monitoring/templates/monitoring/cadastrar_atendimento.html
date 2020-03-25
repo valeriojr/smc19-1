@@ -7,19 +7,19 @@
     <form id="sign-up-form" method="post">
         {% csrf_token %}
         {{ form|crispy }}
-
+        <hr>
         <h6>Sintomas</h6>
         {{ symptom_formset.management_form }}
         <div id="symptoms">
             <div>{{ symptom_formset.forms.0|crispy }}</div>
         </div>
-
+        <hr>
         <h6>Histórico de viagens</h6>
         {{ trip_formset.management_form }}
         <div id="trips">
             <div>{{ trip_formset.forms.0|crispy }}</div>
         </div>
-
+        <hr>
         <h6>Outras doenças</h6>
         {{ comorbidity_formset.management_form }}
         <div id="comorbidities">

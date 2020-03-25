@@ -17,7 +17,7 @@ class Trip(models.Model):
     atendimento = models.ForeignKey(Atendimento, models.CASCADE, default=1)
     departure_date = models.DateField(verbose_name='Ida', null=True, blank=True, default=None)
     return_date = models.DateField(verbose_name='Volta', null=True, blank=True, default=None)
-    country = models.CharField(verbose_name='País', max_length=3, choices=choices.countries, blank=True, default='')
+    country = models.CharField(verbose_name='País', max_length=3, choices=choices.countries, default='')
 
 
 class Symptom(models.Model):
@@ -29,4 +29,4 @@ class Symptom(models.Model):
 
 class Comorbidity(models.Model):
     atendimento = models.ForeignKey(Atendimento, models.CASCADE, default=1)
-    type = models.CharField(verbose_name='Tipo', max_length=1, choices=choices.comorbidities)
+    type = models.CharField(verbose_name='Tipo', max_length=1, choices=choices.comorbidities, default = '')
