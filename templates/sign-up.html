@@ -5,6 +5,7 @@
 
 {% block content %}
     <form id="sign-up-form" method="post">
+        {% csrf_token %}
         <div class="form-row">
             <div class="form-group col mb-0">{{ form.cpf|as_crispy_field }}</div>
         </div>
