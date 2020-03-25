@@ -62,7 +62,7 @@ class NewProfile(mixins.LoginRequiredMixin, generic.CreateView):
 
 
 class CadastrarAtendimento(mixins.LoginRequiredMixin, generic.CreateView):
-    form_class = forms.AtendimentoForm
+    form_class = forms.AtendimentoCreateForm
     success_url = reverse_lazy('monitoring:home')
     template_name = 'monitoring/cadastrar_atendimento.html'
 
