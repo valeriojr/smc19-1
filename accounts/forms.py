@@ -37,7 +37,7 @@ class AccountCreationForm(forms.ModelForm):
             raise ValidationError('O CPF deve conter exatamente 11 dígitos', code='invalid')
 
         # cpfs inválidos
-        for i in range(1, 10):
+        for i in range(10):
             if cpf == str(i) * 11:
                 raise ValidationError('CPF inválido', code='incorrect')
 
