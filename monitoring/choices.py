@@ -37,6 +37,7 @@ comorbidities = [
     ('A', 'Asma'),
     ('P', 'Doença pulmonar crônica'),
     ('R', 'Doenças reumáticas'),
+    ('B', 'Obesidade'),
     ('O', 'Outra')
 ]
 

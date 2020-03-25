@@ -29,4 +29,4 @@ class Symptom(models.Model):
 
 class Comorbidity(models.Model):
     atendimento = models.ForeignKey(Atendimento, models.CASCADE, default=1)
-    type = models.CharField(verbose_name='Tipo', max_length=1, choices=choices.comorbidities, blank=True)
+    type = models.CharField(verbose_name='Tipo', max_length=1, choices=choices.comorbidities)
