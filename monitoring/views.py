@@ -36,7 +36,6 @@ class NewProfile(mixins.LoginRequiredMixin, generic.CreateView):
 
         if  address_formset.is_valid():
             self.object = form.save(commit=False)
-            self.object.set_password(form.cleaned_data['password'])
             self.object.save()
 
             addresses = address_formset.save(commit=False)
@@ -44,7 +43,7 @@ class NewProfile(mixins.LoginRequiredMixin, generic.CreateView):
                 address.profile = self.object
                 address.save()
 
-            messages.success(self.request, 'Usuário %s cadastrado com sucesso!' % self.object.cpf)
+            messages.success(self.request, 'Paciente %s cadastrado com sucesso!' % self.object.full_name)
         else:
             messages.error(self.request, 'Não foi possível criar o usuário')
             for error in address_formset.errors.items():
