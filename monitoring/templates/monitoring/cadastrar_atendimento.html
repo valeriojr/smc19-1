@@ -11,19 +11,19 @@
         <h6>Sintomas</h6>
         {{ symptom_formset.management_form }}
         <div id="symptoms">
-            <div>{{ symptom_formset.empty_form|crispy }}</div>
+            <div>{{ symptom_formset.forms.0|crispy }}</div>
         </div>
 
         <h6>Histórico de viagens</h6>
         {{ trip_formset.management_form }}
         <div id="trips">
-            <div>{{ trip_formset.empty_form|crispy }}</div>
+            <div>{{ trip_formset.forms.0|crispy }}</div>
         </div>
 
         <h6>Outras doenças</h6>
         {{ comorbidity_formset.management_form }}
         <div id="comorbidities">
-            <div>{{ comorbidity_formset.empty_form|crispy }}</div>
+            <div>{{ comorbidity_formset.forms.0|crispy }}</div>
         </div>
 
         <div class="form-row">

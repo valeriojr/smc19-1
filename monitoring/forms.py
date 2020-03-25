@@ -13,8 +13,8 @@ class AtendimentoForm(forms.ModelForm):
         }
 
 
-SymptomInlineFormset = inlineformset_factory(models.Atendimento, models.Symptom, fields='__all__', extra=0)
+SymptomInlineFormset = inlineformset_factory(models.Atendimento, models.Symptom, fields='__all__', extra=1)
 
-TripInlineFormset = inlineformset_factory(models.Atendimento, models.Trip, fields='__all__', extra=0)
+TripInlineFormset = inlineformset_factory(models.Atendimento, models.Trip, fields='__all__', extra=1)
 
-ComorbidityInlineFormset = inlineformset_factory(models.Atendimento, models.Comorbidity, fields='__all__', extra=0)
+ComorbidityInlineFormset = inlineformset_factory(models.Atendimento, models.Comorbidity, fields='__all__', extra=1)

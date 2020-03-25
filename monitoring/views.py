@@ -6,13 +6,15 @@ from django.views import generic
 
 from accounts.forms import ProfileCreationForm, AddressFormset
 from . import forms
+from . import models
 
 
 # Create your views here.
 
 
-class Home(mixins.LoginRequiredMixin, generic.TemplateView):
+class Home(mixins.LoginRequiredMixin, generic.ListView):
     template_name = 'monitoring/home.html'
+    model = models.Atendimento
 
 
 class NewProfile(mixins.LoginRequiredMixin, generic.CreateView):
