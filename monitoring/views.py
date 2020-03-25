@@ -56,7 +56,7 @@ class NewProfile(mixins.LoginRequiredMixin, generic.CreateView):
         return super(NewProfile, self).form_invalid(form)
 
     def get_success_url(self):
-        return self.request.GET.get('next', reverse('login'))
+        return reverse('monitoring:home')
 
 
 class CadastrarAtendimento(mixins.LoginRequiredMixin, generic.CreateView):
