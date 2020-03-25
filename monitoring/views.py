@@ -87,7 +87,6 @@ class CadastrarAtendimento(mixins.LoginRequiredMixin, generic.CreateView):
 
         if symptom_formset.is_valid() and trip_formset.is_valid() and comorbidity_formset.is_valid():
             self.object = form.save(commit=False)
-            self.object.set_password(form.cleaned_data['password'])
             self.object.save()
 
             for formset in ['symptom_formset', 'trip_formset', 'comorbidity_formset']:
@@ -96,7 +95,7 @@ class CadastrarAtendimento(mixins.LoginRequiredMixin, generic.CreateView):
                     instance.atendimento = self.object
                     instance.save()
 
-            messages.success(self.request, 'Atendimento %s cadastrado com sucesso!' % self.object.cpf)
+            messages.success(self.request, 'Atendimento cadastrado com sucesso!')
         else:
             messages.error(self.request, 'Não foi possível criar o usuário')
             for formset in ['symptom_formset', 'trip_formset', 'comorbidity_formset']:
@@ -109,4 +108,4 @@ class CadastrarAtendimento(mixins.LoginRequiredMixin, generic.CreateView):
         return super(CadastrarAtendimento, self).form_invalid(form)
 
     def get_success_url(self):
-        return self.request.GET.get('next', reverse('login'))
+        return reverse('monitoring:home')
