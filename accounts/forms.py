@@ -1,6 +1,8 @@
+from datetime import datetime
+
 from django import forms
-from django.core.exceptions import ValidationError
 from django.forms import inlineformset_factory
+from django.utils import timezone
 
 from . import models
 
@@ -19,27 +21,19 @@ class AccountCreationForm(forms.ModelForm):
 
     confirm_password = forms.CharField(label='Confirme a senha', widget=forms.PasswordInput())
 
-    def clean(self):
-        cleaned_data = super(AccountCreationForm, self).clean()
-        password = cleaned_data.get('password')
-        confirm_password = cleaned_data.get('confirm_password')
-
-        if password != confirm_password:
-            self.add_error('confirm_password', 'As senhas não coincidem')
-
-        return cleaned_data
-
     def clean_cpf(self):
         cpf = self.cleaned_data['cpf']
 
         # verificar o tamanho da string
         if len(cpf) != 11:
-            raise ValidationError('O CPF deve conter exatamente 11 dígitos', code='invalid')
+            self.add_error('cpf', 'O CPF deve conter exatamente 11 dígitos')
+            return cpf
 
         # cpfs inválidos
         for i in range(10):
             if cpf == str(i) * 11:
-                raise ValidationError('CPF inválido', code='incorrect')
+                self.add_error('cpf', 'CPF inválido')
+                return cpf
 
         # validação do primeiro dígito verificador
         s = 0
@@ -56,7 +50,18 @@ class AccountCreationForm(forms.ModelForm):
         if first_digit_valid and second_digit_valid:
             return cpf
 
-        raise ValidationError('CPF inválido', code='invalid')
+        self.add_error('cpf', 'CPF inválido')
+        return cpf
+
+    def clean(self):
+        cleaned_data = super(AccountCreationForm, self).clean()
+        password = cleaned_data['password']
+        confirm_password = cleaned_data['confirm_password']
+
+        if password != confirm_password:
+            self.add_error('confirm_password', 'As senhas não coincidem')
+
+        return cleaned_data
 
 
 class ProfileCreationForm(forms.ModelForm):
@@ -67,9 +72,24 @@ class ProfileCreationForm(forms.ModelForm):
             'birth_date': forms.DateInput(format='%d/%m/%Y', attrs={'type': 'date'}),
         }
 
+    def clean_birth_date(self):
+        birth_date = self.cleaned_data['birth_date']
 
-AddressFormset = inlineformset_factory(models.Profile, models.Address, fields='__all__', extra=1, can_delete=True,
-                                       widgets={
-                                           'postal_code': forms.TextInput(attrs={'class': 'postal-code-field'}),
-                                           'complement': forms.Textarea(attrs={'rows': 2}),
-                                       })
+        if birth_date > timezone.now().date():
+            error = 'Data de nascimento após %s inválida' % datetime.strftime(timezone.now().date(), '%d/%m/%Y')
+            self.add_error('birth_date', error)
+
+        return birth_date
+
+
+class AddressCreateForm(forms.ModelForm):
+    class Meta:
+        model = models.Address
+        fields = '__all__'
+        widgets = {
+            'postal_code': forms.TextInput(attrs={'class': 'postal-code-field'}),
+            'complement': forms.Textarea(attrs={'rows': 2}),
+        }
+
+
+AddressFormset = inlineformset_factory(models.Profile, models.Address, form=AddressCreateForm, extra=1, can_delete=True)

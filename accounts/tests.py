@@ -1,4 +1,5 @@
 from django.test import TestCase
+from django.utils import timezone
 
 from . import forms
 
@@ -9,15 +10,19 @@ class AccountTests(TestCase):
     def test_blacklisted_cpf(self):
         data = {
             'cpf': '11111111111',
+            'password': '12345678',
+            'confirm_password': '12345678'
         }
 
         form = forms.AccountCreationForm(data=data)
 
-        self.assertFalse(form.has_error('cpf'))
+        self.assertTrue(form.has_error('cpf'))
 
     def test_valid_cpf(self):
         data = {
-            'cpf': '09716630417'
+            'cpf': '09716630417',
+            'password': '12345678',
+            'confirm_password': '12345678'
         }
 
         form = forms.AccountCreationForm(data=data)
@@ -27,6 +32,8 @@ class AccountTests(TestCase):
     def test_invalid_cpf(self):
         data = {
             'cpf': '12345678910',
+            'password': '12345678',
+            'confirm_password': '12345678'
         }
 
         form = forms.AccountCreationForm(data=data)
@@ -35,16 +42,18 @@ class AccountTests(TestCase):
 
     def test_passwords_doesnt_match(self):
         data = {
+            'cpf': '09716630417',
             'password': '12345678',
             'confirm_password': '12345679'
         }
 
         form = forms.AccountCreationForm(data=data)
 
-        self.assertFalse(form.has_error('password') or form.has_error('confirm_password'))
+        self.assertTrue(form.has_error('confirm_password'))
 
     def test_passwords_match(self):
         data = {
+            'cpf': '09716630417',
             'password': '12345678',
             'confirm_password': '12345678'
         }
@@ -52,3 +61,14 @@ class AccountTests(TestCase):
         form = forms.AccountCreationForm(data=data)
 
         self.assertTrue(not form.has_error('password') and not form.has_error('confirm_password'))
+
+
+class AddressTests(TestCase):
+    def test_birth_date_in_the_future(self):
+        data = {
+            'birth_date': timezone.now() + timezone.timedelta(days=1)
+        }
+
+        form = forms.ProfileCreationForm(data=data)
+
+        self.assertTrue(form.has_error('birth_date'))
