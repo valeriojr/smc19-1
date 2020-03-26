@@ -12,9 +12,16 @@ from . import models
 # Create your views here.
 
 
-class IndexProfile(mixins.LoginRequiredMixin, generic.ListView):
+class Index(mixins.LoginRequiredMixin, generic.ListView):
     model = models.Profile
-    template_name = 'monitoring/index_profile.html'
+    template_name = 'monitoring/index.html'
+
+    def get_context_data(self, **kwargs):
+        context = super(Index, self).get_context_data(**kwargs)
+
+        context['atendimentos'] = models.Atendimento.objects
+
+        return context
 
 
 class CreateProfile(mixins.LoginRequiredMixin, generic.CreateView):

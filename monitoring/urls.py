@@ -5,7 +5,7 @@ from . import views
 
 app_name = 'monitoring'
 urlpatterns = [
-    path('pacientes/', views.IndexProfile.as_view(), name='index_profile'),
+    path('', views.Index.as_view(), name='index_profile'),
     path('pacientes/cadastrar', views.CreateProfile.as_view(), name='create_profile'),
     path('pacientes/<int:pk>/', views.GetProfile.as_view(), name='get_profile'),
     path('pacientes/<int:pk>/editar', views.UpdateProfile.as_view(), name='edit_profile'),
