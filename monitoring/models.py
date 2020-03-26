@@ -13,8 +13,8 @@ class Profile(models.Model):
     gender = models.CharField(verbose_name='Sexo', max_length=1, choices=choices.genders, blank=True, default='')
 
     phone_number = models.CharField(verbose_name='Número de telefone', max_length=11, blank=True, default='')
-    vaccinated = models.BooleanField(verbose_name='Vacinado', blank=True, default=False)
-    oxygen = models.BooleanField(verbose_name='Já precisou de oxigênio', blank=True, default=False)
+    vaccinated = models.BooleanField(verbose_name='Tomou vacina da gripe em 2020', blank=True, default=False)
+    oxygen = models.BooleanField(verbose_name='Precisou de oxigênio recentemente', blank=True, default=False)
 
     # Comorbidades
     diabetes = models.BooleanField(verbose_name='Diabetes', blank=True, default=False)
