@@ -1,11 +1,3 @@
-countries = [
-    ('CHN', 'China'),
-    ('BRA', 'Brasil'),
-    ('ESP', 'Espanha'),
-    ('USA', 'Estados Unidos'),
-    ('ITA', 'Itália'),
-]
-
 symptoms = [
     ('TR', 'Cansaço'),
     ('DI', 'Diarreia'),
@@ -20,9 +12,30 @@ symptoms = [
 ]
 
 intensities = [
+    ('', 'Não apresenta'),
     ('L', 'Leve'),
     ('M', 'Moderada'),
     ('H', 'Grave'),
+]
+
+genders = [
+    ('F', 'Feminino'),
+    ('M', 'Masculino')
+]
+
+address_types = [
+    ('HM', 'Residencial'),
+    ('WK', 'Trabalho'),
+    ('OT', 'Outro'),
+]
+
+drugs = [
+    ('', 'Anti hipertensivo'),
+    ('', 'Imunossupressores'),
+    ('', 'Anti diabéticos'),
+    ('', 'Antibióticos'),
+    ('', 'Corticoide'),
+    ('', 'Anti inflamatório')
 ]
 
 comorbidities = [
@@ -41,11 +54,10 @@ comorbidities = [
     ('O', 'Outra')
 ]
 
-drugs = [
-    ('', 'Anti hipertensivo'),
-    ('', 'Imunossupressores'),
-    ('', 'Anti diabéticos'),
-    ('', 'Antibióticos'),
-    ('', 'Corticoide'),
-    ('', 'Anti inflamatório')
+countries = [
+    ('CHN', 'China'),
+    ('BRA', 'Brasil'),
+    ('ESP', 'Espanha'),
+    ('USA', 'Estados Unidos'),
+    ('ITA', 'Itália'),
 ]

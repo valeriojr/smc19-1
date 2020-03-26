@@ -4,6 +4,7 @@ from django import forms
 from django.forms import inlineformset_factory
 from django.utils import timezone
 
+from accounts import choices
 from . import models
 
 
@@ -63,33 +64,3 @@ class AccountCreationForm(forms.ModelForm):
 
         return cleaned_data
 
-
-class ProfileCreationForm(forms.ModelForm):
-    class Meta:
-        model = models.Profile
-        exclude = ['account']
-        widgets = {
-            'birth_date': forms.DateInput(format='%d/%m/%Y', attrs={'type': 'date'}),
-        }
-
-    def clean_birth_date(self):
-        birth_date = self.cleaned_data['birth_date']
-
-        if birth_date > timezone.now().date():
-            error = 'Data de nascimento após %s inválida' % datetime.strftime(timezone.now().date(), '%d/%m/%Y')
-            self.add_error('birth_date', error)
-
-        return birth_date
-
-
-class AddressCreateForm(forms.ModelForm):
-    class Meta:
-        model = models.Address
-        fields = '__all__'
-        widgets = {
-            'postal_code': forms.TextInput(attrs={'class': 'postal-code-field'}),
-            'complement': forms.Textarea(attrs={'rows': 2}),
-        }
-
-
-AddressFormset = inlineformset_factory(models.Profile, models.Address, form=AddressCreateForm, extra=1, can_delete=True)

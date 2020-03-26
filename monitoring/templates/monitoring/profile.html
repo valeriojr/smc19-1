@@ -1,0 +1,211 @@
+{% extends 'base.html' %}
+
+{% load crispy_forms_filters %}
+
+{% block content %}
+    <h3>Dados pessoais</h3>
+
+    <p>Nome completo{{ profile }}</p>
+    <p>Nome da mãe: {{ profile.mother_name }}</p>
+    <p>Data de nascimento: {{ profile.birth_date }}</p>
+    <p>CNS: {{ profile.sus_number }}</p>
+    <p>Sexo: {{ profile.gender }}</p>
+    <p>Telefone: {{ profile.phone_number }}</p>
+    <p>Data de nascimento: {{ profile.vaccinated|yesno }}</p>
+    <hr>
+    <h3>Endereço</h3>
+    <div id="create-address" class="modal" role="dialog">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title">Novo endereço</h4>
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                </div>
+
+                <div class="modal-body">
+                    <form id="create-address-form" class="form-inline" method="post"
+                          action="{% url 'monitoring:create_address' profile.id %}">{% csrf_token %}
+                        {{ address_form|crispy }}
+                    </form>
+                </div>
+
+                <div class="modal-footer">
+                    <button class="btn btn-light" data-dismiss="modal">Cancelar</button>
+                    <input type="submit" form="create-address-form" class="btn btn-primary" value="Criar">
+                </div>
+            </div>
+        </div>
+    </div>
+    <ul class="list-group">
+        {% for address in profile.address_set.all %}
+            <div id="delete-address-{{ address.id }}" class="modal" role="dialog">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h4 class="modal-title">Remover endereço</h4>
+                            <button type="button" class="close" data-dismiss="modal">&times;</button>
+                        </div>
+                        <div class="modal-body">
+                            <p>Tem certeza que deseja remover o endereço {{ address }}?</p>
+                            <form id="delete-address-{{ address.id }}-form" method="post"
+                                  action="{% url 'monitoring:delete_address' profile.id address.id %}">{% csrf_token %}</form>
+                        </div>
+
+                        <div class="modal-footer">
+                            <button class="btn btn-light" data-dismiss="modal"></button>
+                            <input type="submit" form="delete-address-{{ address.id }}-form" class="btn btn-danger"
+                                   value="Remover">
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div id="update-address" class="modal" role="dialog">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h4 class="modal-title">Editar endereço</h4>
+                            <button type="button" class="close" data-dismiss="modal">&times;</button>
+                        </div>
+                        <div class="modal-body">
+                            <form id="update-address-form" method="post"
+                                  action="{% url 'monitoring:update_address' profile.id address.id %}">{% csrf_token %}
+                                {{ address_form }}
+                            </form>
+                        </div>
+
+                        <div class="modal-footer">
+                            <button class="btn btn-light" data-dismiss="modal"></button>
+                            <input type="submit" form="update-address-form" class="btn btn-danger"
+                                   value="Remover">
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <li class="list-group-item">
+                {{ address }}
+                <button class="btn btn-secondary">
+                    Editar
+                </button>
+                <button class="btn btn-danger" data-toggle="modal" data-target="#delete-address-{{ address.id }}">
+                    Remover
+                </button>
+            </li>
+        {% endfor %}
+        <button class="btn btn-primary" data-toggle="modal" data-target="#create-address">Adicionar endereço</button>
+    </ul>
+    <hr>
+    <h3>Comorbidades</h3>
+    <p>Diabetes: {{ profile.diabetes|yesno }}</p>
+    <p>Doenças cardíacas: {{ profile.heart_diseases|yesno }}</p>
+    <p>Hipertensão: {{ profile.hypertension|yesno }}</p>
+    <p>Demência: {{ profile.dementia|yesno }}</p>
+    <p>Bronquite crônica: {{ profile.bronchitis|yesno }}</p>
+    <p>Câncer: {{ profile.cancer|yesno }}</p>
+    <p>Doença crônica no fígado: {{ profile.chronic_liver_disease|yesno }}</p>
+    <p>Doença renal crônica: {{ profile.chronic_kidney_disease|yesno }}</p>
+    <p>Asma: {{ profile.asthma|yesno }}</p>
+    <p>Doença pulmonar crônica: {{ profile.chronic_lung_disease|yesno }}</p>
+    <p>Doenças reumáticas: {{ profile.rheumatic_diseases|yesno }}</p>
+    <p>Obesidade: {{ profile.obesity|yesno }}</p>
+    <hr>
+    <h3>Histórico de viagens</h3>
+    <div id="create-trip" class="modal" role="dialog">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title">Nova viagem</h4>
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                </div>
+
+                <div class="modal-body">
+                    <form id="create-trip-form" method="post" action="{% url 'monitoring:create_trip' profile.id %}">
+                        {% csrf_token %}
+                        {{ create_trip_form|crispy }}
+                    </form>
+                </div>
+
+                <div class="modal-footer">
+                    <button class="btn btn-light" data-dismiss="modal"></button>
+                    <input type="submit" form="create-trip-form" class="btn btn-primary" value="Criar">
+
+                </div>
+            </div>
+        </div>
+    </div>
+    <ul class="list-group">
+        {% for trip in profile.trip_set.all %}
+            <div id="delete-trip-{{ trip.id }}" class="modal" role="dialog">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h4 class="modal-title">Remover viagem</h4>
+                            <button type="button" class="close" data-dismiss="modal">&times;</button>
+                        </div>
+                        <div class="modal-body">
+                            <p>Tem certeza que deseja remover a viagem {{ trip }}?</p>
+                            <form id="delete-trip-{{ trip.id }}-form" method="post"
+                                  action="{% url 'monitoring:delete_trip' profile.id trip.id %}">
+                                {% csrf_token %}
+                            </form>
+                        </div>
+
+                        <div class="modal-footer">
+                            <button class="btn btn-light" data-dismiss="modal"></button>
+                            <input type="submit" form="delete-trip-{{ trip.id }}-form" class="btn btn-danger"
+                                   value="Remover">
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <li class="list-group-item">{{ trip }}<a href="#">Editar</a>
+                <button type="button" class="btn btn-danger" data-toggle="modal"
+                        data-target="#delete-trip-{{ trip.id }}">Remover
+                </button>
+            </li>
+        {% empty %}
+            <p>Nenhuma viagem recente</p>
+        {% endfor %}
+        <button class="btn btn-primary" data-toggle="modal" data-target="#create-trip">Adicionar viagem</button>
+    </ul>
+
+    <script>
+        function addressQuery(row, formCount) {
+            const input = $(this);
+            const maxlength = parseInt(input.attr('maxlength'));
+
+            if (maxlength === input.val().length) {
+                console.log("Consultando CEP...");
+                var xhr = new XMLHttpRequest();
+                xhr.open("GET", "http://cep.la/" + input.val(), true);
+                xhr.setRequestHeader("Accept", "application/json");
+                xhr.onreadystatechange = function () {
+                    if ((xhr.readyState === 0 || xhr.readyState === 4) && xhr.status === 200) {
+                        const response = JSON.parse(xhr.responseText);
+                        console.log(xhr.responseText);
+                        let prefix, id;
+
+                        prefix = input.attr("id").split("-")[0];
+                        id = input.attr("id").split("-")[1];
+
+                        console.log(prefix, " ", id);
+
+                        $(`#id_street_name`).val(response.logradouro);
+                        $(`#id_neighbourhood`).val(response.bairro);
+                        $(`#id_city`).val(response.cidade);
+                    }
+                };
+                xhr.send(null);
+            }
+        }
+
+        function populate(frm, data) {
+            $.each(data, function (key, value) {
+                $('[name=' + key + ']', frm).val(value);
+            });
+        }
+
+        $(document).ready(function () {
+            $(".postal-code-field").on('input', addressQuery);
+        });
+    </script>
+{% endblock %}

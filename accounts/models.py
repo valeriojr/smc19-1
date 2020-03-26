@@ -1,8 +1,6 @@
 from django.contrib.auth.models import AbstractUser, BaseUserManager
 from django.db import models
 
-from . import choices
-
 
 # Create your models here.
 
@@ -37,32 +35,3 @@ class Account(AbstractUser):
     USERNAME_FIELD = 'cpf'
     REQUIRED_FIELDS = []
     objects = CustomUserManager()
-
-
-class Profile(models.Model):
-    full_name = models.CharField(verbose_name='Nome completo', max_length=100, blank=True, default='')
-    mother_name = models.CharField(verbose_name='Nome da mãe', max_length=100, blank=True, default='')
-    birth_date = models.DateField(verbose_name='Data de nascimento', null=True, blank=True)
-    sus_number = models.CharField(verbose_name='Cartão do SUS', max_length=15, blank=True, null=True)
-    gender = models.CharField(verbose_name='Sexo', max_length=1, choices=choices.genders, blank=True, default='')
-    phone_number = models.CharField(verbose_name='Número de telefone', max_length=11, blank=True, default='')
-    vaccinated = models.BooleanField(verbose_name='Vacinado', blank=True, default=False)
-    oxygen = models.BooleanField(verbose_name='Já precisou de oxigênio', blank=True, default=False)
-
-    def __str__(self):
-        return self.full_name
-
-
-class Address(models.Model):
-    profile = models.ForeignKey(Profile, models.CASCADE)
-    type = models.CharField(verbose_name='Tipo', max_length=2, choices=choices.address_types, blank=True, default='')
-    postal_code = models.CharField(verbose_name='CEP', max_length=8, blank=True, default='')
-    neighbourhood = models.CharField(verbose_name='Bairro', max_length=100, blank=True, default='')
-    street_name = models.CharField(verbose_name='Logradouro', max_length=100, blank=True, default='')
-    number = models.PositiveIntegerField(verbose_name='Número', blank=True, default=0)
-    complement = models.CharField(verbose_name='Complemento', max_length=100, blank=True, default='')
-    city = models.CharField(verbose_name='Cidade', max_length=100, blank=True, default='')
-    people = models.PositiveIntegerField(verbose_name='Quantidade de pessoas', blank=True, default=1)
-
-    def __str__(self):
-        return '%s, %d - %s, %s, %s' % (self.street_name, self.number, self.neighbourhood, self.city, self.postal_code)
