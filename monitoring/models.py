@@ -62,7 +62,7 @@ class Symptom(models.Model):
     atendimento = models.ForeignKey(Atendimento, models.CASCADE, default=1)
     symptom = models.CharField(verbose_name='Tipo de sintoma', max_length=2, choices=choices.symptoms, default='')
     intensity = models.CharField(verbose_name='Intensidade', max_length=1, choices=choices.intensities, blank=True,
-                                 default='')
+                                 default='L')
     onset = models.DateField(verbose_name='Data do surgimento', blank=True, null=True)
 
     def __str__(self):

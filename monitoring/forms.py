@@ -21,11 +21,12 @@ class AtendimentoCreateForm(forms.ModelForm):
 class SymptomCreateForm(forms.ModelForm):
     class Meta:
         model = models.Symptom
-        fields = '__all__'
+        exclude = ['intensity']
         widgets = {
             'symptom': forms.HiddenInput(),
             'label': forms.HiddenInput(),
             'onset': forms.DateInput(format='%d/%m/%Y', attrs={'type': 'date'}),
+            'intensity': forms.HiddenInput()
         }
 
     label = forms.CharField(widget=forms.HiddenInput(), required=False, empty_value='')

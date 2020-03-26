@@ -81,7 +81,6 @@ class DeleteAddress(mixins.LoginRequiredMixin, generic.DeleteView):
 
 class CadastrarAtendimento(mixins.LoginRequiredMixin, generic.CreateView):
     form_class = forms.AtendimentoCreateForm
-    success_url = reverse_lazy('monitoring:home')
     template_name = 'monitoring/cadastrar_atendimento.html'
 
     def get_context_data(self, **kwargs):
@@ -106,11 +105,10 @@ class CadastrarAtendimento(mixins.LoginRequiredMixin, generic.CreateView):
             self.object.save()
 
             for formset in symptom_formset:
-                instances = context[formset].save(commit=False)
-                for instance in instances:
-                    if instance.intensity != '':
-                        instance.atendimento = self.object
-                        instance.save()
+                instance = formset.save(commit=False)
+                if instance.onset != None:
+                    instance.atendimento = self.object
+                    instance.save()
 
             messages.success(self.request, 'Atendimento cadastrado com sucesso!')
 
@@ -123,7 +121,7 @@ class CadastrarAtendimento(mixins.LoginRequiredMixin, generic.CreateView):
         return super(CadastrarAtendimento, self).form_invalid(form)
 
     def get_success_url(self):
-        return reverse('monitoring:home')
+        return reverse('monitoring:index_profile')
 
 
 class CreateTrip(mixins.LoginRequiredMixin, generic.CreateView):
