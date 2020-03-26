@@ -59,7 +59,7 @@ comorbidities = [
     ('V', 'HIV+'),
     ('I', 'Imunosuprimido'),
     ('U', 'Portador de Lúpus'),
-    ('Y', 'Artrite reumatóide')
+    ('Y', 'Artrite reumatóide'),
     ('O', 'Outra')
 ]
 

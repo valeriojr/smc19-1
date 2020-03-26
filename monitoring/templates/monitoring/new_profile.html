@@ -4,7 +4,7 @@
 {% load crispy_forms_filters %}
 
 {% block content %}
-    <form method="post">{% csrf_token %}
+    <form onsubmit="f()" method="post">{% csrf_token %}
         {{ form|crispy }}
         <div class="form-row justify-content-end">
             <div class="form-group"><input type="submit" class="btn btn-primary" value="Cadastrar paciente"></div>
@@ -32,4 +32,3 @@
         <div class="form-group col-4 mb-0">{{ address_form.people|as_crispy_field }}</div>
     </div>
 </div>
-
