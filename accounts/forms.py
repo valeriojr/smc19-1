@@ -22,38 +22,6 @@ class AccountCreationForm(forms.ModelForm):
 
     confirm_password = forms.CharField(label='Confirme a senha', widget=forms.PasswordInput())
 
-    def clean_cpf(self):
-        cpf = self.cleaned_data['cpf']
-
-        # verificar o tamanho da string
-        if len(cpf) != 11:
-            self.add_error('cpf', 'O CPF deve conter exatamente 11 dígitos')
-            return cpf
-
-        # cpfs inválidos
-        for i in range(10):
-            if cpf == str(i) * 11:
-                self.add_error('cpf', 'CPF inválido')
-                return cpf
-
-        # validação do primeiro dígito verificador
-        s = 0
-        for i in range(9):
-            s += int(cpf[i]) * (10 - i)
-        first_digit_valid = int(cpf[9]) == ((s * 10 % 11) % 10)
-
-        # validação do segundo dígito verificador
-        s = 0
-        for i in range(10):
-            s += int(cpf[i]) * (11 - i)
-        second_digit_valid = int(cpf[10]) == ((s * 10 % 11) % 10)
-
-        if first_digit_valid and second_digit_valid:
-            return cpf
-
-        self.add_error('cpf', 'CPF inválido')
-        return cpf
-
     def clean(self):
         cleaned_data = super(AccountCreationForm, self).clean()
         password = cleaned_data['password']

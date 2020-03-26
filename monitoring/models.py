@@ -1,5 +1,6 @@
 from django.db import models
 
+import validators
 from . import choices
 
 
@@ -8,11 +9,18 @@ from . import choices
 class Profile(models.Model):
     full_name = models.CharField(verbose_name='Nome completo', max_length=100, blank=True, default='')
     mother_name = models.CharField(verbose_name='Nome da mãe', max_length=100, blank=True, default='')
-    birth_date = models.DateField(verbose_name='Data de nascimento', null=True, blank=True)
-    sus_number = models.CharField(verbose_name='Cartão do SUS', max_length=15, blank=True, null=True)
+    birth_date = models.DateField(verbose_name='Data de nascimento', blank=True, default='1970-01-01')
+    age = models.PositiveIntegerField(verbose_name='Idade', blank=True, default=0)
+    cns = models.CharField(verbose_name='Cartão do SUS', max_length=15, blank=True, default='000000000000000')
+    id_document = models.CharField(verbose_name='RG', max_length=9, blank=True, default='000000000')
+    cpf = models.CharField(verbose_name='CPF', max_length=9, blank=True, default='00000000000',
+                           validators=[validators.validate_cpf])
     gender = models.CharField(verbose_name='Sexo', max_length=1, choices=choices.genders, blank=True, default='')
-
     phone_number = models.CharField(verbose_name='Número de telefone', max_length=11, blank=True, default='')
+
+    smoker = models.BooleanField(verbose_name='Fumante', blank=True, default=False)
+    weight = models.FloatField(verbose_name='Peso', blank=True, default=0)
+    height = models.FloatField(verbose_name='Altura', blank=True, default=0)
     vaccinated = models.BooleanField(verbose_name='Tomou vacina da gripe em 2020', blank=True, default=False)
     oxygen = models.BooleanField(verbose_name='Precisou de oxigênio recentemente', blank=True, default=False)
 

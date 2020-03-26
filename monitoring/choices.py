@@ -20,7 +20,8 @@ intensities = [
 
 genders = [
     ('F', 'Feminino'),
-    ('M', 'Masculino')
+    ('M', 'Masculino'),
+    ('N', 'Não quer declarar')
 ]
 
 address_types = [

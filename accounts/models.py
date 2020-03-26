@@ -3,6 +3,7 @@ from django.db import models
 
 
 # Create your models here.
+import validators
 
 
 class CustomUserManager(BaseUserManager):
@@ -30,7 +31,7 @@ class Account(AbstractUser):
     username = None
     first_name = None
     last_name = None
-    cpf = models.CharField(verbose_name='CPF', max_length=11, unique=True)
+    cpf = models.CharField(verbose_name='CPF', max_length=11, unique=True, validators=[validators.validate_cpf])
 
     USERNAME_FIELD = 'cpf'
     REQUIRED_FIELDS = []
