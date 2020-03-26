@@ -49,7 +49,7 @@ class Address(models.Model):
         return '%s, %d - %s, %s, %s' % (self.street_name, self.number, self.neighbourhood, self.city, self.postal_code)
 
 
-class Atendimento(models.Model):
+class Monitoring(models.Model):
     profile = models.ForeignKey(Profile, models.CASCADE)
     date = models.DateField(verbose_name='Data', auto_now_add=True)
     confirmed = models.BooleanField(verbose_name='Confirmado', default=False)
@@ -59,7 +59,7 @@ class Atendimento(models.Model):
 
 
 class Symptom(models.Model):
-    atendimento = models.ForeignKey(Atendimento, models.CASCADE, default=1)
+    monitoring = models.ForeignKey(Monitoring, models.CASCADE, default=1)
     symptom = models.CharField(verbose_name='Tipo de sintoma', max_length=2, choices=choices.symptoms, default='')
     intensity = models.CharField(verbose_name='Intensidade', max_length=1, choices=choices.intensities, blank=True,
                                  default='L')

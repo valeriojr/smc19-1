@@ -11,7 +11,7 @@
                     <button type="button" class="close" data-dismiss="modal">&times;</button>
                 </div>
                 <div class="modal-body">
-                    <form id="update-profile-form" method="post" action="{% url 'monitoring:edit_profile' profile.id %}">{% csrf_token %}
+                    <form id="update-profile-form" method="post" action="{% url 'monitoring:profile-update' profile.id %}">{% csrf_token %}
                         {{ update_profile_form|crispy }}
                     </form>
                 </div>
@@ -48,7 +48,7 @@
 
                 <div class="modal-body">
                     <form id="create-address-form" class="form-inline" method="post"
-                          action="{% url 'monitoring:create_address' profile.id %}">{% csrf_token %}
+                          action="{% url 'monitoring:address-create' profile.id %}">{% csrf_token %}
                         {{ address_form|crispy }}
                     </form>
                 </div>
@@ -108,7 +108,7 @@
                 {{ address }}
                 <button class="btn btn-secondary" data-toggle="modal"
                         data-target="#update-address" onclick="
-                        $('#update-address-form').attr('action', '{% url 'monitoring:update_address' profile.id address.id %}');
+                        $('#update-address-form').attr('action', '{% url 'monitoring:address-update' profile.id address.id %}');
                         $('#update-address-form #id_type').val('{{ address.type }}');
                         $('#update-address-form #id_postal_code').val('{{ address.postal_code }}');
                         $('#update-address-form #id_street_name').val('{{ address.street_name }}');
@@ -120,7 +120,7 @@
                     Editar
                 </button>
                 <button class="btn btn-danger" data-toggle="modal" data-target="#delete-address" onclick="
-                        $('#delete-address-form').attr('action', '{% url 'monitoring:delete_address' profile.id address.id %}');
+                        $('#delete-address-form').attr('action', '{% url 'monitoring:address-delete' profile.id address.id %}');
                         ">
                     Remover
                 </button>
@@ -153,7 +153,7 @@
                 </div>
 
                 <div class="modal-body">
-                    <form id="create-trip-form" method="post" action="{% url 'monitoring:create_trip' profile.id %}">
+                    <form id="create-trip-form" method="post" action="{% url 'monitoring:trip-create' profile.id %}">
                         {% csrf_token %}
                         {{ create_trip_form|crispy }}
                     </form>
@@ -213,8 +213,7 @@
                 {{ trip }}
                 <button class="btn btn-secondary" data-toggle="modal"
                         data-target="#update-trip" onclick="
-                        $('#update-trip-form').attr('action', '{% url 'monitoring:update_trip' profile.id trip.id %}');
-                        console.log($('#update-trip-form #id_departure_date').val());
+                        $('#update-trip-form').attr('action', '{% url 'monitoring:trip-update' profile.id trip.id %}');
                         $('#update-trip-form #id_departure_date').val('{{ trip.departure_date|date:'Y-m-d' }}');
                         $('#update-trip-form #id_return_date').val('{{ trip.return_date|date:'Y-m-d' }}');
                         $('#update-trip-form #id_country').val('{{ trip.country }}');
@@ -222,7 +221,7 @@
                     Editar
                 </button>
                 <button class="btn btn-danger" data-toggle="modal" data-target="#delete-trip" onclick="
-                        $('#delete-trip-form').attr('action', '{% url 'monitoring:delete_trip' profile.id trip.id %}');
+                        $('#delete-trip-form').attr('action', '{% url 'monitoring:trip-delete' profile.id trip.id %}');
                         ">
                     Remover
                 </button>

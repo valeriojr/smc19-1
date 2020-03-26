@@ -9,9 +9,9 @@ from monitoring import choices
 from . import models
 
 
-class AtendimentoCreateForm(forms.ModelForm):
+class MonitoringForm(forms.ModelForm):
     class Meta:
-        model = models.Atendimento
+        model = models.Monitoring
         fields = '__all__'
         labels = {
             'profile': 'Paciente'
@@ -40,7 +40,7 @@ class SymptomCreateForm(forms.ModelForm):
         return onset
 
 
-SymptomInlineFormset = inlineformset_factory(models.Atendimento, model=models.Symptom, form=SymptomCreateForm,
+SymptomInlineFormset = inlineformset_factory(models.Monitoring, model=models.Symptom, form=SymptomCreateForm,
                                              extra=len(choices.symptoms), can_delete=False)
 
 
@@ -113,9 +113,6 @@ class AddressForm(forms.ModelForm):
             'complement': forms.Textarea(attrs={'rows': 2}),
             'profile': forms.HiddenInput()
         }
-
-
-AddressFormset = inlineformset_factory(models.Profile, models.Address, form=AddressForm, extra=0, can_delete=True)
 
 
 class ProfileForm(forms.ModelForm):

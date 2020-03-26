@@ -11,7 +11,6 @@ from . import models
 
 # Create your views here.
 
-
 class Index(mixins.LoginRequiredMixin, generic.ListView):
     model = models.Profile
     template_name = 'monitoring/index.html'
@@ -19,23 +18,28 @@ class Index(mixins.LoginRequiredMixin, generic.ListView):
     def get_context_data(self, **kwargs):
         context = super(Index, self).get_context_data(**kwargs)
 
-        context['atendimentos'] = models.Atendimento.objects
+        context['monitorings'] = models.Monitoring.objects
+        context['monitoring_create_form'] = forms.MonitoringForm()
+        symptoms_initial = [{'symptom': symptom[0], 'label': symptom[1]} for symptom in choices.symptoms]
+        context['symptom_formset'] = forms.SymptomInlineFormset(initial=symptoms_initial)
 
         return context
 
 
-class CreateProfile(mixins.LoginRequiredMixin, generic.CreateView):
+# Profile
+
+class ProfileCreate(mixins.LoginRequiredMixin, generic.CreateView):
     form_class = forms.ProfileForm
     template_name = 'monitoring/new_profile.html'
-    success_url = reverse_lazy('monitoring:index_profile')
+    success_url = reverse_lazy('monitoring:index')
 
 
-class GetProfile(mixins.LoginRequiredMixin, generic.DetailView):
+class ProfileDetail(mixins.LoginRequiredMixin, generic.DetailView):
     model = models.Profile
-    template_name = 'monitoring/profile.html'
+    template_name = 'monitoring/profile_detail.html'
 
     def get_context_data(self, **kwargs):
-        context = super(GetProfile, self).get_context_data(**kwargs)
+        context = super(ProfileDetail, self).get_context_data(**kwargs)
 
         context['update_profile_form'] = forms.ProfileForm(instance=self.object)
 
@@ -56,47 +60,67 @@ class GetProfile(mixins.LoginRequiredMixin, generic.DetailView):
         return context
 
 
-class UpdateProfile(mixins.LoginRequiredMixin, generic.UpdateView):
+class ProfileUpdate(mixins.LoginRequiredMixin, generic.UpdateView):
     model = models.Profile
     form_class = forms.ProfileForm
 
     def get_success_url(self):
-        return reverse('monitoring:get_profile', args=[self.kwargs['pk']])
+        return reverse('monitoring:profile-detail', args=[self.kwargs['pk']])
 
 
-class DeleteProfile(mixins.LoginRequiredMixin, generic.DeleteView):
+class ProfileDelete(mixins.LoginRequiredMixin, generic.DeleteView):
     model = models.Profile
-    success_url = reverse_lazy('monitoring:index_profile')
+    success_url = reverse_lazy('monitoring:index')
 
 
-class CreateAddress(mixins.LoginRequiredMixin, generic.CreateView):
+# Address
+
+class AddressCreate(mixins.LoginRequiredMixin, generic.CreateView):
     form_class = forms.AddressForm
 
     def get_success_url(self):
-        return reverse('monitoring:get_profile', args=[self.kwargs['profile']])
+        return reverse('monitoring:profile-detail', args=[self.kwargs['profile']])
 
 
-class UpdateAddress(mixins.LoginRequiredMixin, generic.UpdateView):
+class AddressUpdate(mixins.LoginRequiredMixin, generic.UpdateView):
     model = models.Address
     form_class = forms.AddressForm
 
     def get_success_url(self):
-        return reverse('monitoring:get_profile', args=[self.kwargs['profile']])
+        return reverse('monitoring:profile-detail', args=[self.kwargs['profile']])
 
 
-class DeleteAddress(mixins.LoginRequiredMixin, generic.DeleteView):
+class AddressDelete(mixins.LoginRequiredMixin, generic.DeleteView):
     model = models.Address
 
     def get_success_url(self):
-        return reverse('monitoring:get_profile', args=[self.kwargs['profile']])
+        return reverse('monitoring:profile-detail', args=[self.kwargs['profile']])
 
 
-class CadastrarAtendimento(mixins.LoginRequiredMixin, generic.CreateView):
-    form_class = forms.AtendimentoCreateForm
-    template_name = 'monitoring/cadastrar_atendimento.html'
+# Monitoring
+
+class MonitoringDetail(mixins.LoginRequiredMixin, generic.DetailView):
+    model = models.Monitoring
 
     def get_context_data(self, **kwargs):
-        context = super(CadastrarAtendimento, self).get_context_data(**kwargs)
+        context = super(MonitoringDetail, self).get_context_data(**kwargs)
+
+        symptoms_initial = [{'symptom': symptom[0], 'label': symptom[1]} for symptom in choices.symptoms]
+
+        if self.request.POST:
+            context['symptom_formset'] = forms.SymptomInlineFormset(self.request.POST, initial=symptoms_initial)
+        else:
+            context['symptom_formset'] = forms.SymptomInlineFormset(initial=symptoms_initial)
+
+        return context
+
+
+class MonitoringCreate(mixins.LoginRequiredMixin, generic.CreateView):
+    model = models.Monitoring
+    form_class = forms.MonitoringForm
+
+    def get_context_data(self, **kwargs):
+        context = super(MonitoringCreate, self).get_context_data(**kwargs)
 
         symptoms_initial = [{'symptom': symptom[0], 'label': symptom[1]} for symptom in choices.symptoms]
 
@@ -113,13 +137,12 @@ class CadastrarAtendimento(mixins.LoginRequiredMixin, generic.CreateView):
         symptom_formset = context['symptom_formset']
 
         if symptom_formset.is_valid():
-            self.object = form.save(commit=False)
-            self.object.save()
+            self.object = form.save(commit=True)
 
             for formset in symptom_formset:
                 instance = formset.save(commit=False)
                 if instance.onset != None:
-                    instance.atendimento = self.object
+                    instance.monitoring = self.object
                     instance.save()
 
             messages.success(self.request, 'Atendimento cadastrado com sucesso!')
@@ -130,33 +153,50 @@ class CadastrarAtendimento(mixins.LoginRequiredMixin, generic.CreateView):
 
     def form_invalid(self, form):
         messages.error(self.request, form.errors)
-        return super(CadastrarAtendimento, self).form_invalid(form)
+        return super(MonitoringCreate, self).form_invalid(form)
 
     def get_success_url(self):
-        return reverse('monitoring:index_profile')
+        return reverse('monitoring:index')
 
 
-class CreateTrip(mixins.LoginRequiredMixin, generic.CreateView):
+class MonitoringUpdate(mixins.LoginRequiredMixin, generic.UpdateView):
+    model = models.Monitoring
+    form_class = forms.MonitoringForm
+
+    def get_success_url(self):
+        return reverse('monitoring:monitoring_detail', args=[self.kwargs['pk']])
+
+
+class MonitoringDelete(mixins.LoginRequiredMixin, generic.DeleteView):
+    model = models.Monitoring
+
+    def get_success_url(self):
+        return reverse('monitoring:index')
+
+
+# Trip
+
+class TripCreate(mixins.LoginRequiredMixin, generic.CreateView):
     form_class = forms.TripForm
-
-    def get_success_url(self):
-        return reverse('monitoring:get_profile', args=[self.kwargs['profile']])
 
     def form_invalid(self, form):
         messages.error(self.request, form.errors)
         return HttpResponseRedirect(self.get_success_url())
 
+    def get_success_url(self):
+        return reverse('monitoring:profile-detail', args=[self.kwargs['profile']])
 
-class UpdateTrip(mixins.LoginRequiredMixin, generic.UpdateView):
+
+class TripUpdate(mixins.LoginRequiredMixin, generic.UpdateView):
     model = models.Trip
     form_class = forms.TripForm
 
     def get_success_url(self):
-        return reverse_lazy('monitoring:index_profile')
+        return reverse_lazy('monitoring:index')
 
 
-class DeleteTrip(mixins.LoginRequiredMixin, generic.DeleteView):
+class TripDelete(mixins.LoginRequiredMixin, generic.DeleteView):
     model = models.Trip
 
     def get_success_url(self):
-        return reverse('monitoring:get_profile', args=[self.kwargs['profile']])
+        return reverse('monitoring:profile-detail', args=[self.kwargs['profile']])

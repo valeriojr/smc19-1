@@ -1,35 +1,80 @@
 {% extends 'base.html' %}
 
 {% load static %}
+{% load crispy_forms_filters %}
 
 {% block content %}
-    <a class="btn btn-primary" href="{% url 'monitoring:create_profile' %}">Novo paciente</a>
-    <a class="btn btn-primary" href="{% url 'monitoring:cadastrar_atendimento' %}">Nova consulta</a>
+    <a class="btn btn-primary" href="{% url 'monitoring:profile-create' %}">Novo paciente</a>
+    <button class="btn btn-primary" data-toggle="modal" data-target="#monitoring-create">Nova consulta</button>
+    <div id="monitoring-create" class="modal" role="dialog">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title">Novo atendimento</h4>
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                </div>
+
+                <div class="modal-body">
+                    <form id="monitoring-create-form" method="post"
+                          action="{% url 'monitoring:monitoring-create' %}">
+                        {% csrf_token %}
+                        {{ monitoring_create_form|crispy }}
+                        <hr>
+                        <h6>Sintomas</h6>
+                        {{ symptom_formset.management_form }}
+                        {% for form in symptom_formset %}
+                            <h6>{{ form.label.value }}</h6>
+                            <div class="form-row">
+                                {{ form.symptom }}
+                                {{ form.onset|as_crispy_field }}
+                            </div>
+                        {% endfor %}
+                    </form>
+                </div>
+
+                <div class="modal-footer">
+                    <button class="btn btn-light" data-dismiss="modal">Cancelar</button>
+                    <input type="submit" form="monitoring-create-form" class="btn btn-primary" value="Criar">
+                </div>
+            </div>
+        </div>
+    </div>
 
     <h1>Pacientes</h1>
 
     <ul>
-    {% for profile in profile_list %}
-        <li><a href="{% url 'monitoring:get_profile' profile.id %}">{{ profile }}</a></li>
-    {% empty %}
-        <p>Nenhum paciente cadastrado</p>
-    {% endfor %}
+        {% for profile in profile_list %}
+            <li><a href="{% url 'monitoring:profile-detail' profile.id %}">{{ profile }}</a></li>
+        {% empty %}
+            <p>Nenhum paciente cadastrado</p>
+        {% endfor %}
     </ul>
 
     <h1>Atendimentos</h1>
-
-    <table class="table table-hover">
-    <thead>
-    <tr>
-        <th>ID</th><th>Paciente</th><th>Foi confirmado?</th><th>Apresenta sintomas?</th><th>Viajou recentemente?</th><th>Apresenta comorbidades?</th>
-    </tr>
-    </thead>
-    <tbody>
-    {% for atendimento in atendimentos.all %}
-        <tr>
-        <td>{{ atendimento.id }}</td><td>{{ atendimento.profile }}</td><td>{{ atendimento.confirmed|yesno }}</td><td>{{ atendimento.symptom_set.all|yesno }}</td><td>{{ atendimento.profile.trip_set.all|yesno }}</td><td>{{ atendimento.profile.comorbidity_set.all|yesno }}</td>
-        </tr>
-    {% endfor %}
-    </tbody>
-    </table>
+    <div style="overflow-x: auto;">
+        <table class="table table-hover">
+            <thead>
+            <tr>
+                <th>ID</th>
+                <th>Paciente</th>
+                <th>Foi confirmado?</th>
+                <th>Apresenta sintomas?</th>
+                <th>Viajou recentemente?</th>
+                <th>Apresenta comorbidades?</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for monitoring in monitorings.all %}
+                <tr>
+                    <td><a href="{% url 'monitoring:monitoring-detail' monitoring.id %}">{{ monitoring.id }}</a></td>
+                    <td>{{ monitoring.profile }}</td>
+                    <td>{{ monitoring.confirmed|yesno }}</td>
+                    <td>{{ monitoring.symptom_set.all|yesno }}</td>
+                    <td>{{ monitoring.profile.trip_set.all|yesno }}</td>
+                    <td>{{ monitoring.profile.comorbidity_set.all|yesno }}</td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
 {% endblock %}

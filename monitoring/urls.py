@@ -2,19 +2,25 @@ from django.urls import path
 
 from . import views
 
-
 app_name = 'monitoring'
 urlpatterns = [
-    path('', views.Index.as_view(), name='index_profile'),
-    path('pacientes/cadastrar', views.CreateProfile.as_view(), name='create_profile'),
-    path('pacientes/<int:pk>/', views.GetProfile.as_view(), name='get_profile'),
-    path('pacientes/<int:pk>/editar', views.UpdateProfile.as_view(), name='edit_profile'),
-    path('pacientes/<int:pk>/remover', views.DeleteProfile.as_view(), name='delete_profile'),
-    path('pacientes/<int:profile>/enderecos/cadastrar', views.CreateAddress.as_view(), name='create_address'),
-    path('pacientes/<int:profile>/enderecos/<int:pk>/remover', views.DeleteAddress.as_view(), name='delete_address'),
-    path('pacientes/<int:profile>/enderecos/<int:pk>/editar', views.UpdateAddress.as_view(), name='update_address'),
-    path('pacientes/<int:profile>/viagens/cadastrar', views.CreateTrip.as_view(), name='create_trip'),
-    path('pacientes/<int:profile>/viagens/<int:pk>/remover', views.DeleteTrip.as_view(), name='delete_trip'),
-    path('pacientes/<int:profile>/enderecos/<int:pk>/editar', views.UpdateTrip.as_view(), name='update_trip'),
-    path('atendimento/cadastrar', views.CadastrarAtendimento.as_view(), name='cadastrar_atendimento'),
+    path('', views.Index.as_view(), name='index'),
+    # Profile
+    path('pacientes/<int:pk>/', views.ProfileDetail.as_view(), name='profile-detail'),
+    path('pacientes/cadastrar/', views.ProfileCreate.as_view(), name='profile-create'),
+    path('pacientes/<int:pk>/editar/', views.ProfileUpdate.as_view(), name='profile-update'),
+    path('pacientes/<int:pk>/remover/', views.ProfileDelete.as_view(), name='profile-delete'),
+    # Address
+    path('pacientes/<int:profile>/enderecos/cadastrar/', views.AddressCreate.as_view(), name='address-create'),
+    path('pacientes/<int:profile>/enderecos/<int:pk>/editar/', views.AddressUpdate.as_view(), name='address-update'),
+    path('pacientes/<int:profile>/enderecos/<int:pk>/remover/', views.AddressDelete.as_view(), name='address-delete'),
+    # Trip
+    path('pacientes/<int:profile>/viagens/cadastrar/', views.TripCreate.as_view(), name='trip-create'),
+    path('pacientes/<int:profile>/enderecos/<int:pk>/editar/', views.TripUpdate.as_view(), name='trip-update'),
+    path('pacientes/<int:profile>/viagens/<int:pk>/remover/', views.TripDelete.as_view(), name='trip-delete'),
+    # Monitoring
+    path('atendimentos/<int:pk>/', views.MonitoringDetail.as_view(), name='monitoring-detail'),
+    path('atendimentos/cadastrar/', views.MonitoringCreate.as_view(), name='monitoring-create'),
+    path('atendimentos/<int:pk>/editar/', views.MonitoringUpdate.as_view(), name='monitoring-update'),
+    path('atendimentos/<int:pk>/remover/', views.MonitoringDelete.as_view(), name='monitoring-delete'),
 ]
