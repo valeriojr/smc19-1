@@ -20,7 +20,7 @@ class SymptomCreateFormTests(TestCase):
 
 class TripCreateFormTests(TestCase):
     def test_departure_after_return(self):
-        form = forms.TripCreateForm(data={
+        form = forms.TripForm(data={
             'departure_date': '01/01/1970',
             'return_date': '31/12/1969',
             'country': 'BRA'

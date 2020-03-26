@@ -15,5 +15,6 @@ urlpatterns = [
     path('pacientes/<int:profile>/enderecos/<int:pk>/editar', views.UpdateAddress.as_view(), name='update_address'),
     path('pacientes/<int:profile>/viagens/cadastrar', views.CreateTrip.as_view(), name='create_trip'),
     path('pacientes/<int:profile>/viagens/<int:pk>/remover', views.DeleteTrip.as_view(), name='delete_trip'),
+    path('pacientes/<int:profile>/enderecos/<int:pk>/editar', views.UpdateTrip.as_view(), name='update_trip'),
     path('atendimento/cadastrar', views.CadastrarAtendimento.as_view(), name='cadastrar_atendimento'),
 ]

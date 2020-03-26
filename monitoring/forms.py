@@ -43,7 +43,7 @@ SymptomInlineFormset = inlineformset_factory(models.Atendimento, model=models.Sy
                                              extra=len(choices.symptoms), can_delete=False)
 
 
-class TripCreateForm(forms.ModelForm):
+class TripForm(forms.ModelForm):
     class Meta:
         model = models.Trip
         fields = '__all__'
@@ -71,7 +71,7 @@ class TripCreateForm(forms.ModelForm):
         return return_date
 
     def clean(self):
-        cleaned_data = super(TripCreateForm, self).clean()
+        cleaned_data = super(TripForm, self).clean()
 
         departure_date = cleaned_data['departure_date']
         return_date = cleaned_data['return_date']
@@ -82,7 +82,7 @@ class TripCreateForm(forms.ModelForm):
         return cleaned_data
 
 
-TripInlineFormset = inlineformset_factory(models.Profile, models.Trip, form=TripCreateForm, extra=1)
+TripInlineFormset = inlineformset_factory(models.Profile, models.Trip, form=TripForm, extra=1)
 
 
 class ProfileCreationForm(forms.ModelForm):
@@ -103,7 +103,7 @@ class ProfileCreationForm(forms.ModelForm):
         return birth_date
 
 
-class AddressCreateForm(forms.ModelForm):
+class AddressForm(forms.ModelForm):
     class Meta:
         model = models.Address
         fields = '__all__'
@@ -114,7 +114,7 @@ class AddressCreateForm(forms.ModelForm):
         }
 
 
-AddressFormset = inlineformset_factory(models.Profile, models.Address, form=AddressCreateForm, extra=0, can_delete=True)
+AddressFormset = inlineformset_factory(models.Profile, models.Address, form=AddressForm, extra=0, can_delete=True)
 
 
 class ProfileCreateForm(forms.ModelForm):

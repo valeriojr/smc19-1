@@ -36,57 +36,68 @@
             </div>
         </div>
     </div>
+    <div id="update-address" class="modal" role="dialog">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title">Editar endereço</h4>
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                </div>
+                <div class="modal-body">
+                    <form id="update-address-form" method="post" action="">{% csrf_token %}
+                        {{ update_address_forms.0|crispy }}
+                    </form>
+                </div>
+
+                <div class="modal-footer">
+                    <button class="btn btn-light" data-dismiss="modal">Cancelar</button>
+                    <input type="submit" form="update-address-form"
+                           class="btn btn-primary"
+                           value="Editar">
+                </div>
+            </div>
+        </div>
+    </div>
+    <div id="delete-address" class="modal" role="dialog">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title">Remover endereço</h4>
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                </div>
+                <div class="modal-body">
+                    <p>Tem certeza que deseja remover o endereço {{ address }}?</p>
+                    <form id="delete-address-form" method="post" action="">{% csrf_token %}</form>
+                </div>
+
+                <div class="modal-footer">
+                    <button class="btn btn-light" data-dismiss="modal"></button>
+                    <input type="submit" form="delete-address-form" class="btn btn-danger"
+                           value="Remover">
+                </div>
+            </div>
+        </div>
+    </div>
     <ul class="list-group">
         {% for address in profile.address_set.all %}
-            <div id="delete-address-{{ address.id }}" class="modal" role="dialog">
-                <div class="modal-dialog">
-                    <div class="modal-content">
-                        <div class="modal-header">
-                            <h4 class="modal-title">Remover endereço</h4>
-                            <button type="button" class="close" data-dismiss="modal">&times;</button>
-                        </div>
-                        <div class="modal-body">
-                            <p>Tem certeza que deseja remover o endereço {{ address }}?</p>
-                            <form id="delete-address-{{ address.id }}-form" method="post"
-                                  action="{% url 'monitoring:delete_address' profile.id address.id %}">{% csrf_token %}</form>
-                        </div>
-
-                        <div class="modal-footer">
-                            <button class="btn btn-light" data-dismiss="modal"></button>
-                            <input type="submit" form="delete-address-{{ address.id }}-form" class="btn btn-danger"
-                                   value="Remover">
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div id="update-address" class="modal" role="dialog">
-                <div class="modal-dialog">
-                    <div class="modal-content">
-                        <div class="modal-header">
-                            <h4 class="modal-title">Editar endereço</h4>
-                            <button type="button" class="close" data-dismiss="modal">&times;</button>
-                        </div>
-                        <div class="modal-body">
-                            <form id="update-address-form" method="post"
-                                  action="{% url 'monitoring:update_address' profile.id address.id %}">{% csrf_token %}
-                                {{ address_form }}
-                            </form>
-                        </div>
-
-                        <div class="modal-footer">
-                            <button class="btn btn-light" data-dismiss="modal"></button>
-                            <input type="submit" form="update-address-form" class="btn btn-danger"
-                                   value="Remover">
-                        </div>
-                    </div>
-                </div>
-            </div>
             <li class="list-group-item">
                 {{ address }}
-                <button class="btn btn-secondary">
+                <button class="btn btn-secondary" data-toggle="modal"
+                        data-target="#update-address" onclick="
+                        $('#update-address-form').attr('action', '{% url 'monitoring:update_address' profile.id address.id %}');
+                        $('#update-address-form #id_type').val('{{ address.type }}');
+                        $('#update-address-form #id_postal_code').val('{{ address.postal_code }}');
+                        $('#update-address-form #id_street_name').val('{{ address.street_name }}');
+                        $('#update-address-form #id_number').val('{{ address.number }}');
+                        $('#update-address-form #id_complement').val('{{ address.complement }}');
+                        $('#update-address-form #id_people').val('{{ address.people }}');
+                        $('#update-address-form #id_city').val('{{ address.city }}');
+                        ">
                     Editar
                 </button>
-                <button class="btn btn-danger" data-toggle="modal" data-target="#delete-address-{{ address.id }}">
+                <button class="btn btn-danger" data-toggle="modal" data-target="#delete-address" onclick="
+                        $('#delete-address-form').attr('action', '{% url 'monitoring:delete_address' profile.id address.id %}');
+                        ">
                     Remover
                 </button>
             </li>
@@ -132,34 +143,64 @@
             </div>
         </div>
     </div>
-    <ul class="list-group">
-        {% for trip in profile.trip_set.all %}
-            <div id="delete-trip-{{ trip.id }}" class="modal" role="dialog">
-                <div class="modal-dialog">
-                    <div class="modal-content">
-                        <div class="modal-header">
-                            <h4 class="modal-title">Remover viagem</h4>
-                            <button type="button" class="close" data-dismiss="modal">&times;</button>
-                        </div>
-                        <div class="modal-body">
-                            <p>Tem certeza que deseja remover a viagem {{ trip }}?</p>
-                            <form id="delete-trip-{{ trip.id }}-form" method="post"
-                                  action="{% url 'monitoring:delete_trip' profile.id trip.id %}">
-                                {% csrf_token %}
-                            </form>
-                        </div>
+    <div id="update-trip" class="modal" role="dialog">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title">Editar endereço</h4>
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                </div>
+                <div class="modal-body">
+                    <form id="update-trip-form" method="post" action="">{% csrf_token %}
+                        {{ update_trip_forms.0|crispy }}
+                    </form>
+                </div>
 
-                        <div class="modal-footer">
-                            <button class="btn btn-light" data-dismiss="modal"></button>
-                            <input type="submit" form="delete-trip-{{ trip.id }}-form" class="btn btn-danger"
-                                   value="Remover">
-                        </div>
-                    </div>
+                <div class="modal-footer">
+                    <button class="btn btn-light" data-dismiss="modal">Cancelar</button>
+                    <input type="submit" form="update-trip-form" class="btn btn-primary" value="Editar">
                 </div>
             </div>
-            <li class="list-group-item">{{ trip }}<a href="#">Editar</a>
-                <button type="button" class="btn btn-danger" data-toggle="modal"
-                        data-target="#delete-trip-{{ trip.id }}">Remover
+        </div>
+    </div>
+    <div id="delete-trip" class="modal" role="dialog">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title">Remover viagem</h4>
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                </div>
+                <div class="modal-body">
+                    <p>Tem certeza que deseja remover a viagem {{ trip }}?</p>
+                    <form id="delete-trip-form" method="post" action="">{% csrf_token %}</form>
+                </div>
+
+                <div class="modal-footer">
+                    <button class="btn btn-light" data-dismiss="modal">Cancelar</button>
+                    <input type="submit" form="delete-trip-form" class="btn btn-danger"
+                           value="Remover">
+                </div>
+            </div>
+        </div>
+    </div>
+    <ul class="list-group">
+        {% for trip in profile.trip_set.all %}
+            <li class="list-group-item">
+                {{ trip }}
+                <button class="btn btn-secondary" data-toggle="modal"
+                        data-target="#update-trip" onclick="
+                        $('#update-trip-form').attr('action', '{% url 'monitoring:update_trip' profile.id trip.id %}');
+                        console.log($('#update-trip-form #id_departure_date').val());
+                        $('#update-trip-form #id_departure_date').val('{{ trip.departure_date|date:'Y-m-d' }}');
+                        $('#update-trip-form #id_return_date').val('{{ trip.return_date|date:'Y-m-d' }}');
+                        $('#update-trip-form #id_country').val('{{ trip.country }}');
+                        ">
+                    Editar
+                </button>
+                <button class="btn btn-danger" data-toggle="modal" data-target="#delete-trip" onclick="
+                        $('#delete-trip-form').attr('action', '{% url 'monitoring:delete_trip' profile.id trip.id %}');
+                        ">
+                    Remover
                 </button>
             </li>
         {% empty %}
@@ -169,8 +210,7 @@
     </ul>
 
     <script>
-        function addressQuery(row, formCount) {
-            const input = $(this);
+        function addressQuery(form, input) {
             const maxlength = parseInt(input.attr('maxlength'));
 
             if (maxlength === input.val().length) {
@@ -182,30 +222,23 @@
                     if ((xhr.readyState === 0 || xhr.readyState === 4) && xhr.status === 200) {
                         const response = JSON.parse(xhr.responseText);
                         console.log(xhr.responseText);
-                        let prefix, id;
 
-                        prefix = input.attr("id").split("-")[0];
-                        id = input.attr("id").split("-")[1];
-
-                        console.log(prefix, " ", id);
-
-                        $(`#id_street_name`).val(response.logradouro);
-                        $(`#id_neighbourhood`).val(response.bairro);
-                        $(`#id_city`).val(response.cidade);
+                        form.find(`#id_street_name`).val(response.logradouro);
+                        form.find(`#id_neighbourhood`).val(response.bairro);
+                        form.find(`#id_city`).val(response.cidade);
                     }
                 };
                 xhr.send(null);
             }
         }
 
-        function populate(frm, data) {
-            $.each(data, function (key, value) {
-                $('[name=' + key + ']', frm).val(value);
-            });
-        }
-
         $(document).ready(function () {
-            $(".postal-code-field").on('input', addressQuery);
+            $(".postal-code-field").each(function(){
+                const input = $(this);
+                const form = input.closest("form");
+                console.log(input.attr("id"));
+                input.on('input', function (){ addressQuery(form, input); });
+            });
         });
     </script>
 {% endblock %}

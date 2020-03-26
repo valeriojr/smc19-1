@@ -30,19 +30,19 @@ class GetProfile(mixins.LoginRequiredMixin, generic.DetailView):
     def get_context_data(self, **kwargs):
         context = super(GetProfile, self).get_context_data(**kwargs)
 
-        context['address_form'] = forms.AddressCreateForm(data={
+        context['address_form'] = forms.AddressForm(data={
             'profile': self.object.id
         })
 
-        context['update_address_forms'] = [forms.AddressCreateForm(instance=address) for address in
+        context['update_address_forms'] = [forms.AddressForm(instance=address) for address in
                                            self.object.address_set.all()]
 
-        context['create_trip_form'] = forms.TripCreateForm(data={
+        context['create_trip_form'] = forms.TripForm(data={
             'profile': self.object.id
         })
 
-        context['update_trip_forms'] = [forms.TripCreateForm(instance=trip) for trip in
-                                           self.object.trip_set.all()]
+        context['update_trip_forms'] = [forms.TripForm(instance=trip) for trip in
+                                        self.object.trip_set.all()]
 
         return context
 
@@ -58,7 +58,7 @@ class DeleteProfile(mixins.LoginRequiredMixin, generic.DeleteView):
 
 
 class CreateAddress(mixins.LoginRequiredMixin, generic.CreateView):
-    form_class = forms.AddressCreateForm
+    form_class = forms.AddressForm
 
     def get_success_url(self):
         return reverse('monitoring:get_profile', args=[self.kwargs['profile']])
@@ -66,6 +66,7 @@ class CreateAddress(mixins.LoginRequiredMixin, generic.CreateView):
 
 class UpdateAddress(mixins.LoginRequiredMixin, generic.UpdateView):
     model = models.Address
+    form_class = forms.AddressForm
 
     def get_success_url(self):
         return reverse('monitoring:get_profile', args=[self.kwargs['profile']])
@@ -126,7 +127,7 @@ class CadastrarAtendimento(mixins.LoginRequiredMixin, generic.CreateView):
 
 
 class CreateTrip(mixins.LoginRequiredMixin, generic.CreateView):
-    form_class = forms.TripCreateForm
+    form_class = forms.TripForm
 
     def get_success_url(self):
         return reverse('monitoring:get_profile', args=[self.kwargs['profile']])
@@ -138,6 +139,7 @@ class CreateTrip(mixins.LoginRequiredMixin, generic.CreateView):
 
 class UpdateTrip(mixins.LoginRequiredMixin, generic.UpdateView):
     model = models.Trip
+    form_class = forms.TripForm
 
     def get_success_url(self):
         return reverse_lazy('monitoring:index_profile')
