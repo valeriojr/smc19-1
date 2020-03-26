@@ -61,14 +61,3 @@ class AccountTests(TestCase):
         form = forms.AccountCreationForm(data=data)
 
         self.assertTrue(not form.has_error('password') and not form.has_error('confirm_password'))
-
-
-class AddressTests(TestCase):
-    def test_birth_date_in_the_future(self):
-        data = {
-            'birth_date': timezone.now() + timezone.timedelta(days=1)
-        }
-
-        form = forms.ProfileCreationForm(data=data)
-
-        self.assertTrue(form.has_error('birth_date'))

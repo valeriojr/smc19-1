@@ -18,7 +18,7 @@ class IndexProfile(mixins.LoginRequiredMixin, generic.ListView):
 
 
 class CreateProfile(mixins.LoginRequiredMixin, generic.CreateView):
-    form_class = forms.ProfileCreateForm
+    form_class = forms.ProfileForm
     template_name = 'monitoring/new_profile.html'
     success_url = reverse_lazy('monitoring:index_profile')
 
@@ -29,6 +29,8 @@ class GetProfile(mixins.LoginRequiredMixin, generic.DetailView):
 
     def get_context_data(self, **kwargs):
         context = super(GetProfile, self).get_context_data(**kwargs)
+
+        context['update_profile_form'] = forms.ProfileForm(instance=self.object)
 
         context['address_form'] = forms.AddressForm(data={
             'profile': self.object.id
@@ -49,7 +51,10 @@ class GetProfile(mixins.LoginRequiredMixin, generic.DetailView):
 
 class UpdateProfile(mixins.LoginRequiredMixin, generic.UpdateView):
     model = models.Profile
-    success_url = reverse_lazy('monitoring:index_profile')
+    form_class = forms.ProfileForm
+
+    def get_success_url(self):
+        return reverse('monitoring:get_profile', args=[self.kwargs['pk']])
 
 
 class DeleteProfile(mixins.LoginRequiredMixin, generic.DeleteView):

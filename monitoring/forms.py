@@ -118,7 +118,7 @@ class AddressForm(forms.ModelForm):
 AddressFormset = inlineformset_factory(models.Profile, models.Address, form=AddressForm, extra=0, can_delete=True)
 
 
-class ProfileCreateForm(forms.ModelForm):
+class ProfileForm(forms.ModelForm):
     class Meta:
         model = models.Profile
         fields = '__all__'
