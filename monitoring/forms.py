@@ -50,22 +50,6 @@ class TripForm(forms.ModelForm):
             'country': forms.RadioSelect()
         }
 
-    def clean_departure_date(self):
-        departure_date = self.cleaned_data['departure_date']
-
-        if departure_date is not None and departure_date > timezone.now().date():
-            self.add_error('departure_date', 'Data de ida no futuro')
-
-        return departure_date
-
-    def clean_return_date(self):
-        return_date = self.cleaned_data['return_date']
-
-        if return_date is not None and return_date > timezone.now().date():
-            self.add_error('return_date', 'Data da volta no futuro')
-
-        return return_date
-
     def clean(self):
         cleaned_data = super(TripForm, self).clean()
 
@@ -89,15 +73,6 @@ class ProfileCreationForm(forms.ModelForm):
             'birth_date': forms.DateInput(format='%d/%m/%Y', attrs={'type': 'date'}),
         }
 
-    def clean_birth_date(self):
-        birth_date = self.cleaned_data['birth_date']
-
-        if birth_date > timezone.now().date():
-            error = 'Data de nascimento após %s inválida' % datetime.strftime(timezone.now().date(), '%d/%m/%Y')
-            self.add_error('birth_date', error)
-
-        return birth_date
-
 
 class AddressForm(forms.ModelForm):
     class Meta:
@@ -117,6 +92,6 @@ class ProfileForm(forms.ModelForm):
     class Meta:
         model = models.Profile
         fields = '__all__'
-
-    birth_date = forms.DateField(input_formats=settings.DATE_INPUT_FORMATS, required=False, label='Data de nascimento',
-                                 widget=forms.DateInput(attrs={'type': 'date'}))
+        widgets = {
+            'birth_date': forms.DateInput(format='%Y-%m-%d', attrs={'type': 'date'})
+        }
