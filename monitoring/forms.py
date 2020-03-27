@@ -118,4 +118,5 @@ class ProfileForm(forms.ModelForm):
         model = models.Profile
         fields = '__all__'
 
-    birth_date = forms.DateField(input_formats=settings.DATE_INPUT_FORMATS, required=False, label='Data de nascimento')
+    birth_date = forms.DateField(input_formats=settings.DATE_INPUT_FORMATS, required=False, label='Data de nascimento',
+                                 widget=forms.DateInput(attrs={'type': 'date'}))
