@@ -53,7 +53,7 @@ comorbidities = [
     ('H', 'Doença cardíacas'),
     ('L', 'Doença crônica no fígado'),
     ('R', 'Doença renal crônica'),
-    ('R', 'Doenças reumáticas'),
+    ('W', 'Doenças reumáticas'),
     ('P', 'Doença pulmonar crônica'),
     ('I', 'Imunosuprimido'),
     ('T', 'Hipertensão'),
@@ -74,4 +74,10 @@ exposure = [
     ('confirmed_cases', 'Contato com casos confirmados'),
     ('suspect_cases', 'Contato com casos suspeitos'),
     ('foreign', 'Contato com pessoas que estiveram em locais com casos confirmados'),
+]
+
+results = [
+    ('SR', 'Sem resposta'),
+    ('PO', 'Positivo'),
+    ('NE', 'Negativo'),
 ]
