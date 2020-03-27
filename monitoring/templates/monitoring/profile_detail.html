@@ -3,6 +3,7 @@
 {% load crispy_forms_filters %}
 
 {% block content %}
+    <!-- Modal com o formulário de atualização do perfil -->
     <div id="update-profile" class="modal" role="dialog">
         <div class="modal-dialog">
             <div class="modal-content">
@@ -26,78 +27,95 @@
             </div>
         </div>
     </div>
-    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#update-profile">Editar</button>
+    <p>
+        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#update-profile">Editar</button>
+    </p>
 
-    <h3>Dados pessoais</h3>
+    <!-- Dados pessoais -->
+    <h4>Dados pessoais</h4>
     <div class="row-col">
-        <div class="text-muted">Nome completo</div>
-        <div>{{ profile.full_name }}</div>
+        <small class="text-muted">Nome completo</small>
+        <div class="border rounded p-1">{{ profile.full_name }}</div>
     </div>
     <div class="row">
-        <div class="col-6">
-            <div class="text-muted">RG</div>
-            <div>{{ profile.id_document }}</div>
+        <div class="col-6 pr-1">
+            <small class="text-muted">RG</small>
+            <div class="border rounded p-1">{{ profile.id_document }}</div>
         </div>
-        <div class="col-6">
-            <div class="text-muted">CPF</div>
-            <div>{{ profile.cpf }}</div>
-        </div>
-    </div>
-    <div class="row-col">
-        <div class="text-muted">Nome da mãe</div>
-        <div>{{ profile.mother_name }}</div>
-    </div>
-    <div class="row-col">
-        <div class="text-muted">Cadastro Nacional de Saúde</div>
-        <div>{{ profile.cns }}</div>
-    </div>
-    <div class="row">
-        <div class="col-6">
-            <div class="text-muted">Data de nascimento</div>
-            <div>{{ profile.birth_date|date:'d/m/Y' }}</div>
-        </div>
-        <div class="col-6">
-            <div class="text-muted">Idade</div>
-            <div>{{ profile.age }} anos</div>
+        <div class="col-6 pl-1">
+            <small class="text-muted">CPF</small>
+            <div class="border rounded p-1">{{ profile.cpf }}</div>
         </div>
     </div>
     <div class="row-col">
-        <div class="text-muted">Sexo</div>
-        <div>{{ profile.get_gender_display }}</div>
+        <small class="text-muted">Nome da mãe</small>
+        <div class="border rounded p-1">{{ profile.mother_name }}</div>
+    </div>
+    <div class="row-col">
+        <small class="text-muted">Cadastro Nacional de Saúde</small>
+        <div class="border rounded p-1">{{ profile.cns }}</div>
     </div>
     <div class="row">
-        <div class="col-6">
-            <div class="text-muted">Altura</div>
-            <div>{{ profile.height }} m</div>
+        <div class="col-6 pr-1">
+            <small class="text-muted">Data de nascimento</small>
+            <div class="border rounded p-1">{{ profile.birth_date|date:'d/m/Y' }}</div>
         </div>
-        <div class="col-6">
-            <div class="text-muted">Peso</div>
-            <div>{{ profile.weight }} kg</div>
+        <div class="col-6 pl-1">
+            <small class="text-muted">Idade</small>
+            <div class="border rounded p-1">{{ profile.age }} anos</div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-4 pr-1">
+            <small class="text-muted">Sexo</small>
+            <div class="border rounded p-1">{{ profile.get_gender_display }}</div>
+        </div>
+        <div class="col-4 pr-1 pl-1">
+            <small class="text-muted">Altura</small>
+            <div class="border rounded p-1">{{ profile.height }} m</div>
+        </div>
+        <div class="col-4 pl-1">
+            <small class="text-muted">Peso</small>
+            <div class="border rounded p-1">{{ profile.weight }} kg</div>
         </div>
     </div>
     <div class="row-col">
-        <div class="text-muted">Número de telefone</div>
-        <div>{{ profile.phone_number }}</div>
+        <small class="text-muted">Número de telefone</small>
+        <div class="border rounded p-1">{{ profile.phone_number }}</div>
     </div>
     <div class="row">
-        <div class="col-6">
-            <div class="text-muted">Vacinado contra gripe em 2020</div>
-            <div>{{ profile.vaccinated|yesno|title }}</div>
+        <div class="col-6 pr-1">
+            <small class="text-muted">Vacinado contra gripe em 2020</small>
+            <div class="border rounded p-1">{{ profile.vaccinated|yesno|title }}</div>
         </div>
-        <div class="col-6">
-            <div class="text-muted">Fumante</div>
-            <div>{{ profile.smoker|yesno|title }}</div>
+        <div class="col-6 pl-1">
+            <small class="text-muted">Fumante</small>
+            <div class="border rounded p-1">{{ profile.smoker|yesno|title }}</div>
         </div>
     </div>
     <div class="row">
-        <div class="col-6">
-            <div class="text-muted">Precisou de oxigênio recentemente</div>
-            <div>{{ profile.oxygen|yesno|title }}</div>
+        <div class="col-6 pr-1">
+            <small class="text-muted">Precisou de oxigênio recentemente</small>
+            <div class="border rounded p-1">{{ profile.oxygen|yesno|title }}</div>
         </div>
     </div>
 
     <hr>
-    <h3>Endereço</h3>
+
+    <h4>Comorbidades</h4>
+    <div class="row">
+        {% for comorbidity in comorbidities %}
+            <div class="col-sm-12 col-md-6 col-lg-4">
+                <small class="text-muted">{{ comorbidity.label }}</small>
+                <div class="border rounded p-1">{{ comorbidity.set|yesno|title }}</div>
+            </div>
+        {% endfor %}
+    </div>
+
+    <hr>
+
+    <h4>Endereço</h4>
+    <!-- Modal com o formulário de criação do endereço -->
     <div id="create-address" class="modal" role="dialog">
         <div class="modal-dialog">
             <div class="modal-content">
@@ -120,6 +138,7 @@
             </div>
         </div>
     </div>
+    <!-- Modal com o formulário de atualização do endereço -->
     <div id="update-address" class="modal" role="dialog">
         <div class="modal-dialog">
             <div class="modal-content">
@@ -142,6 +161,7 @@
             </div>
         </div>
     </div>
+    <!-- Modal com o formulário de remoção do endereço -->
     <div id="delete-address" class="modal" role="dialog">
         <div class="modal-dialog">
             <div class="modal-content">
@@ -162,6 +182,7 @@
             </div>
         </div>
     </div>
+    <!-- Lista de endereços -->
     <ul class="list-group">
         {% for address in profile.address_set.all %}
             <li class="list-group-item">
@@ -185,25 +206,16 @@
                     Remover
                 </button>
             </li>
+        {% empty %}
+            <p class="text-muted">Nenhum endereço cadastrado</p>
         {% endfor %}
         <button class="btn btn-primary" data-toggle="modal" data-target="#create-address">Adicionar endereço</button>
     </ul>
+
     <hr>
-    <h3>Comorbidades</h3>
-    <p>Diabetes: {{ profile.diabetes|yesno|title }}</p>
-    <p>Doenças cardíacas: {{ profile.heart_diseases|yesno|title }}</p>
-    <p>Hipertensão: {{ profile.hypertension|yesno|title }}</p>
-    <p>Demência: {{ profile.dementia|yesno|title }}</p>
-    <p>Bronquite crônica: {{ profile.bronchitis|yesno|title }}</p>
-    <p>Câncer: {{ profile.cancer|yesno|title }}</p>
-    <p>Doença crônica no fígado: {{ profile.chronic_liver_disease|yesno|title }}</p>
-    <p>Doença renal crônica: {{ profile.chronic_kidney_disease|yesno|title }}</p>
-    <p>Asma: {{ profile.asthma|yesno|title }}</p>
-    <p>Doença pulmonar crônica: {{ profile.chronic_lung_disease|yesno|title }}</p>
-    <p>Doenças reumáticas: {{ profile.rheumatic_diseases|yesno|title }}</p>
-    <p>Obesidade: {{ profile.obesity|yesno|title }}</p>
-    <hr>
-    <h3>Histórico de viagens</h3>
+
+    <h4>Histórico de viagens</h4>
+    <!-- Modal com o formulário de criação de viagens -->
     <div id="create-trip" class="modal" role="dialog">
         <div class="modal-dialog">
             <div class="modal-content">
@@ -227,6 +239,7 @@
             </div>
         </div>
     </div>
+    <!-- Modal com o formulário de atualização de viagens -->
     <div id="update-trip" class="modal" role="dialog">
         <div class="modal-dialog">
             <div class="modal-content">
@@ -247,6 +260,7 @@
             </div>
         </div>
     </div>
+    <!-- Modal com o formulário de remoção de viagens -->
     <div id="delete-trip" class="modal" role="dialog">
         <div class="modal-dialog">
             <div class="modal-content">
@@ -267,6 +281,7 @@
             </div>
         </div>
     </div>
+    <!-- Lista de viagens -->
     <ul class="list-group mb-3">
         {% for trip in profile.trip_set.all %}
             <li class="list-group-item">
@@ -287,7 +302,7 @@
                 </button>
             </li>
         {% empty %}
-            <p>Nenhuma viagem recente</p>
+            <p class="text-muted">Nenhuma viagem recente</p>
         {% endfor %}
         <button class="btn btn-primary" data-toggle="modal" data-target="#create-trip">Adicionar viagem</button>
     </ul>

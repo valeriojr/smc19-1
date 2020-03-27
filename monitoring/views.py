@@ -57,12 +57,26 @@ class ProfileDetail(mixins.LoginRequiredMixin, generic.DetailView):
         context['update_trip_forms'] = [forms.TripForm(instance=trip) for trip in
                                         self.object.trip_set.all()]
 
+
+        comorbidities = []
+        for comorbidity in self.object.comorbidities:
+            comorbidities.append({
+                'label': self.object.comorbidities.get_label(comorbidity[0]),
+                'set': comorbidity[1]
+            })
+
+        context['comorbidities'] = comorbidities
+
         return context
 
 
 class ProfileUpdate(mixins.LoginRequiredMixin, generic.UpdateView):
     model = models.Profile
     form_class = forms.ProfileForm
+
+    def form_invalid(self, form):
+        messages.error(self.request, form.errors)
+        return HttpResponseRedirect(self.get_success_url())
 
     def get_success_url(self):
         return reverse('monitoring:profile-detail', args=[self.kwargs['pk']])

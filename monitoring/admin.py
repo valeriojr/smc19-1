@@ -1,4 +1,6 @@
 from django.contrib import admin
+from bitfield import BitField
+from bitfield.forms import BitFieldCheckboxSelectMultiple
 
 from . import models
 

@@ -1,17 +1,17 @@
 symptoms = [
     ('CA', 'Cansaço'),
+    ('CN', 'Congestão nasal'),
     ('DI', 'Diarreia'),
     ('SB', 'Dificuldade respiratória'),
     ('ST', 'Dor de garganta'),
-    ('AP', 'Dores no corpo'),
     ('DC', 'Dor de cabeça'),
+    ('AP', 'Dores no corpo'),
+    ('FA', 'Falta de apetite'), # famoso fastio
     ('FV', 'Febre'),
-    ('TS', 'Tosse seca'),
-    ('TP', 'Tosse produtiva'),
-    ('FA', 'Falta de apetite'),
-    ('CN', 'Congestão nasal'),
     ('RN', 'Nariz escorrendo'),
     ('NA', 'Náusea'),
+    ('TP', 'Tosse produtiva'),
+    ('TS', 'Tosse seca'),
     ('VO', 'Vômitos'),
 ]
 
@@ -34,33 +34,32 @@ address_types = [
     ('OT', 'Outro'),
 ]
 
-drugs = [
-    ('', 'Anti hipertensivo'),
-    ('', 'Imunossupressores'),
-    ('', 'Anti diabéticos'),
-    ('', 'Antibióticos'),
-    ('', 'Corticoide'),
-    ('', 'Anti inflamatório')
-]
+# drugs = [
+#     ('', 'Anti hipertensivo'),
+#     ('', 'Imunossupressores'),
+#     ('', 'Anti diabéticos'),
+#     ('', 'Antibióticos'),
+#     ('', 'Corticoide'),
+#     ('', 'Anti inflamatório')
+# ]
 
 comorbidities = [
-    ('H', 'Doença cardíacas'),
-    ('T', 'Hipertensão'),
-    ('D', 'Diabetes'),
-    ('E', 'Demência'),
+    ('Y', 'Artrite reumatóide'),
+    ('A', 'Asma'),
     ('C', 'Bronquite crônica'),
     ('N', 'Câncer'),
+    ('E', 'Demência'),
+    ('D', 'Diabetes'),
+    ('H', 'Doença cardíacas'),
     ('L', 'Doença crônica no fígado'),
     ('R', 'Doença renal crônica'),
-    ('A', 'Asma'),
-    ('P', 'Doença pulmonar crônica'),
     ('R', 'Doenças reumáticas'),
-    ('B', 'Obesidade'),
-    ('V', 'HIV+'),
+    ('P', 'Doença pulmonar crônica'),
     ('I', 'Imunosuprimido'),
+    ('T', 'Hipertensão'),
+    ('V', 'HIV+'),
+    ('B', 'Obesidade'),
     ('U', 'Portador de Lúpus'),
-    ('Y', 'Artrite reumatóide'),
-    ('O', 'Outra')
 ]
 
 countries = [
