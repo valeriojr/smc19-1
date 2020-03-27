@@ -146,10 +146,8 @@ STATIC_URL = '/static/'
 
 # Extra places for collectstatic to find static files.
 
-
 LOGIN_REDIRECT_URL = reverse_lazy('monitoring:home')
 LOGOUT_REDIRECT_URL = '/'
-
 
 CRISPY_TEMPLATE_PACK = 'bootstrap4'
 
@@ -160,3 +158,5 @@ MESSAGE_TAGS = {
     messages.WARNING: 'alert-warning',
     messages.ERROR: 'alert-danger',
 }
+
+DATE_INPUT_FORMATS = ('%d-%m-%Y','%Y-%m-%d')

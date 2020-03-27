@@ -125,7 +125,7 @@
                 </div>
 
                 <div class="modal-body">
-                    <form id="create-address-form" class="form-inline" method="post"
+                    <form id="create-address-form" class="form-group" method="post"
                           action="{% url 'monitoring:address-create' profile.id %}">{% csrf_token %}
                         {{ address_form|crispy }}
                     </form>

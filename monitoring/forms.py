@@ -6,6 +6,7 @@ from django.utils import timezone
 from django.utils.timezone import now
 
 from monitoring import choices
+from smc19 import settings
 from . import models
 
 
@@ -113,9 +114,14 @@ class AddressForm(forms.ModelForm):
             'complement': forms.Textarea(attrs={'rows': 2}),
             'profile': forms.HiddenInput()
         }
+        labels = {
+            'people': 'Número de pessoas residindo nesse endereço'
+        }
 
 
 class ProfileForm(forms.ModelForm):
     class Meta:
         model = models.Profile
         fields = '__all__'
+
+    birth_date = forms.DateField(input_formats=settings.DATE_INPUT_FORMATS, required=False, label='Data de nascimento')
