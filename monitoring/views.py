@@ -26,6 +26,10 @@ class Index(mixins.LoginRequiredMixin, generic.ListView):
         return context
 
 
+class Map(mixins.LoginRequiredMixin, generic.TemplateView):
+    template_name = 'monitoring/map.html'
+
+
 # Profile
 
 class ProfileCreate(mixins.LoginRequiredMixin, generic.CreateView):
