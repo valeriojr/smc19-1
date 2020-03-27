@@ -10,4 +10,15 @@
             <div class="form-group"><input type="submit" class="btn btn-primary" value="Cadastrar paciente"></div>
         </div>
     </form>
+    <script>
+        $("#id_birth_date").on('change', () => {
+            var birth_date = new Date($("#id_birth_date").val());
+            var today = new Date();
+            var diff = new Date(milisecond = (today - birth_date));
+            var age =  Math.abs(diff.getFullYear() - 1970);
+            $("#id_age").val(age);
+            console.log(age);
+        });
+
+    </script>
 {% endblock %}

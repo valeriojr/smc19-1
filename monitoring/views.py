@@ -116,6 +116,7 @@ class AddressDelete(mixins.LoginRequiredMixin, generic.DeleteView):
 class MonitoringDetail(mixins.LoginRequiredMixin, generic.DetailView):
     model = models.Monitoring
 
+
     def get_context_data(self, **kwargs):
         context = super(MonitoringDetail, self).get_context_data(**kwargs)
 
@@ -186,8 +187,8 @@ class MonitoringUpdate(mixins.LoginRequiredMixin, generic.UpdateView):
     model = models.Monitoring
     form_class = forms.MonitoringForm
 
-    def get_success_url(self):
-        return reverse('monitoring:monitoring_detail', args=[self.kwargs['pk']])
+    #def get_success_url(self):
+    #    return reverse('monitoring:monitoring_detail', args=[self.kwargs['pk']])
 
 
 class MonitoringDelete(mixins.LoginRequiredMixin, generic.DeleteView):
