@@ -5,8 +5,8 @@
     <h3>Atendimento <span class="text-muted">nº{{ monitoring.id }}</span></h3>
     <p>Realizado em {{ monitoring.date|date:'d/m/Y' }}</p>
     <div class="row-col">
-        <small class="text-muted">Confirmado</small>
-        <div class="border rounded p-1">{{ monitoring.confirmed|yesno|title }}</div>
+        <small class="text-muted">Caso suspeito?</small>
+        <div class="border rounded p-1">{{ monitoring.suspect|yesno|title }}</div>
     </div>
 
     <h4>Exposições ao vírus</h4>
