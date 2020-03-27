@@ -3,9 +3,43 @@
 {% load static %}
 
 {% block content %}
+    <style>
+        path {
+            fill: #ccc;
+            stroke: #fff;
+            stroke-width: .5px;
+        }
 
-    <svg id="map"></svg>
+        circle {
+            fill: #fff;
+            fill-opacity: 0.4;
+            stroke: #111;
+        }
 
+        path.active {
+            fill: blue;
+        }
+
+        .low {
+            fill: blue;
+        }
+
+        .medium {
+            fill: yellow;
+        }
+
+        .high {
+            fill: red;
+        }
+
+        circle.active {
+            fill: blue;
+        }
+    </style>
+
+    <div  style="overflow-x: scroll">
+        <svg></svg>
+    </div>
     <script src="{% static 'scripts/map_visualization.js' %}"></script>
 
 {% endblock %}
