@@ -28,6 +28,7 @@ SECRET_KEY = 'afr)&4ipm5wp2_-9c=no-!a+tq&frk3lgfze$t#+%ak#n*=+%z'
 DEBUG = True
 
 ALLOWED_HOSTS = [
+    '192.168.92.128',
     'smc19.herokuapp.com',
     '127.0.0.1'
 ]
