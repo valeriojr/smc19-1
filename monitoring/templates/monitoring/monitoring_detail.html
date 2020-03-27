@@ -22,10 +22,6 @@
                 <div class="border rounded p-1">{{ monitoring.result|title }}</div>
             </div>
 
-            <div class="col-6 col-md-6 col-lg-4">
-                <button>Confirmar</button>
-            </div>
-
         </div>
     </div>
 
@@ -47,5 +43,7 @@
             <p class="text-muted">Nenhum sintoma reportado</p>
         {% endfor %}
     </ul>
+
+    <a class="btn btn-primary" href="{% url 'monitoring:monitoring-update' monitoring.id %}">Editar</a>
 
 {% endblock %}

@@ -186,8 +186,21 @@ class MonitoringUpdate(mixins.LoginRequiredMixin, generic.UpdateView):
     model = models.Monitoring
     form_class = forms.MonitoringForm
 
-    def get_success_url(self):
-        return reverse('monitoring:monitoring_detail', args=[self.kwargs['pk']])
+    def get_context_data(self, **kwargs):
+        global model
+        context = super(MonitoringUpdate, self).get_context_data(**kwargs)
+
+        symptoms_initial = [{'symptom': symptom[0], 'label': symptom[1]} for symptom in choices.symptoms]
+
+        if self.request.GET:
+            context['symptom_formset'] = forms.SymptomInlineFormset(model, initial=symptoms_initial)
+        else:
+            context['symptom_formset'] = forms.SymptomInlineFormset(initial=symptoms_initial)
+
+        return context
+
+    # def get_success_url(self):
+    #     return reverse('monitoring:monitoring_detail', args=[self.kwargs['pk']])
 
 
 class MonitoringDelete(mixins.LoginRequiredMixin, generic.DeleteView):

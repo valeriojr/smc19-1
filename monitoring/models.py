@@ -1,6 +1,7 @@
 from bitfield import BitField
 from django.core.validators import MinValueValidator
 from django.db import models
+from django.urls import reverse
 
 import validators
 from . import choices
@@ -58,6 +59,9 @@ class Monitoring(models.Model):
     suspect = models.BooleanField(verbose_name='Suspeito de COVID-19', default=False)
     virus_exposure = BitField(verbose_name='Exposição COVID-19', flags=choices.exposure, blank=True, default=0)
     result = models.CharField(verbose_name='Resultado do exame', max_length=2, choices=choices.results, default='SR')
+
+    def get_absolute_url(self):
+        return reverse('monitoring:monitoring-detail', kwargs={'pk': self.pk})
 
     def __str__(self):
         return '%s (%s)' % (self.profile, self.date.strftime('%d/%m/%Y'))
