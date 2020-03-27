@@ -1,14 +1,18 @@
 symptoms = [
-    ('TR', 'Cansaço'),
+    ('CA', 'Cansaço'),
     ('DI', 'Diarreia'),
     ('SB', 'Dificuldade respiratória'),
     ('ST', 'Dor de garganta'),
     ('AP', 'Dores no corpo'),
+    ('DC', 'Dor de cabeça'),
     ('FV', 'Febre'),
-    ('DC', 'Tosse'),
+    ('TS', 'Tosse seca'),
+    ('TP', 'Tosse produtiva'),
+    ('FA', 'Falta de apetite'),
+    ('CN', 'Congestão nasal'),
     ('RN', 'Nariz escorrendo'),
-    ('DI', 'Náusea'),
-    ('OT', 'Outro')
+    ('NA', 'Náusea'),
+    ('VO', 'Vômitos'),
 ]
 
 intensities = [
@@ -52,6 +56,10 @@ comorbidities = [
     ('P', 'Doença pulmonar crônica'),
     ('R', 'Doenças reumáticas'),
     ('B', 'Obesidade'),
+    ('V', 'HIV+'),
+    ('I', 'Imunosuprimido'),
+    ('U', 'Portador de Lúpus'),
+    ('Y', 'Artrite reumatóide'),
     ('O', 'Outra')
 ]
 
