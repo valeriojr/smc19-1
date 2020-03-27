@@ -52,8 +52,8 @@ class Address(models.Model):
 class Monitoring(models.Model):
     profile = models.ForeignKey(Profile, models.CASCADE)
     date = models.DateField(verbose_name='Data', auto_now_add=True)
-    suspect = models.BooleanField(verbose_name='Suspeito', default=False)
-    virus_exposure = BitField(verbose_name='Exposição ao vírus', flags=choices.exposure, blank=True, default=0)
+    suspect = models.BooleanField(verbose_name='Suspeito de COVID-19', default=False)
+    virus_exposure = BitField(verbose_name='Exposição COVID-19', flags=choices.exposure, blank=True, default=0)
 
     def __str__(self):
         return '%s (%s)' % (self.profile, self.date.strftime('%d/%m/%Y'))
