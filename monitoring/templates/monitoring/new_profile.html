@@ -37,6 +37,15 @@
                     age.val('');
                 }
             });
+            birthDate.on("click", function () {
+                const date = new Date(birthDate.val());
+                if(date.getFullYear() > 1900 && date.getFullYear() < new Date().getFullYear()){
+                    age.val(getAge(new Date(birthDate.val())));
+                }
+                else {
+                    age.val('');
+                }
+            });
         });
     </script>
 {% endblock %}
