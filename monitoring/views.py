@@ -57,7 +57,6 @@ class ProfileDetail(mixins.LoginRequiredMixin, generic.DetailView):
         context['update_trip_forms'] = [forms.TripForm(instance=trip) for trip in
                                         self.object.trip_set.all()]
 
-
         comorbidities = []
         for comorbidity in self.object.comorbidities:
             comorbidities.append({
@@ -119,10 +118,24 @@ class MonitoringDetail(mixins.LoginRequiredMixin, generic.DetailView):
     def get_context_data(self, **kwargs):
         context = super(MonitoringDetail, self).get_context_data(**kwargs)
 
-        symptoms_initial = [{'symptom': symptom[0], 'label': symptom[1]} for symptom in choices.symptoms]
+        # Formulário de edição do atendimento atual
+        context['monitoring_update_form'] = forms.MonitoringForm(instance=self.object)
 
-        if self.request.POST:
-            context['symptom_formset'] = forms.SymptomInlineFormset(self.request.POST, initial=symptoms_initial)
+        symptoms_initial = []
+        for symptom in choices.symptoms:
+            s = models.Symptom.objects.filter(symptom=symptom[0])
+            if len(s) > 0:
+                symptoms_initial.append({
+                    'symptom': symptom[0],
+                    'label': symptom[1],
+                    'onset': s[0].onset
+                })
+            else:
+                symptoms_initial.append({
+                    'symptom': symptom[0],
+                    'label': symptom[1]
+                })
+
         else:
             context['symptom_formset'] = forms.SymptomInlineFormset(initial=symptoms_initial)
 
@@ -187,20 +200,45 @@ class MonitoringUpdate(mixins.LoginRequiredMixin, generic.UpdateView):
     form_class = forms.MonitoringForm
 
     def get_context_data(self, **kwargs):
-        global model
         context = super(MonitoringUpdate, self).get_context_data(**kwargs)
 
-        symptoms_initial = [{'symptom': symptom[0], 'label': symptom[1]} for symptom in choices.symptoms]
-
-        if self.request.GET:
-            context['symptom_formset'] = forms.SymptomInlineFormset(model, initial=symptoms_initial)
-        else:
-            context['symptom_formset'] = forms.SymptomInlineFormset(initial=symptoms_initial)
+        if self.request.POST:
+            symptoms_initial = [{'symptom': symptom[0], 'label': symptom[1]} for symptom in choices.symptoms]
+            context['symptom_formset'] = forms.SymptomInlineFormset(self.request.POST, initial=symptoms_initial)
 
         return context
 
-    # def get_success_url(self):
-    #     return reverse('monitoring:monitoring_detail', args=[self.kwargs['pk']])
+    def form_valid(self, form):
+        context = self.get_context_data()
+
+        symptom_formset = context['symptom_formset']
+
+        if symptom_formset.is_valid():
+            self.object = form.save(commit=True)
+
+            for formset in symptom_formset:
+                instance = formset.save(commit=False)
+                symptoms = self.object.symptom_set.filter(symptom=instance.symptom)
+                if len(symptoms) == 1:
+                    if instance.onset is not None:
+                        symptoms[0].onset = instance.onset
+                        symptoms[0].save()
+                    else:
+                        symptoms[0].delete()
+                else:
+                    if instance.onset is not None:
+                        instance.monitoring = self.object
+                        instance.save()
+
+
+            messages.success(self.request, 'Atendimento atualizado com sucesso!')
+
+            return HttpResponseRedirect(self.get_success_url())
+        else:
+            return self.form_invalid(form)
+
+    def get_success_url(self):
+        return reverse('monitoring:monitoring-detail', args=[self.kwargs['pk']])
 
 
 class MonitoringDelete(mixins.LoginRequiredMixin, generic.DeleteView):

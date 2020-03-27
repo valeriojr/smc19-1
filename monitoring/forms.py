@@ -28,7 +28,7 @@ class SymptomCreateForm(forms.ModelForm):
         widgets = {
             'symptom': forms.HiddenInput(),
             'label': forms.HiddenInput(),
-            'onset': forms.DateInput(format='%d/%m/%Y', attrs={'type': 'date'}),
+            'onset': forms.DateInput(format='%Y-%m-%d', attrs={'type': 'date'}),
             'intensity': forms.HiddenInput()
         }
 
