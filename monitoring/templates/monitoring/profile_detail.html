@@ -11,7 +11,8 @@
                     <button type="button" class="close" data-dismiss="modal">&times;</button>
                 </div>
                 <div class="modal-body">
-                    <form id="update-profile-form" method="post" action="{% url 'monitoring:profile-update' profile.id %}">{% csrf_token %}
+                    <form id="update-profile-form" method="post"
+                          action="{% url 'monitoring:profile-update' profile.id %}">{% csrf_token %}
                         {{ update_profile_form|crispy }}
                     </form>
                 </div>
@@ -28,14 +29,73 @@
     <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#update-profile">Editar</button>
 
     <h3>Dados pessoais</h3>
+    <div class="row-col">
+        <div class="text-muted">Nome completo</div>
+        <div>{{ profile.full_name }}</div>
+    </div>
+    <div class="row">
+        <div class="col-6">
+            <div class="text-muted">RG</div>
+            <div>{{ profile.id_document }}</div>
+        </div>
+        <div class="col-6">
+            <div class="text-muted">CPF</div>
+            <div>{{ profile.cpf }}</div>
+        </div>
+    </div>
+    <div class="row-col">
+        <div class="text-muted">Nome da mãe</div>
+        <div>{{ profile.mother_name }}</div>
+    </div>
+    <div class="row-col">
+        <div class="text-muted">Cadastro Nacional de Saúde</div>
+        <div>{{ profile.cns }}</div>
+    </div>
+    <div class="row">
+        <div class="col-6">
+            <div class="text-muted">Data de nascimento</div>
+            <div>{{ profile.birth_date|date:'d/m/Y' }}</div>
+        </div>
+        <div class="col-6">
+            <div class="text-muted">Idade</div>
+            <div>{{ profile.age }} anos</div>
+        </div>
+    </div>
+    <div class="row-col">
+        <div class="text-muted">Sexo</div>
+        <div>{{ profile.get_gender_display }}</div>
+    </div>
+    <div class="row">
+        <div class="col-6">
+            <div class="text-muted">Altura</div>
+            <div>{{ profile.height }} m</div>
+        </div>
+        <div class="col-6">
+            <div class="text-muted">Peso</div>
+            <div>{{ profile.weight }} kg</div>
+        </div>
+    </div>
+    <div class="row-col">
+        <div class="text-muted">Número de telefone</div>
+        <div>{{ profile.phone_number }}</div>
+    </div>
+    <div class="row">
+        <div class="col-6">
+            <div class="text-muted">Vacinado contra gripe em 2020</div>
+            <div>{{ profile.vaccinated|yesno|title }}</div>
+        </div>
+        <div class="col-6">
+            <div class="text-muted">Fumante</div>
+            <div>{{ profile.smoker|yesno|title }}</div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-6">
+            <div class="text-muted">Precisou de oxigênio recentemente</div>
+            <div>{{ profile.oxygen|yesno|title }}</div>
+        </div>
+    </div>
 
-    <p>Nome completo{{ profile }}</p>
-    <p>Nome da mãe: {{ profile.mother_name }}</p>
-    <p>Data de nascimento: {{ profile.birth_date }}</p>
-    <p>CNS: {{ profile.cns }}</p>
-    <p>Sexo: {{ profile.gender }}</p>
-    <p>Telefone: {{ profile.phone_number }}</p>
-    <p>Data de nascimento: {{ profile.vaccinated|yesno }}</p>
     <hr>
     <h3>Endereço</h3>
     <div id="create-address" class="modal" role="dialog">
@@ -130,18 +190,18 @@
     </ul>
     <hr>
     <h3>Comorbidades</h3>
-    <p>Diabetes: {{ profile.diabetes|yesno }}</p>
-    <p>Doenças cardíacas: {{ profile.heart_diseases|yesno }}</p>
-    <p>Hipertensão: {{ profile.hypertension|yesno }}</p>
-    <p>Demência: {{ profile.dementia|yesno }}</p>
-    <p>Bronquite crônica: {{ profile.bronchitis|yesno }}</p>
-    <p>Câncer: {{ profile.cancer|yesno }}</p>
-    <p>Doença crônica no fígado: {{ profile.chronic_liver_disease|yesno }}</p>
-    <p>Doença renal crônica: {{ profile.chronic_kidney_disease|yesno }}</p>
-    <p>Asma: {{ profile.asthma|yesno }}</p>
-    <p>Doença pulmonar crônica: {{ profile.chronic_lung_disease|yesno }}</p>
-    <p>Doenças reumáticas: {{ profile.rheumatic_diseases|yesno }}</p>
-    <p>Obesidade: {{ profile.obesity|yesno }}</p>
+    <p>Diabetes: {{ profile.diabetes|yesno|title }}</p>
+    <p>Doenças cardíacas: {{ profile.heart_diseases|yesno|title }}</p>
+    <p>Hipertensão: {{ profile.hypertension|yesno|title }}</p>
+    <p>Demência: {{ profile.dementia|yesno|title }}</p>
+    <p>Bronquite crônica: {{ profile.bronchitis|yesno|title }}</p>
+    <p>Câncer: {{ profile.cancer|yesno|title }}</p>
+    <p>Doença crônica no fígado: {{ profile.chronic_liver_disease|yesno|title }}</p>
+    <p>Doença renal crônica: {{ profile.chronic_kidney_disease|yesno|title }}</p>
+    <p>Asma: {{ profile.asthma|yesno|title }}</p>
+    <p>Doença pulmonar crônica: {{ profile.chronic_lung_disease|yesno|title }}</p>
+    <p>Doenças reumáticas: {{ profile.rheumatic_diseases|yesno|title }}</p>
+    <p>Obesidade: {{ profile.obesity|yesno|title }}</p>
     <hr>
     <h3>Histórico de viagens</h3>
     <div id="create-trip" class="modal" role="dialog">
@@ -207,7 +267,7 @@
             </div>
         </div>
     </div>
-    <ul class="list-group">
+    <ul class="list-group mb-3">
         {% for trip in profile.trip_set.all %}
             <li class="list-group-item">
                 {{ trip }}
@@ -256,11 +316,13 @@
         }
 
         $(document).ready(function () {
-            $(".postal-code-field").each(function(){
+            $(".postal-code-field").each(function () {
                 const input = $(this);
                 const form = input.closest("form");
                 console.log(input.attr("id"));
-                input.on('input', function (){ addressQuery(form, input); });
+                input.on('input', function () {
+                    addressQuery(form, input);
+                });
             });
         });
     </script>

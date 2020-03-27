@@ -13,7 +13,7 @@ class Profile(models.Model):
     age = models.PositiveIntegerField(verbose_name='Idade', blank=True, default=0)
     cns = models.CharField(verbose_name='Cartão do SUS', max_length=15, blank=True, default='000000000000000')
     id_document = models.CharField(verbose_name='RG', max_length=9, blank=True, default='000000000')
-    cpf = models.CharField(verbose_name='CPF', max_length=9, blank=True, default='00000000000',
+    cpf = models.CharField(verbose_name='CPF', max_length=11, blank=True, default='00000000000',
                            validators=[validators.validate_cpf])
     gender = models.CharField(verbose_name='Sexo', max_length=1, choices=choices.genders, blank=True, default='')
     phone_number = models.CharField(verbose_name='Número de telefone', max_length=11, blank=True, default='')

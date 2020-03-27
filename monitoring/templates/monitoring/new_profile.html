@@ -11,25 +11,3 @@
         </div>
     </form>
 {% endblock %}
-
-<div>
-    <h6>Endereço 1</h6>
-    {{ address_form.profile }}
-    <div class="form-row">
-        <div class="form-group col-6 mb-0">{{ address_form.type|as_crispy_field }}</div>
-        <div class="form-group col-6 mb-0">{{ address_form.postal_code|as_crispy_field }}</div>
-    </div>
-    <div class="form-row">
-        <div class="form-group col-8 mb-0">{{ address_form.street_name|as_crispy_field }}</div>
-        <div class="form-group col-4 mb-0">{{ address_form.number|as_crispy_field }}</div>
-    </div>
-    <div class="form-row">
-        <div class="form-group col-12 mb-0">{{ address_form.complement|as_crispy_field }}</div>
-    </div>
-    <div class="form-row">
-        <div class="form-group col-4 mb-0">{{ address_form.neighbourhood|as_crispy_field }}</div>
-        <div class="form-group col-4 mb-0">{{ address_form.city|as_crispy_field }}</div>
-        <div class="form-group col-4 mb-0">{{ address_form.people|as_crispy_field }}</div>
-    </div>
-</div>
-
