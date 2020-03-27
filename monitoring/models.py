@@ -1,6 +1,6 @@
-from django.db import models
-
 from bitfield import BitField
+from django.core.validators import MinValueValidator
+from django.db import models
 
 import validators
 from . import choices
@@ -11,7 +11,8 @@ from . import choices
 class Profile(models.Model):
     full_name = models.CharField(verbose_name='Nome completo', max_length=100, blank=True, default='')
     mother_name = models.CharField(verbose_name='Nome da mãe', max_length=100, blank=True, default='')
-    birth_date = models.DateField(verbose_name='Data de nascimento', blank=True, default='1970-01-01')
+    birth_date = models.DateField(verbose_name='Data de nascimento', blank=True, default='1970-01-01',
+                                  validators=[validators.prevent_future_date])
     cns = models.CharField(verbose_name='Cartão do SUS', max_length=15, blank=True, default='000000000000000')
     id_document = models.CharField(verbose_name='RG', max_length=9, blank=True, default='000000000')
     cpf = models.CharField(verbose_name='CPF', max_length=11, blank=True, default='00000000000',
@@ -19,8 +20,9 @@ class Profile(models.Model):
     phone_number = models.CharField(verbose_name='Número de telefone', max_length=11, blank=True, default='')
     gender = models.CharField(verbose_name='Sexo', max_length=1, choices=choices.genders, blank=True, default='')
     age = models.PositiveIntegerField(verbose_name='Idade', blank=True, default=0)
-    weight = models.FloatField(verbose_name='Peso', blank=True, default=0)
-    height = models.FloatField(verbose_name='Altura', blank=True, default=0)
+    weight = models.FloatField(verbose_name='Peso', blank=True, default=0,
+                               validators=[MinValueValidator(0)])
+    height = models.FloatField(verbose_name='Altura', blank=True, default=0, validators=[MinValueValidator(0)])
 
     smoker = models.BooleanField(verbose_name='Fumante', blank=True, default=False)
     vaccinated = models.BooleanField(verbose_name='Tomou vacina da gripe em 2020', blank=True, default=False)
@@ -62,7 +64,8 @@ class Symptom(models.Model):
     symptom = models.CharField(verbose_name='Tipo de sintoma', max_length=2, choices=choices.symptoms, default='')
     intensity = models.CharField(verbose_name='Intensidade', max_length=1, choices=choices.intensities, blank=True,
                                  default='L')
-    onset = models.DateField(verbose_name='Data do surgimento', blank=True, null=True)
+    onset = models.DateField(verbose_name='Data do surgimento', blank=True, null=True,
+                             validators=[validators.prevent_future_date])
 
     def __str__(self):
         return '%s %s desde %s' % (self.get_symptom_display(), self.get_intensity_display(),
@@ -71,8 +74,10 @@ class Symptom(models.Model):
 
 class Trip(models.Model):
     profile = models.ForeignKey(Profile, models.CASCADE, default=1)
-    departure_date = models.DateField(verbose_name='Ida', null=True, blank=True, default=None)
-    return_date = models.DateField(verbose_name='Volta', null=True, blank=True, default=None)
+    departure_date = models.DateField(verbose_name='Ida', null=True, blank=True, default=None,
+                                      validators=[validators.prevent_future_date])
+    return_date = models.DateField(verbose_name='Volta', null=True, blank=True, default=None,
+                                   validators=[validators.prevent_future_date])
     country = models.CharField(verbose_name='País', max_length=3, choices=choices.countries, default='')
 
     def __str__(self):

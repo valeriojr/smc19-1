@@ -34,14 +34,6 @@ class SymptomCreateForm(forms.ModelForm):
 
     label = forms.CharField(widget=forms.HiddenInput(), required=False, empty_value='')
 
-    def clean_onset(self):
-        onset = self.cleaned_data['onset']
-
-        if onset is not None and onset > now().date():
-            self.add_error('onset', 'Surgimento de sintoma(s) no futuro')
-
-        return onset
-
 
 SymptomInlineFormset = inlineformset_factory(models.Monitoring, model=models.Symptom, form=SymptomCreateForm,
                                              extra=len(choices.symptoms), can_delete=False)

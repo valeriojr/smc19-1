@@ -1,4 +1,5 @@
 from django.core.exceptions import ValidationError
+from django.utils import timezone
 
 
 def validate_cpf(cpf):
@@ -25,3 +26,8 @@ def validate_cpf(cpf):
 
     if not first_digit_valid or not second_digit_valid:
         raise ValidationError('CPF inválido')
+
+
+def prevent_future_date(date):
+    if date > timezone.now().date():
+        raise ValidationError('Data no futuro')
