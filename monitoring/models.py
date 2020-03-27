@@ -1,6 +1,7 @@
 from bitfield import BitField
 from django.core.validators import MinValueValidator
 from django.db import models
+from django.urls import reverse
 
 import validators
 from . import choices
@@ -20,7 +21,7 @@ class Profile(models.Model):
     phone_number = models.CharField(verbose_name='Número de telefone', max_length=11, blank=True, default='')
     gender = models.CharField(verbose_name='Sexo biológico', max_length=1, choices=choices.genders, blank=True,
                               default='')
-    age = models.PositiveIntegerField(verbose_name='Idade', blank=True, default=0)
+    age = models.PositiveIntegerField(verbose_name='Idade', blank=True)
     weight = models.FloatField(verbose_name='Peso', blank=True, default=0,
                                validators=[MinValueValidator(0)])
     height = models.FloatField(verbose_name='Altura', blank=True, default=0, validators=[MinValueValidator(0)])
@@ -53,9 +54,14 @@ class Address(models.Model):
 
 class Monitoring(models.Model):
     profile = models.ForeignKey(Profile, models.CASCADE)
+    tested = models.BooleanField(verbose_name='Já foi testado', blank=True, default=False)
     date = models.DateField(verbose_name='Data', auto_now_add=True)
     suspect = models.BooleanField(verbose_name='Suspeito de COVID-19', default=False)
     virus_exposure = BitField(verbose_name='Exposição COVID-19', flags=choices.exposure, blank=True, default=0)
+    result = models.CharField(verbose_name='Resultado do exame', max_length=2, choices=choices.results, default='SR')
+
+    def get_absolute_url(self):
+        return reverse('monitoring:monitoring-detail', kwargs={'pk': self.pk})
 
     def __str__(self):
         return '%s (%s)' % (self.profile, self.date.strftime('%d/%m/%Y'))

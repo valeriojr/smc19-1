@@ -5,8 +5,24 @@
     <h3>Atendimento <span class="text-muted">nº{{ monitoring.id }}</span></h3>
     <p>Realizado em {{ monitoring.date|date:'d/m/Y' }}</p>
     <div class="row-col">
-        <small class="text-muted">Caso suspeito?</small>
-        <div class="border rounded p-1">{{ monitoring.suspect|yesno|title }}</div>
+
+        <div class="row">
+            <div class="col-6 col-md-6 col-lg-4">
+                <small class="text-muted">Caso suspeito?</small>
+                <div class="border rounded p-1">{{ monitoring.suspect|yesno|title }}</div>
+            </div>
+
+            <div class="col-6 col-md-6 col-lg-4">
+                <small class="text-muted">Testado?</small>
+                <div class="border rounded p-1">{{ monitoring.tested|yesno|title }}</div>
+            </div>
+
+            <div class="col-6 col-md-6 col-lg-4">
+                <small class="text-muted">Resultado do exame</small>
+                <div class="border rounded p-1">{{ monitoring.result|title }}</div>
+            </div>
+
+        </div>
     </div>
 
     <h4>Exposições ao vírus</h4>
@@ -27,5 +43,7 @@
             <p class="text-muted">Nenhum sintoma reportado</p>
         {% endfor %}
     </ul>
+
+    <a class="btn btn-primary" href="{% url 'monitoring:monitoring-update' monitoring.id %}">Editar</a>
 
 {% endblock %}
