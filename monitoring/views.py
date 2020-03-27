@@ -126,6 +126,15 @@ class MonitoringDetail(mixins.LoginRequiredMixin, generic.DetailView):
         else:
             context['symptom_formset'] = forms.SymptomInlineFormset(initial=symptoms_initial)
 
+        exposures = []
+        for exposure in self.object.virus_exposure:
+            exposures.append({
+                'label': self.object.virus_exposure.get_label(exposure[0]),
+                'set': exposure[1]
+            })
+
+        context['exposures'] = exposures
+
         return context
 
 

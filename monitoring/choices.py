@@ -69,3 +69,9 @@ countries = [
     ('USA', 'Estados Unidos'),
     ('ITA', 'Itália'),
 ]
+
+exposure = [
+    ('confirmed_cases', 'Contato com casos confirmados'),
+    ('suspect_cases', 'Contato com casos suspeitos'),
+    ('foreign', 'Contato com pessoas que estiveram em locais com casos confirmados'),
+]

@@ -105,7 +105,7 @@
     <h4>Comorbidades</h4>
     <div class="row">
         {% for comorbidity in comorbidities %}
-            <div class="col-sm-12 col-md-6 col-lg-4">
+            <div class="col-6 col-md-6 col-lg-4">
                 <small class="text-muted">{{ comorbidity.label }}</small>
                 <div class="border rounded p-1">{{ comorbidity.set|yesno|title }}</div>
             </div>

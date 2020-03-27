@@ -4,32 +4,28 @@
 {% block content %}
     <h3>Atendimento <span class="text-muted">nº{{ monitoring.id }}</span></h3>
     <p>Realizado em {{ monitoring.date|date:'d/m/Y' }}</p>
-    <ul class="list-group">
-    {% for symptom in monitoring.symptom_set.all %}
-        <li class="list-group-item">{{ symptom.get_symptom_display }} desde {{ symptom.onset|date:'d/m/Y' }}</li>
-    {% empty %}
-        <p>Nenhum sintoma reportado</p>
-    {% endfor %}
-    </ul>
-    <div id="monitoring-create" class="modal" role="dialog">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h4 class="modal-title">Novo atendimento</h4>
-                    <button type="button" class="close" data-dismiss="modal">&times;</button>
-                </div>
-
-                <div class="modal-body">
-                    <form id="monitoring-create-form" method="post" action="{% url 'monitoring:monitoring-create' %}">{% csrf_token %}
-                        {{ monitoring_create_form }}
-                    </form>
-                </div>
-
-                <div class="modal-footer">
-                    <button class="btn btn-light" data-dismiss="modal">Cancelar</button>
-                    <input type="sumbit" form="monitoring-create-form" class="btn btn-primary" value="Salvar">
-                </div>
-            </div>
-        </div>
+    <div class="row-col">
+        <small class="text-muted">Confirmado</small>
+        <div class="border rounded p-1">{{ monitoring.confirmed|yesno|title }}</div>
     </div>
+
+    <h4>Exposições ao vírus</h4>
+    <div class="row">
+        {% for exposure in exposures %}
+            <div class="col-6 col-md-6 col-lg-4">
+                <small class="text-muted">{{ exposure.label }}</small>
+                <div class="border rounded p-1">{{ exposure.set|yesno|title }}</div>
+            </div>
+        {% endfor %}
+    </div>
+
+    <h4>Sintomas reportados</h4>
+    <ul class="list-group">
+        {% for symptom in monitoring.symptom_set.all %}
+            <li class="list-group-item">{{ symptom.get_symptom_display }} desde {{ symptom.onset|date:'d/m/Y' }}</li>
+        {% empty %}
+            <p class="text-muted">Nenhum sintoma reportado</p>
+        {% endfor %}
+    </ul>
+
 {% endblock %}

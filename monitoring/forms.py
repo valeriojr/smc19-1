@@ -1,5 +1,7 @@
 from datetime import datetime
 
+import bitfield
+from bitfield.forms import BitFieldCheckboxSelectMultiple
 from django import forms
 from django.forms import inlineformset_factory
 from django.utils import timezone

@@ -26,7 +26,7 @@ class Profile(models.Model):
     vaccinated = models.BooleanField(verbose_name='Tomou vacina da gripe em 2020', blank=True, default=False)
     oxygen = models.BooleanField(verbose_name='Precisou de oxigênio recentemente', blank=True, default=False)
 
-    comorbidities = BitField(flags=choices.comorbidities, default=0)
+    comorbidities = BitField(verbose_name='Comorbidades', flags=choices.comorbidities, default=0)
 
     def __str__(self):
         return self.full_name
@@ -51,6 +51,7 @@ class Monitoring(models.Model):
     profile = models.ForeignKey(Profile, models.CASCADE)
     date = models.DateField(verbose_name='Data', auto_now_add=True)
     confirmed = models.BooleanField(verbose_name='Confirmado', default=False)
+    virus_exposure = BitField(verbose_name='Exposição ao vírus', flags=choices.exposure, blank=True, default=0)
 
     def __str__(self):
         return '%s (%s)' % (self.profile, self.date.strftime('%d/%m/%Y'))
