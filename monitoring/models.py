@@ -21,7 +21,7 @@ class Profile(models.Model):
     phone_number = models.CharField(verbose_name='Número de telefone', max_length=11, blank=True, default='')
     gender = models.CharField(verbose_name='Sexo biológico', max_length=1, choices=choices.genders, blank=True,
                               default='')
-    age = models.PositiveIntegerField(verbose_name='Idade', blank=True, default=0)
+    age = models.PositiveIntegerField(verbose_name='Idade', blank=True)
     weight = models.FloatField(verbose_name='Peso', blank=True, default=0,
                                validators=[MinValueValidator(0)])
     height = models.FloatField(verbose_name='Altura', blank=True, default=0, validators=[MinValueValidator(0)])

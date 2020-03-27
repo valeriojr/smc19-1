@@ -18,7 +18,6 @@ from django.urls import reverse, reverse_lazy
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
-
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/3.0/howto/deployment/checklist/
 
@@ -32,7 +31,6 @@ ALLOWED_HOSTS = [
     'smc19.herokuapp.com',
     '127.0.0.1'
 ]
-
 
 # Application definition
 
@@ -79,12 +77,12 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'smc19.wsgi.application'
 
-
 # Database
 # https://docs.djangoproject.com/en/3.0/ref/settings/#databases
 
 if 'DATABASE_URL' in os.environ:
     import dj_database_url
+
     DATABASES = {'default': dj_database_url.config()}
 else:
     DATABASES = {
@@ -93,7 +91,6 @@ else:
             'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
         }
     }
-
 
 # Password validation
 # https://docs.djangoproject.com/en/3.0/ref/settings/#auth-password-validators
@@ -132,15 +129,11 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/3.0/howto/static-files/
 
-if DEBUG:
-    STATICFILES_DIRS = (
-        os.path.join(BASE_DIR, 'static'),
-    )
-else:
-    STATICFILES_DIRS = (
-        os.path.join(BASE_DIR, 'staticfiles'),
-    )
-    STATIC_ROOT = os.path.join(BASE_DIR, 'static')
+
+STATICFILES_DIRS = (
+    os.path.join(BASE_DIR, 'staticfiles'),
+)
+STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 
 STATIC_URL = '/static/'
 
@@ -159,4 +152,4 @@ MESSAGE_TAGS = {
     messages.ERROR: 'alert-danger',
 }
 
-DATE_INPUT_FORMATS = ('%d-%m-%Y','%Y-%m-%d')
+DATE_INPUT_FORMATS = ('%d-%m-%Y', '%Y-%m-%d')
