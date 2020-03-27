@@ -14,7 +14,7 @@ class Profile(models.Model):
     birth_date = models.DateField(verbose_name='Data de nascimento', blank=True, default='',
                                   validators=[validators.prevent_future_date])
     cns = models.CharField(verbose_name='Cartão do SUS', max_length=15, blank=True, default='000000000000000')
-    id_document = models.CharField(verbose_name='RG', max_length=9, blank=True, default='000000000')
+    id_document = models.CharField(verbose_name='RG', max_length=15, blank=True, default='000000000')
     cpf = models.CharField(verbose_name='CPF', max_length=11, blank=True, default='00000000000',
                            validators=[validators.validate_cpf])
     phone_number = models.CharField(verbose_name='Número de telefone', max_length=11, blank=True, default='')
