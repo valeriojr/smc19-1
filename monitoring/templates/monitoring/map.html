@@ -17,7 +17,21 @@
         }
 
         path.active {
-            fill: blue;
+            stroke: yellow;
+            stroke-width: 1px;
+        }
+
+        path.selected {
+            stroke: greenyellow;
+            stroke-width: 1px;
+        }
+
+        .tooltip {
+            color: white;
+            background-color: black;
+            padding: 8px;
+            border-radius: 8px;
+            pointer-events: none;
         }
 
         .low {
@@ -37,9 +51,27 @@
         }
     </style>
 
-    <div  style="overflow-x: scroll">
+    <div>
+        <form method="get">
+            Idade
+            de:<input type="number" name="profile__age__gt">
+            até:<input type="number" name="profile__age__lt">
+            <select name="profile__render">
+                <option>Feminino</option>
+                <option>Masculino</option>
+                <option>Não quer declerar</option>
+            </select>
+            <input type="submit" value="Filrar">
+        </form>
+    </div>
+
+    <div style="overflow-x: scroll">
         <svg></svg>
     </div>
+
+    {{ data }}
+    {{ stats|json_script:'data' }}
+
     <script src="{% static 'scripts/map_visualization.js' %}"></script>
 
 {% endblock %}

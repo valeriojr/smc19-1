@@ -1,5 +1,6 @@
 from django.contrib import messages
 from django.contrib.auth import mixins
+from django.db.models import Count, Q, F
 from django.http import HttpResponseRedirect
 from django.urls import reverse_lazy, reverse
 from django.views import generic
@@ -28,6 +29,26 @@ class Index(mixins.LoginRequiredMixin, generic.ListView):
 
 class Map(mixins.LoginRequiredMixin, generic.TemplateView):
     template_name = 'monitoring/map.html'
+
+    def get_context_data(self, **kwargs):
+        context = super(Map, self).get_context_data(**kwargs)
+
+        query = {
+            'suspect_cases': Count(F('suspect'), filter=(Q(suspect=True) & ~Q(result='PO'))),
+            'confirmed_cases': Count(F('result'), filter=Q(result='PO'))
+        }
+        stats_per_city = models.Monitoring.objects.values('profile__address__city', 'profile').filter().annotate(**query)
+
+        context['stats'] = {
+            'total_profiles': models.Monitoring.objects.values('profile').count(),
+            'total': models.Monitoring.objects.values('profile').filter().aggregate(**query),
+            'cities': {
+                stat['profile__address__city'] if 'profile__address__city' in stat else stat[
+                    'profile__address__neighbourhood']: stat for stat in
+                stats_per_city}
+        }
+
+        return context
 
 
 # Profile
@@ -233,7 +254,6 @@ class MonitoringUpdate(mixins.LoginRequiredMixin, generic.UpdateView):
                     if instance.onset is not None:
                         instance.monitoring = self.object
                         instance.save()
-
 
             messages.success(self.request, 'Atendimento atualizado com sucesso!')
 
