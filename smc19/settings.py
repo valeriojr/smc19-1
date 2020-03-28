@@ -44,6 +44,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'monitoring.apps.MonitoringConfig',
     'accounts.apps.AccountsConfig',
+    'evolution.apps.EvolutionConfig',
     'crispy_forms',
     'dynamic_formsets'
 ]

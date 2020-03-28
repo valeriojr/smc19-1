@@ -59,6 +59,7 @@ class Monitoring(models.Model):
     suspect = models.BooleanField(verbose_name='Suspeito de COVID-19', default=False)
     virus_exposure = BitField(verbose_name='Exposição COVID-19', flags=choices.exposure, blank=True, default=0)
     result = models.CharField(verbose_name='Resultado do exame', max_length=2, choices=choices.results, default='SR')
+    created = models.DateTimeField(auto_now_add=True)
 
     def get_absolute_url(self):
         return reverse('monitoring:monitoring-detail', kwargs={'pk': self.pk})
