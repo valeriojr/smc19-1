@@ -33,15 +33,19 @@ class Map(mixins.LoginRequiredMixin, generic.TemplateView):
     def get_context_data(self, **kwargs):
         context = super(Map, self).get_context_data(**kwargs)
 
+        params = {key: value for key, value in self.request.GET.items() if value != '' and value != 0}
+        context['params'] = params
+
         query = {
             'suspect_cases': Count(F('suspect'), filter=(Q(suspect=True) & ~Q(result='PO'))),
             'confirmed_cases': Count(F('result'), filter=Q(result='PO'))
         }
-        stats_per_city = models.Monitoring.objects.values('profile__address__city', 'profile').filter().annotate(**query)
+        stats_per_city = models.Monitoring.objects.values('profile__address__city', 'profile').filter(
+            **params).annotate(**query)
 
         context['stats'] = {
             'total_profiles': models.Monitoring.objects.values('profile').count(),
-            'total': models.Monitoring.objects.values('profile').filter().aggregate(**query),
+            'total': models.Monitoring.objects.values('profile').filter(**params).aggregate(**query),
             'cities': {
                 stat['profile__address__city'] if 'profile__address__city' in stat else stat[
                     'profile__address__neighbourhood']: stat for stat in

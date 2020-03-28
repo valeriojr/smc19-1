@@ -53,14 +53,19 @@
 
     <div>
         <form method="get">
-            Idade
-            de:<input type="number" name="profile__age__gt">
-            até:<input type="number" name="profile__age__lt">
-            <select name="profile__render">
-                <option>Feminino</option>
-                <option>Masculino</option>
-                <option>Não quer declerar</option>
+            <div class="form-row">
+                Idade
+                de: <input type="number" name="profile__age__gte" value="{{ params.profile__age__gte }}"> anos
+                até: <input type="number" name="profile__age__lte" value="{{ params.profile__age__lte }}"> anos
+            </div>
+            <div class="form-row">
+                Sexo: <select name="profile__gender">
+                <option value="">Todos</option>
+                <option value="F">Feminino</option>
+                <option value="M">Masculino</option>
+                <option value="O">Não quer declerar</option>
             </select>
+            </div>
             <input type="submit" value="Filrar">
         </form>
     </div>
@@ -69,7 +74,8 @@
         <svg></svg>
     </div>
 
-    {{ data }}
+    {{ params }}
+    {{ stats }}
     {{ stats|json_script:'data' }}
 
     <script src="{% static 'scripts/map_visualization.js' %}"></script>
