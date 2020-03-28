@@ -1,6 +1,7 @@
 from django.shortcuts import render
+from django.views import generic
+from django.contrib.auth import mixins
 
 
-def graph_evolution(request):
-
-    return render(request, 'evolution/graph_evolution.html', context={})
+class GraphEvolution(mixins.LoginRequiredMixin, generic.TemplateView):
+    template_name = 'evolution/graph_evolution.html'

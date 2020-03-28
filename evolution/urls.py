@@ -5,5 +5,5 @@ from . import views
 
 app_name = 'evolution'
 urlpatterns = [
-    path('', views.graph_evolution, name='graph_evolution'),
+    path('', views.GraphEvolution.as_view(), name='graph_evolution'),
 ]
