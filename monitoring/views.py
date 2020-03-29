@@ -321,3 +321,20 @@ class TripDelete(mixins.LoginRequiredMixin, generic.DeleteView):
 
     def get_success_url(self):
         return reverse('monitoring:profile-detail', args=[self.kwargs['profile']])
+
+
+class RequestCreate(mixins.LoginRequiredMixin, generic.CreateView):
+    form_class = forms.RequestForm
+    template_name = 'monitoring/new_request.html'
+    success_url = reverse_lazy('monitoring:request')
+
+class RequestIndex(mixins.LoginRequiredMixin, generic.ListView):
+    template_name = 'monitoring/request_index.html'
+    context_object_name = 'all_requests'
+
+    def get_queryset(self):
+        return models.Request.objects.all()
+
+class RequestDelete(mixins.LoginRequiredMixin, generic.DeleteView):
+    model = models.Request
+    success_url = reverse_lazy('monitoring:request')

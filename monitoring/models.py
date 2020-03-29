@@ -112,3 +112,11 @@ class Trip(models.Model):
     def __str__(self):
         return '%s - %s a %s' % (self.get_country_display(), self.departure_date.strftime('%d/%m/%Y'),
                                  self.return_date.strftime('%d/%m/%Y'))
+
+class Request(models.Model):
+    material = models.CharField(verbose_name='Material requisitado', default='', max_length=300)
+    quantity = models.PositiveIntegerField(verbose_name='Quantidade necessária', default=0)
+    name = models.CharField(verbose_name='Nome', default='', max_length=100)
+    # profile = models.ForeignKey(Profile, models.CASCADE, default=1)
+    cellphone = models.CharField(verbose_name='Telefone', default='', max_length=20, null=True, blank=True)
+    email = models.CharField(verbose_name='E-mail', default='', max_length=50, null=True, blank=True)

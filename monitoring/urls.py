@@ -24,4 +24,8 @@ urlpatterns = [
     path('atendimentos/cadastrar/', views.MonitoringCreate.as_view(), name='monitoring-create'),
     path('atendimentos/<int:pk>/editar/', views.MonitoringUpdate.as_view(), name='monitoring-update'),
     path('atendimentos/<int:pk>/remover/', views.MonitoringDelete.as_view(), name='monitoring-delete'),
+    #Request
+    path('request/', views.RequestIndex.as_view(), name='request'),
+    path('request/cadastrar/', views.RequestCreate.as_view(), name='request-create'),
+    path('request/<int:pk>/remover/', views.RequestDelete.as_view(), name='request-delete'),
 ]
