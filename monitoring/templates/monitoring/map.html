@@ -82,6 +82,26 @@
             </div>
 
             <div class="col-auto">
+                <label for="smoker-select">Fumante</label>
+                <select id="smoker-select" class="form-control" name="smoker">
+                    <option value="" {% ifequal params.smoker '' %}selected{% endifequal %}>Todos</option>
+                    <option value="True" {% ifequal params.smoker 'True' %}selected{% endifequal %}>Sim</option>
+                    <option value="False" {% ifequal params.smoker 'False' %}selected{% endifequal %}>Não</option>
+                </select>
+            </div>
+
+            <div class="col-auto">
+                <label for="vaccinated-select">Vacinado contra gripe em 2020</label>
+                <select id="vaccinated-select" class="form-control" name="vaccinated">
+                    <option value="" {% ifequal params.vaccinated '' %}selected{% endifequal %}>Todos</option>
+                    <option value="True" {% ifequal params.vaccinated 'True' %}selected{% endifequal %}>Sim</option>
+                    <option value="False" {% ifequal params.vaccinated 'False' %}selected{% endifequal %}>Não</option>
+                </select>
+            </div>
+
+
+
+            <div class="col-auto align-self-end">
                 <input type="submit" class="btn btn-primary" value="Filtrar">
             </div>
         </form>
