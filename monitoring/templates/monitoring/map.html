@@ -52,21 +52,38 @@
     </style>
 
     <div>
-        <form method="get">
-            <div class="form-row">
-                Idade
-                de: <input type="number" name="profile__age__gte" value="{{ params.profile__age__gte }}"> anos
-                até: <input type="number" name="profile__age__lte" value="{{ params.profile__age__lte }}"> anos
+        <form class="form-row mt-3" method="get">
+            <div class="col-auto">
+                <label for="age-group-select">Faixa etária</label>
+                <select id="age-group-select" class="form-control mr-2">
+                    <option>Todas</option>
+                    <option value="0">0 a 9 anos</option>
+                    <option value="1">10 a 19 anos</option>
+                    <option value="2">20 a 29 anos</option>
+                    <option value="3">30 a 39 anos</option>
+                    <option value="4">40 a 49 anos</option>
+                    <option value="5">50 a 59 anos</option>
+                    <option value="6">60 a 69 anos</option>
+                    <option value="7">70 a 79 anos</option>
+                    <option value="8">mais de 80 anos</option>
+                </select>
+                <input type="hidden" name="age__gte" value="{{ params.age__gte }}">
+                <input type="hidden" name="age__lte" value="{{ params.age__lte }}">
             </div>
-            <div class="form-row">
-                Sexo: <select name="profile__gender">
-                <option value="">Todos</option>
-                <option value="F">Feminino</option>
-                <option value="M">Masculino</option>
-                <option value="O">Não quer declarar</option>
-            </select>
+
+            <div class="col-auto">
+                <label for="gender-select">Sexo</label>
+                <select id="gender-select" name="gender" class="form-control">
+                    <option value="" {% ifequal params.gender '' %}selected{% endifequal %}>Todos</option>
+                    <option value="F" {% ifequal params.gender 'F' %}selected{% endifequal %}>Feminino</option>
+                    <option value="M" {% ifequal params.gender 'M' %}selected{% endifequal %}>Masculino</option>
+                    <option value="O" {% ifequal params.gender 'O' %}selected{% endifequal %}>Não quer declarar</option>
+                </select>
             </div>
-            <input type="submit" value="Filtrar">
+
+            <div class="col-auto">
+                <input type="submit" class="btn btn-primary" value="Filtrar">
+            </div>
         </form>
     </div>
 
@@ -79,5 +96,27 @@
     {{ stats|json_script:'data' }}
 
     <script src="{% static 'scripts/map_visualization.js' %}"></script>
+    <!-- Filtro de faixa etária -->
+    <script>
+        $(document).ready(function () {
+            const ageMin = $("input[name='age__gte']");
+            const ageMax = $("input[name='age__lte']");
+            const ageSelect = $("#age-group-select");
 
+            if ("{{ params.age__gte }}" !== "") {
+                ageSelect.val("" + (0{% if params.age__gte %} + {{ params.age__gte }}{% endif %}) / 10);
+            }
+
+            ageSelect.on("change", function () {
+                const select = parseInt($(this).val());
+                if (!isNaN(select)) {
+                    ageMin.val(select * 10);
+                    ageMax.val((select < 8) ? (select * 10 + 9) : "");
+                } else {
+                    ageMin.val("");
+                    ageMax.val("");
+                }
+            });
+        });
+    </script>
 {% endblock %}

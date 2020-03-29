@@ -58,7 +58,7 @@ class Map(mixins.LoginRequiredMixin, generic.TemplateView):
             **params).annotate(**query)
 
         context['stats'] = {
-            'total_profiles': models.Monitoring.objects.filter(**params).count(),
+            'total_profiles': models.Profile.objects.filter(**params).count(),
             'total': models.Profile.objects.filter(**params).aggregate(**query),
             'cities': {
                 stat['address__city'] if 'address__city' in stat else stat[
