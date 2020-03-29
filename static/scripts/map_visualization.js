@@ -193,40 +193,40 @@ function plotMap(territoryData, healthCentersData) {
         //     .on("mouseover", function(d){tooltipMouseover(d, options);})
         //     .on("mouseout", function(d){tooltipMouseout(d, options);})
         //     .on("click", clicked);
-    });
 
-    d3.json(healthCentersData.dataSrc, function (error, data) {
-        const circle_radius = 5;
+        d3.json(healthCentersData.dataSrc, function (error, data) {
+            const circle_radius = 5;
+            
+            tooltipDiv = d3.select("body").append("div")
+                .attr("class", "tooltip");
+    
+            g.append("g")
+            .selectAll(".mark") //adding mark in the group
+            .data(data.features)
+            .enter()
+            .append("circle")
+            .attr("class", "mark")
+            .attr("r", circle_radius)
+            .style("fill", "red")
+            .attr("transform", function(d) {
+              return "translate(" + projection(d.geometry.coordinates) + ")";
+            })
+            .on("mouseover", function (d) {
+                d3.select(this)
+                .transition()
+                .duration(750)
+                .attr("r", function(d) { return 3 * circle_radius; });
         
-        tooltipDiv = d3.select("body").append("div")
-            .attr("class", "tooltip");
-
-        g.append("g")
-        .selectAll(".mark") //adding mark in the group
-        .data(data.features)
-        .enter()
-        .append("circle")
-        .attr("class", "mark")
-        .attr("r", circle_radius)
-        .style("fill", "red")
-        .attr("transform", function(d) {
-          return "translate(" + projection(d.geometry.coordinates) + ")";
-        })
-        .on("mouseover", function (d) {
-            d3.select(this)
-            .transition()
-            .duration(750)
-            .attr("r", function(d) { return 3 * circle_radius; });
-    
-            tooltipMouseover(this, d, healthCentersData);
-        })
-        .on("mouseout", function (d) {
-            d3.select(this)
-            .transition()
-            .duration(750)
-            .attr("r", function(d) { return circle_radius; });
-    
-            tooltipMouseout(this, d, healthCentersData);
+                tooltipMouseover(this, d, healthCentersData);
+            })
+            .on("mouseout", function (d) {
+                d3.select(this)
+                .transition()
+                .duration(750)
+                .attr("r", function(d) { return circle_radius; });
+        
+                tooltipMouseout(this, d, healthCentersData);
+            });
         });
     });
 }
