@@ -53,9 +53,9 @@
 
     <div>
         <form class="form-row mt-3" method="get">
-            <div class="col-auto">
+            <div class="col-auto mr-0 mb-2">
                 <label for="age-group-select">Faixa etária</label>
-                <select id="age-group-select" class="form-control mr-2">
+                <select id="age-group-select" class="form-control">
                     <option>Todas</option>
                     <option value="0">0 a 9 anos</option>
                     <option value="1">10 a 19 anos</option>
@@ -65,13 +65,22 @@
                     <option value="5">50 a 59 anos</option>
                     <option value="6">60 a 69 anos</option>
                     <option value="7">70 a 79 anos</option>
-                    <option value="8">mais de 80 anos</option>
+                    <option value="8">Mais de 80 anos</option>
+                    <option value="-1">Especificar...</option>
                 </select>
-                <input type="hidden" name="age__gte" value="{{ params.age__gte }}">
-                <input type="hidden" name="age__lte" value="{{ params.age__lte }}">
+            </div>
+            <div class="col-auto mr-0 mb-2">
+                <label for="age-group-min">De</label>
+                <input id="age-group-min" type="hidden" name="age__gte" class="form-control" min="0" max="120"
+                       value="{{ params.age__gte }}" placeholder="De...">
+            </div>
+            <div class="col-auto mr-2 mb-2">
+                <label for="age-group-max">Até</label>
+                <input id="age-group-max" type="hidden" name="age__lte" class="form-control" min="0" max="120"
+                       value="{{ params.age__lte }}" placeholder="Até...">
             </div>
 
-            <div class="col-auto">
+            <div class="col-auto mr-2 mb-2">
                 <label for="gender-select">Sexo</label>
                 <select id="gender-select" name="gender" class="form-control">
                     <option value="" {% ifequal params.gender '' %}selected{% endifequal %}>Todos</option>
@@ -81,7 +90,7 @@
                 </select>
             </div>
 
-            <div class="col-auto">
+            <div class="col-auto mr-0 mb-2">
                 <label for="smoker-select">Fumante</label>
                 <select id="smoker-select" class="form-control" name="smoker">
                     <option value="" {% ifequal params.smoker '' %}selected{% endifequal %}>Todos</option>
@@ -90,7 +99,7 @@
                 </select>
             </div>
 
-            <div class="col-auto">
+            <div class="col-auto mr-0 mb-2">
                 <label for="vaccinated-select">Vacinado contra gripe em 2020</label>
                 <select id="vaccinated-select" class="form-control" name="vaccinated">
                     <option value="" {% ifequal params.vaccinated '' %}selected{% endifequal %}>Todos</option>
@@ -100,8 +109,7 @@
             </div>
 
 
-
-            <div class="col-auto align-self-end">
+            <div class="col-auto mr-0 mb-2 align-self-end">
                 <input type="submit" class="btn btn-primary" value="Filtrar">
             </div>
         </form>
@@ -127,18 +135,53 @@
             const ageMax = $("input[name='age__lte']");
             const ageSelect = $("#age-group-select");
 
-            if ("{{ params.age__gte }}" !== "") {
-                ageSelect.val("" + (0{% if params.age__gte %} + {{ params.age__gte }}{% endif %}) / 10);
+
+            if ("{{ params.age__gte }}" !== "" && "{{ params.age__lte }}" !== "") {
+                const min = parseInt("{{ params.age__gte }}");
+                const max = parseInt("{{ params.age__lte }}");
+
+                console.log(min, max);
+
+                if ((min >= 0) && (min <= 70) && (min % 10 === 0) && (max === min + 9)) { // Faixa etária existente no select
+                    ageSelect.val(min / 10);
+                } else { // Faixa etária customizada
+                    ageSelect.val("-1");
+                    ageMin.val(min);
+                    ageMin.attr("type", "number");
+                    $("label[for=" + ageMin.attr("id") + "]").show();
+                    ageMax.val(max);
+                    ageMax.attr("type", "number");
+                    $("label[for=" + ageMax.attr("id") + "]").show();
+                }
+
+            } else if (("{{ params.age__gte }}" !== "" && "{{ params.age__lte }}" === "") ||
+                ("{{ params.age__gte }}" === "" && "{{ params.age__lte }}" !== "")) {
+                ageMin.val("{{ params.age__gte }}");
+                ageMax.val("{{ params.age__lte }}");
             }
 
             ageSelect.on("change", function () {
                 const select = parseInt($(this).val());
-                if (!isNaN(select)) {
+                if (!isNaN(select) && select !== -1) {
+                    $.each([ageMin, ageMax], function (i, age) {
+                        age.attr("type", "hidden");
+                        $("label[for=" + age.attr("id") + "]").hide();
+                    });
                     ageMin.val(select * 10);
                     ageMax.val((select < 8) ? (select * 10 + 9) : "");
                 } else {
-                    ageMin.val("");
-                    ageMax.val("");
+                    if (isNaN(select)) {
+                        $.each([ageMin, ageMax], function (i, age) {
+                            age.val("");
+                            age.attr("type", "hidden");
+                            $("label[for=" + age.attr("id") + "]").hide();
+                        });
+                    } else {
+                        $.each([ageMin, ageMax], function (i, age) {
+                            age.attr("type", "number");
+                            $("label[for=" + age.attr("id") + "]").show();
+                        });
+                    }
                 }
             });
         });
