@@ -33,12 +33,12 @@
   </button>
   <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
     <div class="navbar-nav">
-      <a class="nav-item nav-link" href="{% url 'monitoring:index' %}">Início <span class="sr-only">(current)</span></a>
+      <a class="nav-item nav-link" href="{% url 'monitoring:index' %}">Atendimento <span class="sr-only">(current)</span></a>
       <a class="nav-item nav-link" href="{% url 'monitoring:map' %}">Mapa</a>
       <a class="nav-item nav-link" href="#">Demanda do atendimento</a>
       <a class="nav-item nav-link" href="{% url 'evolution:graph_evolution' %}">Gráfico de evolução</a>
       <a class="nav-item nav-link" href="#">Dashboard</a>
-      <a class="btn btn-primary" href="/accounts/logout">Sair</a>  <!-- corrigir? -->
+      <a class="btn btn-primary" href="{% url 'logout' %}">Sair</a>
     </div>
   </div>
 </nav>

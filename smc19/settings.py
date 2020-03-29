@@ -155,3 +155,7 @@ MESSAGE_TAGS = {
 }
 
 DATE_INPUT_FORMATS = ('%d-%m-%Y', '%Y-%m-%d')
+
+SESSION_SAVE_EVERY_REQUEST = True
+
+SESSION_COOKIE_AGE = 300 # 5 minutos
