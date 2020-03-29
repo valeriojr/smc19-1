@@ -167,77 +167,66 @@ function plotMap(territoryData, healthCentersData) {
         .attr("class", "tooltip");
 
     d3.json(territoryData.dataSrc, function (error, citiesGeoData) {
-        if (error) alert(error);
+        d3.json(healthCentersData.dataSrc, function (error, healthCentersData) {
+            if (error) alert(error);
 
-        console.log(citiesGeoData);
+            console.log(citiesGeoData);
 
-        data = JSON.parse($("#data").text());
-        cities = data.cities;
+            data = JSON.parse($("#data").text());
+            cities = data.cities;
 
-        g.append("g")
-            .selectAll("path")
-            .data(citiesGeoData.features)
-            .enter().append("path")
-            .attr("d", path)
-            .style("fill", function (d) {
-                return cityFill(d, territoryData);
-            })
-            .on("mouseover", function (d) {
-                tooltipMouseover(this, d, territoryData);
-            })
-            .on("mouseout", function (d) {
-                tooltipMouseout(this, d, territoryData);
-            })
-            .on("click", clicked);
+            g.append("g")
+                .selectAll("path")
+                .data(citiesGeoData.features)
+                .enter().append("path")
+                .attr("d", path)
+                .style("fill", function (d) {
+                    return cityFill(d, territoryData);
+                })
+                .on("mouseover", function (d) {
+                    tooltipMouseover(this, d, territoryData);
+                })
+                .on("mouseout", function (d) {
+                    tooltipMouseout(this, d, territoryData);
+                })
+                .on("click", clicked);
+            const circle_radius = 5;
 
-        // g.append("g")
-        //     .selectAll("path")
-        //     .data(neighbourhooodGeoData.features)
-        //     .enter().append("path")
-        //     .attr("d", path)
-        //     .style("fill", cityFill)
-        //     .on("mouseover", function(d){tooltipMouseover(d, options);})
-        //     .on("mouseout", function(d){tooltipMouseout(d, options);})
-        //     .on("click", clicked);
-    });
+            tooltipDiv = d3.select("body").append("div")
+                .attr("class", "tooltip");
 
-    d3.json(healthCentersData.dataSrc, function (error, data) {
-        const circle_radius = 5;
+            g.append("g")
+                .selectAll(".mark") //adding mark in the group
+                .data(healthCentersData.features)
+                .enter()
+                .append("circle")
+                .attr("class", "mark")
+                .attr("r", circle_radius)
+                .style("fill", "red")
+                .attr("transform", function (d) {
+                    return "translate(" + projection(d.geometry.coordinates) + ")";
+                })
+                .on("mouseover", function (d) {
+                    d3.select(this)
+                        .transition()
+                        .duration(750)
+                        .attr("r", function (d) {
+                            return 3 * circle_radius;
+                        });
 
-        tooltipDiv = d3.select("body").append("div")
-            .attr("class", "tooltip");
+                    tooltipMouseover(this, d, healthCentersData);
+                })
+                .on("mouseout", function (d) {
+                    d3.select(this)
+                        .transition()
+                        .duration(750)
+                        .attr("r", function (d) {
+                            return circle_radius;
+                        });
 
-        g.append("g")
-            .selectAll(".mark") //adding mark in the group
-            .data(data.features)
-            .enter()
-            .append("circle")
-            .attr("class", "mark")
-            .attr("r", circle_radius)
-            .style("fill", "red")
-            .attr("transform", function (d) {
-                return "translate(" + projection(d.geometry.coordinates) + ")";
-            })
-            .on("mouseover", function (d) {
-                d3.select(this)
-                    .transition()
-                    .duration(750)
-                    .attr("r", function (d) {
-                        return 3 * circle_radius;
-                    });
-
-                tooltipMouseover(this, d, healthCentersData);
-            })
-            .on("mouseout", function (d) {
-                d3.select(this)
-                    .transition()
-                    .duration(750)
-                    .attr("r", function (d) {
-                        return circle_radius;
-                    });
-
-                tooltipMouseout(this, d, healthCentersData);
-            });
+                    tooltipMouseout(this, d, healthCentersData);
+                });
+        });
     });
 }
 
@@ -260,21 +249,14 @@ function getTranslation(transform) {
 }
 
 state = {
-    dataSrc: "/static/data/geojs-27-mun.geojson",
+    dataSrc: STATIC_URL + "data/geojs-27-mun.geojson",
     center: [-36.3, -9.5],
     featureName: "name",
     scale: 13000
 };
 
-maceio = {
-    dataSrc: "/static/data/bairrosgeojson.geojson",
-    center: [-36.3, -9.5],
-    featureName: "Bairro",
-    scale: 30000
-};
-
 health_centers = {
-    dataSrc: "/static/data/unidadesdesaude.json",
+    dataSrc: STATIC_URL + "data/unidadesdesaude.json",
     center: [-36.3, -9.5],
     featureName: "Nome",
     scale: 13000

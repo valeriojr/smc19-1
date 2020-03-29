@@ -95,6 +95,10 @@
     {{ stats }}
     {{ stats|json_script:'data' }}
 
+    <script>
+        const STATIC_URL = "{% static '' %}";
+    </script>
+
     <script src="{% static 'scripts/map_visualization.js' %}"></script>
     <!-- Filtro de faixa etária -->
     <script>
