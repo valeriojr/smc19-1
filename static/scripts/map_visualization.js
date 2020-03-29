@@ -33,30 +33,30 @@ function clicked(d) {
             return d === centered;
         });
 
-	g.selectAll(".mark")
-		.transition()
-		.duration(750)
-		.attr("transform", function(d) {
-		    var t = getTranslation(d3.select(this).attr("transform"));
-		    return "translate(" + t[0] +","+ t[1] + ")scale("+1/k+")";
-		});
+    g.selectAll(".mark")
+        .transition()
+        .duration(750)
+        .attr("transform", function (d) {
+            var t = getTranslation(d3.select(this).attr("transform"));
+            return "translate(" + t[0] + "," + t[1] + ")scale(" + 1 / k + ")";
+        });
 
     g.transition()
         .duration(750)
         .attr("transform", "translate(" + width / 2 + "," + height / 2 + ")scale(" + k + ")translate(" + -xCenter + "," + -yCenter + ")")
         .style("stroke-width", 1.5 / k + "px");
-        // .on("end", function () {
-        //     if (zommLevel === "state") {
-        //         //d3.selectAll("svg > *").remove();
-        //         zommLevel = "city";
-        //         // plotMap({
-        //         //     dataSrc: "/static/data/bairrosgeojson.geojson",
-        //         //     center: [xCenter, yCenter],
-        //         //     featureName: "Bairro",
-        //         //     scale: k * 13000
-        //         // });
-        //     }
-        // });
+    // .on("end", function () {
+    //     if (zommLevel === "state") {
+    //         //d3.selectAll("svg > *").remove();
+    //         zommLevel = "city";
+    //         // plotMap({
+    //         //     dataSrc: "/static/data/bairrosgeojson.geojson",
+    //         //     center: [xCenter, yCenter],
+    //         //     featureName: "Bairro",
+    //         //     scale: k * 13000
+    //         // });
+    //     }
+    // });
 }
 
 function tooltipTextFocused(data, featureName, d, total) {
@@ -127,9 +127,12 @@ function tooltipMouseout(t) {
 }
 
 function cityFill(d, options) {
+    city = cities[d.properties[options.featureName]];
+
     if (cities[d.properties[options.featureName]]) {
         console.log(d);
-        const r = (cities[d.properties[options.featureName]]["suspect_cases"] / data.total.suspect_cases);
+        const r = ((city.suspect_cases + city.confirmed_cases + city.deaths) /
+            (data.total.suspect_cases + data.total.confirmed_cases + data.total.deaths));
         const gb = 255 * r;
         return `rgb(255, ${225 - gb}, ${225 - gb})`;
     } else {
@@ -197,37 +200,41 @@ function plotMap(territoryData, healthCentersData) {
 
     d3.json(healthCentersData.dataSrc, function (error, data) {
         const circle_radius = 5;
-        
+
         tooltipDiv = d3.select("body").append("div")
             .attr("class", "tooltip");
 
         g.append("g")
-        .selectAll(".mark") //adding mark in the group
-        .data(data.features)
-        .enter()
-        .append("circle")
-        .attr("class", "mark")
-        .attr("r", circle_radius)
-        .style("fill", "red")
-        .attr("transform", function(d) {
-          return "translate(" + projection(d.geometry.coordinates) + ")";
-        })
-        .on("mouseover", function (d) {
-            d3.select(this)
-            .transition()
-            .duration(750)
-            .attr("r", function(d) { return 3 * circle_radius; });
-    
-            tooltipMouseover(this, d, healthCentersData);
-        })
-        .on("mouseout", function (d) {
-            d3.select(this)
-            .transition()
-            .duration(750)
-            .attr("r", function(d) { return circle_radius; });
-    
-            tooltipMouseout(this, d, healthCentersData);
-        });
+            .selectAll(".mark") //adding mark in the group
+            .data(data.features)
+            .enter()
+            .append("circle")
+            .attr("class", "mark")
+            .attr("r", circle_radius)
+            .style("fill", "red")
+            .attr("transform", function (d) {
+                return "translate(" + projection(d.geometry.coordinates) + ")";
+            })
+            .on("mouseover", function (d) {
+                d3.select(this)
+                    .transition()
+                    .duration(750)
+                    .attr("r", function (d) {
+                        return 3 * circle_radius;
+                    });
+
+                tooltipMouseover(this, d, healthCentersData);
+            })
+            .on("mouseout", function (d) {
+                d3.select(this)
+                    .transition()
+                    .duration(750)
+                    .attr("r", function (d) {
+                        return circle_radius;
+                    });
+
+                tooltipMouseout(this, d, healthCentersData);
+            });
     });
 }
 
@@ -236,15 +243,15 @@ function getTranslation(transform) {
     // be appended to the DOM and will be discarded once this function 
     // returns.
     var g = document.createElementNS("http://www.w3.org/2000/svg", "g");
-    
+
     // Set the transform attribute to the provided string value.
     g.setAttributeNS(null, "transform", transform);
-    
+
     // consolidate the SVGTransformList containing all transformations
     // to a single SVGTransform of type SVG_TRANSFORM_MATRIX and get
     // its SVGMatrix. 
     var matrix = g.transform.baseVal.consolidate().matrix;
-    
+
     // As per definition values e and f are the ones for the translation.
     return [matrix.e, matrix.f];
 }

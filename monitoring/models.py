@@ -32,6 +32,8 @@ class Profile(models.Model):
 
     comorbidities = BitField(verbose_name='Comorbidades', flags=choices.comorbidities, default=0)
 
+    status = models.CharField(verbose_name='Status', max_length=1, blank=True, choices=choices.status, default='N')
+
     def __str__(self):
         return self.full_name
 
@@ -60,6 +62,14 @@ class Monitoring(models.Model):
     virus_exposure = BitField(verbose_name='Exposição COVID-19', flags=choices.exposure, blank=True, default=0)
     result = models.CharField(verbose_name='Resultado do exame', max_length=2, choices=choices.results, default='SR')
     created = models.DateTimeField(auto_now_add=True)
+
+    def update_profile_status(self):
+        if self.result == 'PO':
+            self.profile.status = 'C'
+        elif self.suspect:
+            self.profile.status = 'S'
+
+        self.profile.save()
 
     def get_absolute_url(self):
         return reverse('monitoring:monitoring-detail', kwargs={'pk': self.pk})

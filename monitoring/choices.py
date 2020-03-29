@@ -81,3 +81,11 @@ results = [
     ('PO', 'Positivo'),
     ('NE', 'Negativo'),
 ]
+
+status = (
+    ('N', 'Normal'),
+    ('S', 'Suspeito'),
+    ('C', 'Confirmado'),
+    ('M', 'Morto'),
+    ('R', 'Recuperado')
+)

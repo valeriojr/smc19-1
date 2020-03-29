@@ -1,6 +1,6 @@
 from django.contrib import messages
 from django.contrib.auth import mixins
-from django.db.models import Count, Q, F
+from django.db.models import Count, Q, F, Value
 from django.http import HttpResponseRedirect
 from django.shortcuts import get_list_or_404
 from django.urls import reverse_lazy, reverse
@@ -50,18 +50,19 @@ class Map(mixins.LoginRequiredMixin, generic.TemplateView):
         context['params'] = params
 
         query = {
-            'suspect_cases': Count(F('suspect'), filter=(Q(suspect=True) & ~Q(result='PO'))),
-            'confirmed_cases': Count(F('result'), filter=Q(result='PO'))
+            'suspect_cases': Count('status', filter=Q(status='S')),
+            'confirmed_cases': Count('status', filter=Q(status='C')),
+            'deaths': Count('status', filter=Q(status='M'))
         }
-        stats_per_city = models.Monitoring.objects.values('profile__address__city', 'profile').filter(
+        stats_per_city = models.Profile.objects.values('address__city').filter(
             **params).annotate(**query)
 
         context['stats'] = {
-            'total_profiles': models.Monitoring.objects.values('profile').count(),
-            'total': models.Monitoring.objects.values('profile').filter(**params).aggregate(**query),
+            'total_profiles': models.Monitoring.objects.filter(**params).count(),
+            'total': models.Profile.objects.filter(**params).aggregate(**query),
             'cities': {
-                stat['profile__address__city'] if 'profile__address__city' in stat else stat[
-                    'profile__address__neighbourhood']: stat for stat in
+                stat['address__city'] if 'address__city' in stat else stat[
+                    'address__neighbourhood']: stat for stat in
                 stats_per_city}
         }
 
@@ -208,6 +209,7 @@ class MonitoringCreate(mixins.LoginRequiredMixin, generic.CreateView):
 
         if symptom_formset.is_valid():
             self.object = form.save(commit=True)
+            self.object.update_profile_status()
 
             for formset in symptom_formset:
                 instance = formset.save(commit=False)
@@ -249,6 +251,7 @@ class MonitoringUpdate(mixins.LoginRequiredMixin, generic.UpdateView):
 
         if symptom_formset.is_valid():
             self.object = form.save(commit=True)
+            self.object.update_profile_status()
 
             for formset in symptom_formset:
                 instance = formset.save(commit=False)
