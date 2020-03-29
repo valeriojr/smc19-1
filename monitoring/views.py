@@ -84,20 +84,12 @@ class ProfileDetail(mixins.LoginRequiredMixin, generic.DetailView):
         context = super(ProfileDetail, self).get_context_data(**kwargs)
 
         context['update_profile_form'] = forms.ProfileForm(instance=self.object)
-
         context['address_form'] = forms.AddressForm(data={
             'profile': self.object.id
         })
-
-        context['update_address_forms'] = [forms.AddressForm(instance=address) for address in
-                                           self.object.address_set.all()]
-
-        context['create_trip_form'] = forms.TripForm(data={
+        context['trip_form'] = forms.TripForm(data={
             'profile': self.object.id
         })
-
-        context['update_trip_forms'] = [forms.TripForm(instance=trip) for trip in
-                                        self.object.trip_set.all()]
 
         comorbidities = []
         for comorbidity in self.object.comorbidities:
