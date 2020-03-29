@@ -1,8 +1,7 @@
 from django.contrib import messages
 from django.contrib.auth import mixins
-from django.db.models import Count, Q, F, Value
+from django.db.models import Count, Q, Avg
 from django.http import HttpResponseRedirect
-from django.shortcuts import get_list_or_404
 from django.urls import reverse_lazy, reverse
 from django.views import generic
 
@@ -19,12 +18,13 @@ class Index(mixins.LoginRequiredMixin, generic.ListView):
 
     def get_queryset(self):
         params = dict(zip(self.request.GET.keys(), self.request.GET.values()))
-        print(self.request.GET)
-        print(params)
 
         if params.get('search-target') == 'profile':
-            params.pop('search-target')
-            return models.Profile.objects.filter(**params)
+            search_term = self.request.GET.get('term')
+            return models.Profile.objects.filter(Q(full_name__startswith=search_term) |
+                                                 Q(id_document__startswith=search_term) |
+                                                 Q(cpf__startswith=search_term) |
+                                                 Q(cns__startswith=search_term))
 
         return super(Index, self).get_queryset()
 
@@ -52,13 +52,16 @@ class Map(mixins.LoginRequiredMixin, generic.TemplateView):
         query = {
             'suspect_cases': Count('status', filter=Q(status='S')),
             'confirmed_cases': Count('status', filter=Q(status='C')),
-            'deaths': Count('status', filter=Q(status='M'))
+            'deaths': Count('status', filter=Q(status='M')),
+            'people_average': Avg('address__people'),
+            'smokers': Count('smoker', filter=Q(smoker=True)),
+            'vaccinated': Count('vaccinated', filter=Q(vaccinated=True)),
         }
         stats_per_city = models.Profile.objects.values('address__city').filter(
             **params).annotate(**query)
 
         context['stats'] = {
-            'total_profiles': models.Monitoring.objects.filter(**params).count(),
+            'total_profiles': models.Profile.objects.filter(**params).count(),
             'total': models.Profile.objects.filter(**params).aggregate(**query),
             'cities': {
                 stat['address__city'] if 'address__city' in stat else stat[

@@ -47,9 +47,9 @@
         <form method="get" class="row-col justify-content-end form-inline">
             <input type="hidden" name="search-target" value="profile">
 
-            <label for="fullname-search-bar"></label>
-            <input id="fullname-search-bar" class="form-control mr-2" name="full_name__startswith"
-                   value="{{ params.full_name__startswith|capfirst }}" placeholder="Nome">
+            <label for="search-query"></label>
+            <input id="search-query" class="form-control mr-2" name="term"
+                   value="{{ params.term|capfirst }}" placeholder="Nome">
 
             <input type="submit" class="btn btn-primary" value="Pesquisar">
         </form>
