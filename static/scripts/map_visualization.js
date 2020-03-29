@@ -61,24 +61,27 @@ function clicked(d) {
 
 function tooltipTextFocused(data, featureName, d, total) {
     if (featureName == "name") {
-        var city, confirmed, suspect, deaths;
-        city = d.properties[featureName];
+        var confirmed, suspect, deaths, confirmedRate, suspectRate, mortality;
+        const location = d.properties[featureName];
+
+        suspect = confirmed = deaths = "-";
+        suspectRate = confirmedRate = mortality = "";
 
         if (data[d.properties[featureName]]) {
-            suspect = data[city]["suspect_cases"] ? data[city]["suspect_cases"] : "-";
-            confirmed = data[city]["confirmed_cases"] ? data[city]["confirmed_cases"] : "-";
-            deaths = "-";//data[city]["deaths"];
-        } else {
-            confirmed = "-";
-            suspect = "-";
-            deaths = "-";
+            suspect = data[location]["suspect_cases"] !== undefined ? data[location].suspect_cases : "-";
+            confirmed = data[location]["confirmed_cases"] !== undefined ? data[location].confirmed_cases : "-";
+            deaths = data[location]["deaths"] !== undefined ? data[location].deaths : "-";
+
+            suspectRate = total.suspect_cases ? "(" + (100 * suspect / total.suspect_cases).toFixed(1) + "%)" : "";
+            confirmedRate = total.confirmed_cases ? "(" + (100 * confirmed / total.confirmed_cases).toFixed(1) + "%)" : "";
+            mortality = total.deaths ? "(" + (100 * deaths / total.deaths).toFixed(1) + "%)" : "";
         }
 
         return `<div class="row-col">` +
-            `<strong>${city}</strong>` +
-            `<div>Suspeitos: <span class="text-info">${suspect} ${(total.suspect_cases) ? "(" + (100 * suspect / total.suspect_cases).toFixed(1) + "%)" : ""}</div>` +
-            `<div>Confirmados: <span class="text-warning">${confirmed} ${(total.confirmed_cases) ? "(" + (100 * confirmed / total.confirmed_cases).toFixed(1) + "%)" : ""}</div>` +
-            `<div>Mortes: <span class="text-danger">${deaths}</span></div>` +
+            `<strong>${location}</strong>` +
+            `<div>Suspeitos: <span class="text-info">${suspect} ${suspectRate}</div>` +
+            `<div>Confirmados: <span class="text-warning">${confirmed} ${confirmedRate}</div>` +
+            `<div>Mortes: <span class="text-danger">${deaths} ${mortality}</span></div>` +
             `</div>`;
     } else {
         var unityName, avaiable_beds, total_beds;

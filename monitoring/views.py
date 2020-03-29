@@ -1,6 +1,6 @@
 from django.contrib import messages
 from django.contrib.auth import mixins
-from django.db.models import Count, Q, F, Value
+from django.db.models import Count, Q, F, Value, Avg
 from django.http import HttpResponseRedirect
 from django.shortcuts import get_list_or_404
 from django.urls import reverse_lazy, reverse
@@ -52,7 +52,10 @@ class Map(mixins.LoginRequiredMixin, generic.TemplateView):
         query = {
             'suspect_cases': Count('status', filter=Q(status='S')),
             'confirmed_cases': Count('status', filter=Q(status='C')),
-            'deaths': Count('status', filter=Q(status='M'))
+            'deaths': Count('status', filter=Q(status='M')),
+            'people_average': Avg('address__people'),
+            'smokers': Count('smoker', filter=Q(smoker=True)),
+            'vaccinated': Count('vaccinated', filter=Q(vaccinated=True)),
         }
         stats_per_city = models.Profile.objects.values('address__city').filter(
             **params).annotate(**query)
