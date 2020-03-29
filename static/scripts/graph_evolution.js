@@ -5,33 +5,47 @@ d3.timeFormatDefaultLocale(locale);
 
 });
 
-// set the dimensions and margins of the graph
-var margin = {top: 10, right: 30, bottom: 30, left: 60},
-    width = 960 - margin.left - margin.right,
-    height = 400 - margin.top - margin.bottom;
-
-// append the svg object to the body of the page
-var svg = d3.select("#my_dataviz")
-    .append("svg")
-    .attr("width", width + margin.left + margin.right)
-    .attr("height", height + margin.top + margin.bottom)
-    .append("g")
-    .attr("transform",
-            "translate(" + margin.left + "," + margin.top + ")");
-
-
+function encodeQueryData(data) {
+    const ret = [];
+    for (let d in data)
+        ret.push(encodeURIComponent(d) + '=' + encodeURIComponent(data[d]));
+    return ret.join('&');
+    }
 
 function verGrafico() {
+    $('#svg_id').remove()
+
+    // set the dimensions and margins of the graph
+    var margin = {top: 10, right: 30, bottom: 30, left: 60},
+        width = 960 - margin.left - margin.right,
+        height = 400 - margin.top - margin.bottom;
+
+    // append the svg object to the body of the page
+    var svg = d3.select("#my_dataviz")
+        .append("svg")
+        .attr('id', 'svg_id')
+        .attr("width", width + margin.left + margin.right)
+        .attr("height", height + margin.top + margin.bottom)
+        .append("g")
+        .attr("transform",
+                "translate(" + margin.left + "," + margin.top + ")");
 
     let uf = $('#uf_id').val()
     let cidade = $('#cidade_id').val()
     let bairro = $('#bairro_id').val()
     let dado = $('#dado_id').val()
 
-    console.log(uf, cidade, bairro, dado)
+    params = {
+        'UF':uf,
+        'CIDADE':cidade,
+        'BAIRRO':bairro,
+        'DADO': dado
+    }
 
     //Read the data
-    d3.csv("https://raw.githubusercontent.com/holtzy/data_to_viz/master/Example_dataset/3_TwoNumOrdered_comma.csv",
+    var url = "http://127.0.0.1:8000/evolution/data?".concat(encodeQueryData(params))
+
+    d3.csv(url,
 
     // When reading the csv, I must format variables:
     function(d){
@@ -137,4 +151,8 @@ function verGrafico() {
     });
 
     })
+}
+
+window.onload = function () {
+    $('#ver_grafico_id').click()
 }
