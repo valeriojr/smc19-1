@@ -155,7 +155,7 @@ var g;
 // Define the div for the tooltip
 var tooltipDiv;
 
-function plotMap(territoryData, healthCentersData) {
+function plotMap(territoryData, healthCentersOptions) {
     projection = d3.geoMercator().scale(territoryData.scale).center(territoryData.center);
     path = d3.geoPath().projection(projection);
     svg = d3.select("svg")
@@ -167,7 +167,7 @@ function plotMap(territoryData, healthCentersData) {
         .attr("class", "tooltip");
 
     d3.json(territoryData.dataSrc, function (error, citiesGeoData) {
-        d3.json(healthCentersData.dataSrc, function (error, healthCentersData) {
+        d3.json(healthCentersOptions.dataSrc, function (error, healthCentersData) {
             if (error) alert(error);
 
             console.log(citiesGeoData);
@@ -214,7 +214,7 @@ function plotMap(territoryData, healthCentersData) {
                             return 3 * circle_radius;
                         });
 
-                    tooltipMouseover(this, d, healthCentersData);
+                    tooltipMouseover(this, d, healthCentersOptions);
                 })
                 .on("mouseout", function (d) {
                     d3.select(this)
@@ -224,7 +224,7 @@ function plotMap(territoryData, healthCentersData) {
                             return circle_radius;
                         });
 
-                    tooltipMouseout(this, d, healthCentersData);
+                    tooltipMouseout(this, d, healthCentersOptions);
                 });
         });
     });
