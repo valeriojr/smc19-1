@@ -1,8 +1,7 @@
 from django.contrib import messages
 from django.contrib.auth import mixins
-from django.db.models import Count, Q, F, Value, Avg
+from django.db.models import Count, Q, Avg
 from django.http import HttpResponseRedirect
-from django.shortcuts import get_list_or_404
 from django.urls import reverse_lazy, reverse
 from django.views import generic
 
@@ -19,12 +18,13 @@ class Index(mixins.LoginRequiredMixin, generic.ListView):
 
     def get_queryset(self):
         params = dict(zip(self.request.GET.keys(), self.request.GET.values()))
-        print(self.request.GET)
-        print(params)
 
         if params.get('search-target') == 'profile':
-            params.pop('search-target')
-            return models.Profile.objects.filter(**params)
+            search_term = self.request.GET.get('term')
+            return models.Profile.objects.filter(Q(full_name__startswith=search_term) |
+                                                 Q(id_document__startswith=search_term) |
+                                                 Q(cpf__startswith=search_term) |
+                                                 Q(cns__startswith=search_term))
 
         return super(Index, self).get_queryset()
 
