@@ -110,11 +110,11 @@ function tooltipMouseover(t, d, options) {
     if (!centered) {
         tooltipText = tooltipTextFocused(cities, options.featureName, d, data.total);
     } else {
-        tooltipText = "";
+        tooltipText = tooltipTextFocused(cities, options.featureName, d, data.total);
     }
     tooltipDiv.html(tooltipText)
         .style("left", (d3.event.pageX + 25) + "px")
-        .style("top", (d3.event.pageY - 100) + "px");
+        .style("top", (d3.event.pageY - 100) + "px")
 }
 
 function tooltipMouseout(t) {
