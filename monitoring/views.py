@@ -14,6 +14,7 @@ from . import models
 
 class Index(mixins.LoginRequiredMixin, generic.ListView):
     model = models.Profile
+    paginate_by = 10
     template_name = 'monitoring/index.html'
 
     def get_queryset(self):
