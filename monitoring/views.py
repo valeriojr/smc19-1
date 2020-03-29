@@ -2,6 +2,7 @@ from django.contrib import messages
 from django.contrib.auth import mixins
 from django.db.models import Count, Q, F
 from django.http import HttpResponseRedirect
+from django.shortcuts import get_list_or_404
 from django.urls import reverse_lazy, reverse
 from django.views import generic
 
@@ -16,9 +17,21 @@ class Index(mixins.LoginRequiredMixin, generic.ListView):
     model = models.Profile
     template_name = 'monitoring/index.html'
 
+    def get_queryset(self):
+        params = dict(zip(self.request.GET.keys(), self.request.GET.values()))
+        print(self.request.GET)
+        print(params)
+
+        if params.get('search-target') == 'profile':
+            params.pop('search-target')
+            return models.Profile.objects.filter(**params)
+
+        return super(Index, self).get_queryset()
+
     def get_context_data(self, **kwargs):
         context = super(Index, self).get_context_data(**kwargs)
 
+        context['params'] = self.request.GET
         context['monitorings'] = models.Monitoring.objects
         context['monitoring_create_form'] = forms.MonitoringForm()
         symptoms_initial = [{'symptom': symptom[0], 'label': symptom[1]} for symptom in choices.symptoms]
