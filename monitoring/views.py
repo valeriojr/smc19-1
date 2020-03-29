@@ -129,6 +129,14 @@ class ProfileDelete(mixins.LoginRequiredMixin, generic.DeleteView):
 class AddressCreate(mixins.LoginRequiredMixin, generic.CreateView):
     form_class = forms.AddressForm
 
+    def form_valid(self, form):
+        self.object = form.save(commit=True)
+        if self.object.profile.address_set.count() == 1:
+            self.object.primary = True
+        self.object.save()
+
+        return super(AddressCreate, self).form_valid(form)
+
     def get_success_url(self):
         return reverse('monitoring:profile-detail', args=[self.kwargs['profile']])
 

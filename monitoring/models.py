@@ -40,6 +40,7 @@ class Profile(models.Model):
 
 class Address(models.Model):
     profile = models.ForeignKey(Profile, models.CASCADE)
+    primary = models.BooleanField(verbose_name='Principal', blank=True, default=False)
     type = models.CharField(verbose_name='Tipo', max_length=2, choices=choices.address_types, blank=True, default='')
     postal_code = models.CharField(verbose_name='CEP', max_length=8, blank=True, default='')
     neighbourhood = models.CharField(verbose_name='Bairro', max_length=100, blank=True, default='')
@@ -48,6 +49,15 @@ class Address(models.Model):
     complement = models.CharField(verbose_name='Complemento', max_length=100, blank=True, default='')
     city = models.CharField(verbose_name='Cidade', max_length=100, blank=True, default='')
     people = models.PositiveIntegerField(verbose_name='Quantidade de pessoas', blank=True, null=True, default=1)
+
+    def delete(self, using=None, keep_parents=False):
+        if self.primary:
+            for address in self.profile.address_set.exclude(id=self.id).order_by('type'):
+                if address.type == 'HM':
+                    address.primary = True
+                    address.save()
+                    break
+        super(Address, self).delete(using, keep_parents)
 
     def __str__(self):
         return '%s, %s - %s, %s, %s' % (

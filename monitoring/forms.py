@@ -70,7 +70,7 @@ class ProfileCreationForm(forms.ModelForm):
 class AddressForm(forms.ModelForm):
     class Meta:
         model = models.Address
-        fields = '__all__'
+        exclude = ['primary']
         widgets = {
             'postal_code': forms.TextInput(attrs={'class': 'postal-code-field'}),
             'complement': forms.Textarea(attrs={'rows': 2}),
