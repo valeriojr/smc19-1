@@ -121,6 +121,7 @@ class Request(models.Model):
     # profile = models.ForeignKey(Profile, models.CASCADE, default=1)
     cellphone = models.CharField(verbose_name='Telefone', default='', max_length=20, null=True, blank=True)
     email = models.CharField(verbose_name='E-mail', default='', max_length=50, null=True, blank=True)
+    unidade = models.CharField(verbose_name='Unidade de Saúde', default='', max_length=50)
 
 class State(models.Model):
     name = models.CharField(max_length=50)

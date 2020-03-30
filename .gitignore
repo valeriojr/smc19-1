@@ -3,6 +3,7 @@ accounts/migrations
 monitoring/migrations
 smcovid19/migrations
 evolution/migrations
+prediction/migrations
 
 # ---> Python
 # Byte-compiled / optimized / DLL files
@@ -10,7 +11,6 @@ __pycache__/
 *.py[cod]
 *$py.class
 .idea/
-
 
 
 # vscode files
