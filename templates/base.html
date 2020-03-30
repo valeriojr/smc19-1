@@ -39,7 +39,7 @@
             <div class="navbar-nav">
                 <a class="nav-item nav-link" href="{% url 'monitoring:index' %}">Atendimento <span class="sr-only">(current)</span></a>
                 <a class="nav-item nav-link" href="{% url 'monitoring:map' %}">Mapa</a>
-                <a class="nav-item nav-link" href="#">Demanda do atendimento</a>
+                <a class="nav-item nav-link" href="{% url 'prediction:prediction_hub' %}">Previsão de Leitos</a>
                 <a class="nav-item nav-link" href="{% url 'evolution:graph_evolution' %}">Gráfico de evolução</a>
                 <a class="nav-item nav-link" href="{% url 'monitoring:request' %}">Pedidos</a>
                 <a class="nav-item nav-link" href="#">Dashboard</a>
@@ -47,6 +47,7 @@
             </div>
         </div>
     {% endblock %}
+>>>>>>> master
 </nav>
 
 <div class="container col-sm-12 col-lg-10">

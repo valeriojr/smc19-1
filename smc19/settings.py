@@ -45,6 +45,7 @@ INSTALLED_APPS = [
     'monitoring.apps.MonitoringConfig',
     'accounts.apps.AccountsConfig',
     'evolution.apps.EvolutionConfig',
+    'prediction.apps.PredictionConfig',
     'crispy_forms',
     'dynamic_formsets'
 ]

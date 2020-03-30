@@ -1392,6 +1392,7 @@ function plotMap(territoryData, healthCentersOptions) {
                 });
 
             tooltipMouseout(this, d, healthCentersOptions);
+>>>>>>> master
         });
 }
 
