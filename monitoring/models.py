@@ -72,6 +72,7 @@ class Monitoring(models.Model):
     virus_exposure = BitField(verbose_name='Exposição COVID-19', flags=choices.exposure, blank=True, default=0)
     result = models.CharField(verbose_name='Resultado do exame', max_length=2, choices=choices.results, default='SR')
     created = models.DateTimeField(auto_now_add=True)
+    status = models.CharField(verbose_name='Estado atual do paciente', choices = choices.status, default = 'N', max_length = 1)
 
     def update_profile_status(self):
         if self.result == 'PO':
