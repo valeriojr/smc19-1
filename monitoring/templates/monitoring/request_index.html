@@ -16,10 +16,11 @@
             {% csrf_token %}
             <ul>
                 <li>
-                    <h4>{{request.material}}</h4>
+                    <h4>{{request.material}} ({{request.quantity}})</h4>
                 </li>
-                <h6>feito por: {{request.name}}</h6>
-                <button type="submit" class="btn btn-danger">Excluir</button>
+                <h6>Feito por: {{request.name}}</h6>
+                <h6>Contato: {{request.cellphone}}/ {{request.email}}</h6>
+                <button type="submit" class="btn btn-danger">Excluir pedido</button>
             </ul>
         </form>
     {% endfor %}
