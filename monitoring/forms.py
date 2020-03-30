@@ -89,3 +89,14 @@ class ProfileForm(forms.ModelForm):
             'birth_date': forms.DateInput(format='%Y-%m-%d', attrs={'type': 'date'}),
             'status': forms.HiddenInput()
         }
+
+
+class RequestForm(forms.ModelForm):
+    class Meta:
+        model=models.Request
+        fields='__all__'
+        # widgets={
+        #     'profile': forms.HiddenInput()
+        # }
+
+# RequestInlineFormset = inlineformset_factory(models.Profile, model=models.Request, form=RequestForm, extra=1)
