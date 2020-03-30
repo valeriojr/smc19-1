@@ -1393,6 +1393,8 @@ function plotMap(territoryData, healthCentersOptions) {
 
             tooltipMouseout(this, d, healthCentersOptions);
         });
+
+    //g.append(function() { return document.getElementById("forecast"); });
 }
 
 function getTranslation(transform) {

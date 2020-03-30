@@ -108,7 +108,6 @@
                 </select>
             </div>
 
-
             <div class="col-auto mr-0 mb-2 align-self-end">
                 <input type="submit" class="btn btn-primary" value="Filtrar">
             </div>
@@ -116,8 +115,60 @@
     </div>
 
     <div style="overflow-x: scroll">
-        <svg></svg>
+    <div id="forecast" class="float-left text-light rounded bg-dark p-3 text-center"
+             style="position:relative;top: 0;left: 0;">
+            <p>Previsão para os próximos 4 dias</p>
+            <table>
+                <thead>
+                <tr>
+                    <th class="px-3"></th>
+                    <th class="px-3">30/03</th>
+                    <th class="px-3">31/03</th>
+                    <th class="px-3">01/04</th>
+                    <th class="px-3">02/04</th>
+                    <th class="px-3">03/04</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr>
+                    <td>RETs disponíveis</td>
+                    <td>0</td>
+                    <td>0</td>
+                    <td>0</td>
+                    <td>0</td>
+                    <td>0</td>
+                </tr>
+                <tr>
+                    <td>RETs ocupados</td>
+                    <td>0</td>
+                    <td>0</td>
+                    <td>0</td>
+                    <td>0</td>
+                    <td>0</td>
+                </tr>
+                <tr>
+                    <td>UTIs disponíveis</td>
+                    <td>0</td>
+                    <td>0</td>
+                    <td>0</td>
+                    <td>0</td>
+                    <td>0</td>
+                </tr>
+                <tr>
+                    <td>UTIs ocupadas</td>
+                    <td>0</td>
+                    <td>0</td>
+                    <td>0</td>
+                    <td>0</td>
+                    <td>0</td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+        <svg class="float-right"></svg>
     </div>
+
+
 
     {{ stats|json_script:'data' }}
 
