@@ -1,8 +1,7 @@
 from django.contrib import messages
 from django.contrib.auth import mixins
-from django.db.models import Count, Q, F
+from django.db.models import Count, Q, Avg
 from django.http import HttpResponseRedirect
-from django.shortcuts import get_list_or_404
 from django.urls import reverse_lazy, reverse
 from django.views import generic
 
@@ -15,16 +14,18 @@ from . import models
 
 class Index(mixins.LoginRequiredMixin, generic.ListView):
     model = models.Profile
+    paginate_by = 10
     template_name = 'monitoring/index.html'
 
     def get_queryset(self):
         params = dict(zip(self.request.GET.keys(), self.request.GET.values()))
-        print(self.request.GET)
-        print(params)
 
         if params.get('search-target') == 'profile':
-            params.pop('search-target')
-            return models.Profile.objects.filter(**params)
+            search_term = self.request.GET.get('term')
+            return models.Profile.objects.filter(Q(full_name__startswith=search_term) |
+                                                 Q(id_document__startswith=search_term) |
+                                                 Q(cpf__startswith=search_term) |
+                                                 Q(cns__startswith=search_term))
 
         return super(Index, self).get_queryset()
 
@@ -50,18 +51,22 @@ class Map(mixins.LoginRequiredMixin, generic.TemplateView):
         context['params'] = params
 
         query = {
-            'suspect_cases': Count(F('suspect'), filter=(Q(suspect=True) & ~Q(result='PO'))),
-            'confirmed_cases': Count(F('result'), filter=Q(result='PO'))
+            'suspect_cases': Count('status', filter=Q(status='S')),
+            'confirmed_cases': Count('status', filter=Q(status='C')),
+            'deaths': Count('status', filter=Q(status='M')),
+            'people_average': Avg('address__people'),
+            'smokers': Count('smoker', filter=Q(smoker=True)),
+            'vaccinated': Count('vaccinated', filter=Q(vaccinated=True)),
         }
-        stats_per_city = models.Monitoring.objects.values('profile__address__city', 'profile').filter(
+        stats_per_city = models.Profile.objects.values('address__city').filter(
             **params).annotate(**query)
 
         context['stats'] = {
-            'total_profiles': models.Monitoring.objects.values('profile').count(),
-            'total': models.Monitoring.objects.values('profile').filter(**params).aggregate(**query),
+            'total_profiles': models.Profile.objects.filter(**params).count(),
+            'total': models.Profile.objects.filter(**params).aggregate(**query),
             'cities': {
-                stat['profile__address__city'] if 'profile__address__city' in stat else stat[
-                    'profile__address__neighbourhood']: stat for stat in
+                stat['address__city'] if 'address__city' in stat else stat[
+                    'address__neighbourhood']: stat for stat in
                 stats_per_city}
         }
 
@@ -84,20 +89,12 @@ class ProfileDetail(mixins.LoginRequiredMixin, generic.DetailView):
         context = super(ProfileDetail, self).get_context_data(**kwargs)
 
         context['update_profile_form'] = forms.ProfileForm(instance=self.object)
-
         context['address_form'] = forms.AddressForm(data={
             'profile': self.object.id
         })
-
-        context['update_address_forms'] = [forms.AddressForm(instance=address) for address in
-                                           self.object.address_set.all()]
-
-        context['create_trip_form'] = forms.TripForm(data={
+        context['trip_form'] = forms.TripForm(data={
             'profile': self.object.id
         })
-
-        context['update_trip_forms'] = [forms.TripForm(instance=trip) for trip in
-                                        self.object.trip_set.all()]
 
         comorbidities = []
         for comorbidity in self.object.comorbidities:
@@ -132,6 +129,14 @@ class ProfileDelete(mixins.LoginRequiredMixin, generic.DeleteView):
 
 class AddressCreate(mixins.LoginRequiredMixin, generic.CreateView):
     form_class = forms.AddressForm
+
+    def form_valid(self, form):
+        self.object = form.save(commit=True)
+        if self.object.profile.address_set.count() == 1:
+            self.object.primary = True
+        self.object.save()
+
+        return super(AddressCreate, self).form_valid(form)
 
     def get_success_url(self):
         return reverse('monitoring:profile-detail', args=[self.kwargs['profile']])
@@ -216,6 +221,7 @@ class MonitoringCreate(mixins.LoginRequiredMixin, generic.CreateView):
 
         if symptom_formset.is_valid():
             self.object = form.save(commit=True)
+            self.object.update_profile_status()
 
             for formset in symptom_formset:
                 instance = formset.save(commit=False)
@@ -257,6 +263,7 @@ class MonitoringUpdate(mixins.LoginRequiredMixin, generic.UpdateView):
 
         if symptom_formset.is_valid():
             self.object = form.save(commit=True)
+            self.object.update_profile_status()
 
             for formset in symptom_formset:
                 instance = formset.save(commit=False)
@@ -315,3 +322,20 @@ class TripDelete(mixins.LoginRequiredMixin, generic.DeleteView):
 
     def get_success_url(self):
         return reverse('monitoring:profile-detail', args=[self.kwargs['profile']])
+
+
+class RequestCreate(mixins.LoginRequiredMixin, generic.CreateView):
+    form_class = forms.RequestForm
+    template_name = 'monitoring/new_request.html'
+    success_url = reverse_lazy('monitoring:request')
+
+class RequestIndex(mixins.LoginRequiredMixin, generic.ListView):
+    template_name = 'monitoring/request_index.html'
+    context_object_name = 'all_requests'
+
+    def get_queryset(self):
+        return models.Request.objects.all()
+
+class RequestDelete(mixins.LoginRequiredMixin, generic.DeleteView):
+    model = models.Request
+    success_url = reverse_lazy('monitoring:request')

@@ -1,14 +1,7 @@
-from datetime import datetime
-
-import bitfield
-from bitfield.forms import BitFieldCheckboxSelectMultiple
 from django import forms
 from django.forms import inlineformset_factory
-from django.utils import timezone
-from django.utils.timezone import now
 
 from monitoring import choices
-from smc19 import settings
 from . import models
 
 
@@ -77,11 +70,11 @@ class ProfileCreationForm(forms.ModelForm):
 class AddressForm(forms.ModelForm):
     class Meta:
         model = models.Address
-        fields = '__all__'
+        exclude = ['primary']
         widgets = {
             'postal_code': forms.TextInput(attrs={'class': 'postal-code-field'}),
             'complement': forms.Textarea(attrs={'rows': 2}),
-            'profile': forms.HiddenInput()
+            'profile': forms.HiddenInput(),
         }
         labels = {
             'people': 'Número de pessoas residindo nesse endereço'
@@ -93,5 +86,17 @@ class ProfileForm(forms.ModelForm):
         model = models.Profile
         fields = '__all__'
         widgets = {
-            'birth_date': forms.DateInput(format='%Y-%m-%d', attrs={'type': 'date'})
+            'birth_date': forms.DateInput(format='%Y-%m-%d', attrs={'type': 'date'}),
+            'status': forms.HiddenInput()
         }
+
+
+class RequestForm(forms.ModelForm):
+    class Meta:
+        model=models.Request
+        fields='__all__'
+        # widgets={
+        #     'profile': forms.HiddenInput()
+        # }
+
+# RequestInlineFormset = inlineformset_factory(models.Profile, model=models.Request, form=RequestForm, extra=1)

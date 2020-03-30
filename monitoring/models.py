@@ -32,12 +32,15 @@ class Profile(models.Model):
 
     comorbidities = BitField(verbose_name='Comorbidades', flags=choices.comorbidities, default=0)
 
+    status = models.CharField(verbose_name='Status', max_length=1, blank=True, choices=choices.status, default='N')
+
     def __str__(self):
         return self.full_name
 
 
 class Address(models.Model):
     profile = models.ForeignKey(Profile, models.CASCADE)
+    primary = models.BooleanField(verbose_name='Principal', blank=True, default=False)
     type = models.CharField(verbose_name='Tipo', max_length=2, choices=choices.address_types, blank=True, default='')
     postal_code = models.CharField(verbose_name='CEP', max_length=8, blank=True, default='')
     neighbourhood = models.CharField(verbose_name='Bairro', max_length=100, blank=True, default='')
@@ -46,6 +49,15 @@ class Address(models.Model):
     complement = models.CharField(verbose_name='Complemento', max_length=100, blank=True, default='')
     city = models.CharField(verbose_name='Cidade', max_length=100, blank=True, default='')
     people = models.PositiveIntegerField(verbose_name='Quantidade de pessoas', blank=True, null=True, default=1)
+
+    def delete(self, using=None, keep_parents=False):
+        if self.primary:
+            for address in self.profile.address_set.exclude(id=self.id).order_by('type'):
+                if address.type == 'HM':
+                    address.primary = True
+                    address.save()
+                    break
+        super(Address, self).delete(using, keep_parents)
 
     def __str__(self):
         return '%s, %s - %s, %s, %s' % (
@@ -60,6 +72,14 @@ class Monitoring(models.Model):
     virus_exposure = BitField(verbose_name='Exposição COVID-19', flags=choices.exposure, blank=True, default=0)
     result = models.CharField(verbose_name='Resultado do exame', max_length=2, choices=choices.results, default='SR')
     created = models.DateTimeField(auto_now_add=True)
+
+    def update_profile_status(self):
+        if self.result == 'PO':
+            self.profile.status = 'C'
+        elif self.suspect:
+            self.profile.status = 'S'
+
+        self.profile.save()
 
     def get_absolute_url(self):
         return reverse('monitoring:monitoring-detail', kwargs={'pk': self.pk})
@@ -92,3 +112,31 @@ class Trip(models.Model):
     def __str__(self):
         return '%s - %s a %s' % (self.get_country_display(), self.departure_date.strftime('%d/%m/%Y'),
                                  self.return_date.strftime('%d/%m/%Y'))
+
+class Request(models.Model):
+    material = models.CharField(verbose_name='Material requisitado', default='', max_length=300)
+    quantity = models.PositiveIntegerField(verbose_name='Quantidade necessária', default=0)
+    name = models.CharField(verbose_name='Nome', default='', max_length=100)
+    # profile = models.ForeignKey(Profile, models.CASCADE, default=1)
+    cellphone = models.CharField(verbose_name='Telefone', default='', max_length=20, null=True, blank=True)
+    email = models.CharField(verbose_name='E-mail', default='', max_length=50, null=True, blank=True)
+
+class State(models.Model):
+    name = models.CharField(max_length=50)
+
+    def __str__(self):
+        return self.name
+
+class City(models.Model):
+    state = models.ForeignKey(State, on_delete=models.CASCADE)
+    name = models.CharField(max_length=50)
+
+    def __str__(self):
+        return self.state.__str__() + ', ' + self.name
+
+class Neighbourhood(models.Model):
+    city = models.ForeignKey(City, on_delete=models.CASCADE)
+    name = models.CharField(max_length=50)
+
+    def __str__(self):
+        return self.city.__str__() + ', ' + self.name

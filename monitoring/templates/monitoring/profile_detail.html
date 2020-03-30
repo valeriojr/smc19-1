@@ -146,9 +146,10 @@
                     <h4 class="modal-title">Editar endereço</h4>
                     <button type="button" class="close" data-dismiss="modal">&times;</button>
                 </div>
+
                 <div class="modal-body">
                     <form id="update-address-form" method="post" action="">{% csrf_token %}
-                        {{ update_address_forms.0|crispy }}
+                        {{ address_form|crispy }}
                     </form>
                 </div>
 
@@ -227,7 +228,7 @@
                 <div class="modal-body">
                     <form id="create-trip-form" method="post" action="{% url 'monitoring:trip-create' profile.id %}">
                         {% csrf_token %}
-                        {{ create_trip_form|crispy }}
+                        {{ trip_form|crispy }}
                     </form>
                 </div>
 
@@ -247,9 +248,10 @@
                     <h4 class="modal-title">Editar endereço</h4>
                     <button type="button" class="close" data-dismiss="modal">&times;</button>
                 </div>
+
                 <div class="modal-body">
                     <form id="update-trip-form" method="post" action="">{% csrf_token %}
-                        {{ update_trip_forms.0|crispy }}
+                        {{ trip_form|crispy }}
                     </form>
                 </div>
 
@@ -306,6 +308,32 @@
         {% endfor %}
         <button class="btn btn-primary" data-toggle="modal" data-target="#create-trip">Adicionar viagem</button>
     </ul>
+
+    <hr>
+
+    <!-- Lista de atendimentos -->
+    <div class="list-group">
+        {% for monitoring in profile.monitoring_set.all %}
+            <li class="list-group-item">
+                <div class="row">
+                    <div class="col">
+                        <a href="{% url 'monitoring:monitoring-detail' monitoring.id %}">{{ monitoring.date }}</a>
+                        {% ifequal monitoring.result 'PO' %}
+                            <span class="badge badge-dark">Confirmado</span>
+                        {% else %}
+                            {% if monitoring.suspect %}
+                                <span class="badge badge-warning">Suspeito</span>
+                            {% endif %}
+                        {% endifequal %}
+                    </div>
+                </div>
+            </li>
+        {% empty %}
+            <p class="text-muted">Nenhum atendimento encontrado</p>
+        {% endfor %}
+    </div>
+
+    <p></p>
 
     <script>
         function addressQuery(form, input) {

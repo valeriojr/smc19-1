@@ -133,12 +133,13 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/3.0/howto/static-files/
 
 
-STATICFILES_DIRS = (
-    os.path.join(BASE_DIR, 'static'),
-)
-#STATIC_ROOT = os.path.join(BASE_DIR, 'static')
-
-STATIC_URL = '/static/'
+if DEBUG:
+    STATICFILES_DIRS = (
+        os.path.join(BASE_DIR, 'static'),
+    )
+    STATIC_URL = '/static/'
+else:
+    STATIC_URL = 'https://adrianobarbosa.xyz/smc19-static/'
 
 # Extra places for collectstatic to find static files.
 
@@ -157,6 +158,7 @@ MESSAGE_TAGS = {
 
 DATE_INPUT_FORMATS = ('%d-%m-%Y', '%Y-%m-%d')
 
-SESSION_SAVE_EVERY_REQUEST = True
+if not DEBUG:
+    SESSION_SAVE_EVERY_REQUEST = True
 
-SESSION_COOKIE_AGE = 300 # 5 minutos
+    SESSION_COOKIE_AGE = 300 # 5 minutos

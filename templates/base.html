@@ -26,21 +26,28 @@
     <script src="https://d3js.org/d3-geo-projection.v2.min.js"></script>
 </head>
 <body>
+
 <nav class="navbar navbar-expand-lg navbar-light bg-light">
-  <a class="navbar-brand" href="/">Sistema de monitoramento COVID-19</a>
-  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
-    <span class="navbar-toggler-icon"></span>
-  </button>
-  <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
-    <div class="navbar-nav">
-      <a class="nav-item nav-link" href="{% url 'monitoring:index' %}">Atendimento <span class="sr-only">(current)</span></a>
-      <a class="nav-item nav-link" href="{% url 'monitoring:map' %}">Mapa</a>
-      <a class="nav-item nav-link" href="{% url 'prediction:prediction_hub' %}">Previsão de Leitos</a>
-      <a class="nav-item nav-link" href="{% url 'evolution:graph_evolution' %}">Gráfico de evolução</a>
-      <a class="nav-item nav-link" href="#">Dashboard</a>
-      <a class="btn btn-primary" href="{% url 'logout' %}">Sair</a>
-    </div>
-  </div>
+    <a class="navbar-brand" href="/">Sistema de monitoramento COVID-19</a>
+
+    {% block navigation %}
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup"
+                aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
+            <div class="navbar-nav">
+                <a class="nav-item nav-link" href="{% url 'monitoring:index' %}">Atendimento <span class="sr-only">(current)</span></a>
+                <a class="nav-item nav-link" href="{% url 'monitoring:map' %}">Mapa</a>
+                <a class="nav-item nav-link" href="{% url 'prediction:prediction_hub' %}">Previsão de Leitos</a>
+                <a class="nav-item nav-link" href="{% url 'evolution:graph_evolution' %}">Gráfico de evolução</a>
+                <a class="nav-item nav-link" href="{% url 'monitoring:request' %}">Pedidos</a>
+                <a class="nav-item nav-link" href="#">Dashboard</a>
+                <a class="btn btn-primary" href="{% url 'logout' %}">Sair</a>
+            </div>
+        </div>
+    {% endblock %}
+>>>>>>> master
 </nav>
 
 <div class="container col-sm-12 col-lg-10">
