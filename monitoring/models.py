@@ -17,14 +17,14 @@ class Profile(models.Model):
     cns = models.CharField(verbose_name='Cartão do SUS', max_length=15, blank=True, default='000000000000000')
     id_document = models.CharField(verbose_name='RG', max_length=15, blank=True, default='000000000')
     cpf = models.CharField(verbose_name='CPF', max_length=11, blank=True, default='00000000000',
-                           validators=[validators.validate_cpf])
-    phone_number = models.CharField(verbose_name='Número de telefone', max_length=11, blank=True, default='')
+                           validators=[validators.validate_cpf], null=True)
+    phone_number = models.CharField(verbose_name='Número de telefone', max_length=20, blank=True, default='')
     gender = models.CharField(verbose_name='Sexo biológico', max_length=1, choices=choices.genders, blank=True,
                               default='')
     age = models.PositiveIntegerField(verbose_name='Idade', blank=True)
-    weight = models.FloatField(verbose_name='Peso', blank=True, default=0,
+    weight = models.FloatField(verbose_name='Peso (Kg)', blank=True, default=0,
                                validators=[MinValueValidator(0)])
-    height = models.FloatField(verbose_name='Altura', blank=True, default=0, validators=[MinValueValidator(0)])
+    height = models.FloatField(verbose_name='Altura (m)', blank=True, default=0, validators=[MinValueValidator(0)])
 
     smoker = models.BooleanField(verbose_name='Fumante', blank=True, default=False)
     vaccinated = models.BooleanField(verbose_name='Tomou vacina da gripe em 2020', blank=True, default=False)
