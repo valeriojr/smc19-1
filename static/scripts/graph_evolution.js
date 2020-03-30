@@ -33,13 +33,13 @@ function verGrafico() {
     let uf = $('#uf_id').val()
     let cidade = $('#cidade_id').val()
     let bairro = $('#bairro_id').val()
-    let dado = $('#dado_id').val()
+    let status = $('#status_id').val()
 
     params = {
         'UF':uf,
         'CIDADE':cidade,
         'BAIRRO':bairro,
-        'DADO': dado
+        'STATUS': status
     }
 
     //Read the data
@@ -154,5 +154,46 @@ function verGrafico() {
 }
 
 window.onload = function () {
+    $('#ver_grafico_id').click(verGrafico)
+
     $('#ver_grafico_id').click()
+
+    $.getJSON('http://127.0.0.1:8000/evolution/data?'.concat(encodeQueryData({'UF':'ELEMENTOS'})), function(data) {
+        //data is the JSON string
+        for(var i = 0; i < data.length; i++) {
+            var obj = data[i];
+            $("#uf_id").append($("<option />").val(obj.value).text(obj.text));
+        }
+    });
+
+    $("#uf_id").on("change", function() {
+        $("#cidade_id").empty()
+        $("#bairro_id").empty()
+
+        params = {'UF':$("#uf_id").val(), 'CIDADE': 'ELEMENTOS'}
+
+        $.getJSON('http://127.0.0.1:8000/evolution/data?'.concat(encodeQueryData(params)), function(data) {
+        //data is the JSON string
+        for(var i = 0; i < data.length; i++) {
+            var obj = data[i];
+            $("#cidade_id").append($("<option />").val(obj.value).text(obj.text));
+        }
+        });
+    });
+
+    $("#cidade_id").on("change", function() {
+        $("#bairro_id").empty()
+
+        params = {'UF':$("#uf_id").val(), 'CIDADE': $("#cidade_id").val(), 'BAIRRO': 'ELEMENTOS'}
+
+        $.getJSON('http://127.0.0.1:8000/evolution/data?'.concat(encodeQueryData(params)), function(data) {
+        //data is the JSON string
+        for(var i = 0; i < data.length; i++) {
+            var obj = data[i];
+            $("#bairro_id").append($("<option />").val(obj.value).text(obj.text));
+        }
+        });
+    });
+
+
 }

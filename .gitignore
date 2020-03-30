@@ -1,6 +1,8 @@
 # projeto
 accounts/migrations
 monitoring/migrations
+smcovid19/migrations
+evolution/migrations
 
 # ---> Python
 # Byte-compiled / optimized / DLL files
