@@ -155,7 +155,6 @@ function verGrafico() {
 
 window.onload = function () {
     $('#ver_grafico_id').click(verGrafico)
-
     $('#ver_grafico_id').click()
 
     $.getJSON('http://127.0.0.1:8000/evolution/data?'.concat(encodeQueryData({'UF':'ELEMENTOS'})), function(data) {
@@ -167,18 +166,20 @@ window.onload = function () {
     });
 
     $("#uf_id").on("change", function() {
-        $("#cidade_id").empty()
-        $("#bairro_id").empty()
+        if($("#uf_id") != 'TODOS'){
+            $("#cidade_id").empty()
+            $("#bairro_id").empty()
 
-        params = {'UF':$("#uf_id").val(), 'CIDADE': 'ELEMENTOS'}
+            params = {'UF':$("#uf_id").val(), 'CIDADE': 'ELEMENTOS'}
 
-        $.getJSON('http://127.0.0.1:8000/evolution/data?'.concat(encodeQueryData(params)), function(data) {
-        //data is the JSON string
-        for(var i = 0; i < data.length; i++) {
-            var obj = data[i];
-            $("#cidade_id").append($("<option />").val(obj.value).text(obj.text));
+            $.getJSON('http://127.0.0.1:8000/evolution/data?'.concat(encodeQueryData(params)), function(data) {
+            //data is the JSON string
+            for(var i = 0; i < data.length; i++) {
+                var obj = data[i];
+                $("#cidade_id").append($("<option />").val(obj.value).text(obj.text));
+            }
+            });
         }
-        });
     });
 
     $("#cidade_id").on("change", function() {
