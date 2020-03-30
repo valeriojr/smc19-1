@@ -51,22 +51,21 @@ class Map(mixins.LoginRequiredMixin, generic.TemplateView):
         context['params'] = params
 
         query = {
-            'suspect_cases': Count('status', filter=Q(status='S')),
-            'confirmed_cases': Count('status', filter=Q(status='C')),
-            'deaths': Count('status', filter=Q(status='M')),
-            'people_average': Avg('address__people'),
-            'smokers': Count('smoker', filter=Q(smoker=True)),
-            'vaccinated': Count('vaccinated', filter=Q(vaccinated=True)),
+            'suspect_cases': Count('profile__status', filter=Q(profile__status='S')),
+            'confirmed_cases': Count('profile__status', filter=Q(profile__status='C')),
+            'deaths': Count('profile__status', filter=Q(profile__status='M')),
+            'people_average': Avg('people'),
+            'smokers': Count('profile__smoker', filter=Q(profile__smoker=True)),
+            'vaccinated': Count('profile__vaccinated', filter=Q(profile__vaccinated=True)),
         }
-        stats_per_city = models.Profile.objects.values('address__city').filter(
+        stats_per_city = models.Address.objects.filter(primary=True).values('city').filter(
             **params).annotate(**query)
 
         context['stats'] = {
-            'total_profiles': models.Profile.objects.filter(**params).count(),
-            'total': models.Profile.objects.filter(**params).aggregate(**query),
+            'total': models.Address.objects.filter(primary=True, **params).aggregate(**query),
             'cities': {
-                stat['address__city'] if 'address__city' in stat else stat[
-                    'address__neighbourhood']: stat for stat in
+                stat['city'] if 'city' in stat else stat[
+                    'neighbourhood']: stat for stat in
                 stats_per_city}
         }
 
