@@ -12,13 +12,15 @@
     </div>
     
     {% for request in all_requests %}
-        <form method="post" action="{% url 'monitoring:request-delete' request.id %}">
+        <form onsubmit="return confirm('Deseja mesmo excluir?');"  method="post" action="{% url 'monitoring:request-delete' request.id %}">
             {% csrf_token %}
+            <hr>
             <ul>
                 <li>
                     <h4>{{request.material}} ({{request.quantity}})</h4>
                 </li>
                 <h6>Feito por: {{request.name}}</h6>
+                <h6>Unidade de saúde: {{request.unidade}}</h6>
                 <h6>Contato: {{request.cellphone}}/ {{request.email}}</h6>
                 <button type="submit" class="btn btn-danger">Excluir pedido</button>
             </ul>
