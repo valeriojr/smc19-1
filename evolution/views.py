@@ -17,7 +17,7 @@ class DataGraphEvolution(mixins.LoginRequiredMixin, View):
         writer = csv.writer(response)
         writer.writerow(['date','value'])
         for i in range(1,32):
-            writer.writerow(['2019-03-{}'.format(i),1.3**i])
+            writer.writerow(['2019-03-{}'.format(i),1.2**i])
         
 
         return response

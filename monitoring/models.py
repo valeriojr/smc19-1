@@ -120,3 +120,23 @@ class Request(models.Model):
     # profile = models.ForeignKey(Profile, models.CASCADE, default=1)
     cellphone = models.CharField(verbose_name='Telefone', default='', max_length=20, null=True, blank=True)
     email = models.CharField(verbose_name='E-mail', default='', max_length=50, null=True, blank=True)
+
+class State(models.Model):
+    name = models.CharField(max_length=50)
+
+    def __str__(self):
+        return self.name
+
+class City(models.Model):
+    state = models.ForeignKey(State, on_delete=models.CASCADE)
+    name = models.CharField(max_length=50)
+
+    def __str__(self):
+        return self.state.__str__() + ', ' + self.name
+
+class Neighbourhood(models.Model):
+    city = models.ForeignKey(City, on_delete=models.CASCADE)
+    name = models.CharField(max_length=50)
+
+    def __str__(self):
+        return self.city.__str__() + ', ' + self.name
