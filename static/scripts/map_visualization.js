@@ -1414,14 +1414,14 @@ function getTranslation(transform) {
 }
 
 state = {
-    dataSrc: STATIC_URL + "data/geojs-27-mun.geojson",
+    dataSrc: "data/geojs-27-mun.geojson",
     center: [-36.3, -9.5],
     featureName: "name",
     scale: 13000
 };
 
 health_centers = {
-    dataSrc: STATIC_URL + "data/unidadesdesaude.json",
+    dataSrc: "data/unidadesdesaude.json",
     center: [-36.3, -9.5],
     featureName: "Nome",
     scale: 13000
