@@ -20,12 +20,16 @@ function clicked(d) {
             .classed("selected", true);
         d3.select(selected).classed("selected", false);
         selected = this;
+
+        $("#location-name").html(d.properties.name);
     } else {
         xCenter = width / 2;
         yCenter = height / 2;
         k = 1;
         centered = null;
         d3.select(selected).classed("selected", false);
+
+        $("#location-name").html("Alagoas");
     }
 
     g.selectAll("path")
@@ -1329,7 +1333,6 @@ function plotMap(territoryData, healthCentersOptions) {
     projection = d3.geoMercator().scale(territoryData.scale).center(territoryData.center);
     path = d3.geoPath().projection(projection);
     svg = d3.select("svg")
-        .attr("width", width)
         .attr("height", height);
     g = svg.append("g");
 
@@ -1409,7 +1412,7 @@ function getTranslation(transform) {
 
 state = {
     dataSrc: "data/geojs-27-mun.geojson",
-    center: [-36.4, -9.6],
+    center: [-36.1, -9.6],
     featureName: "name",
     scale: 13000
 };

@@ -87,8 +87,11 @@
                 <select id="gender-select" class="form-control" name="profile__gender">
                     <option value="" {% ifequal params.profile__gender '' %}selected{% endifequal %}>Todos</option>
                     <option value="F" {% ifequal params.profile__gender 'F' %}selected{% endifequal %}>Feminino</option>
-                    <option value="M" {% ifequal params.profile__gender 'M' %}selected{% endifequal %}>Masculino</option>
-                    <option value="O" {% ifequal params.profile__gender 'O' %}selected{% endifequal %}>Não quer declarar</option>
+                    <option value="M" {% ifequal params.profile__gender 'M' %}selected{% endifequal %}>Masculino
+                    </option>
+                    <option value="O" {% ifequal params.profile__gender 'O' %}selected{% endifequal %}>Não quer
+                        declarar
+                    </option>
                 </select>
             </div>
 
@@ -96,8 +99,10 @@
                 <label for="smoker-select">Fumante</label>
                 <select id="smoker-select" class="form-control" name="profile__smoker">
                     <option value="" {% ifequal params.profile__smoker '' %}selected{% endifequal %}>Todos</option>
-                    <option value="True" {% ifequal params.profile__smoker 'True' %}selected{% endifequal %}>Sim</option>
-                    <option value="False" {% ifequal params.profile__smoker 'False' %}selected{% endifequal %}>Não</option>
+                    <option value="True" {% ifequal params.profile__smoker 'True' %}selected{% endifequal %}>Sim
+                    </option>
+                    <option value="False" {% ifequal params.profile__smoker 'False' %}selected{% endifequal %}>Não
+                    </option>
                 </select>
             </div>
 
@@ -105,8 +110,10 @@
                 <label for="vaccinated-select">Vacinado contra gripe em 2020</label>
                 <select id="vaccinated-select" class="form-control" name="profile__vaccinated">
                     <option value="" {% ifequal params.profile__vaccinated '' %}selected{% endifequal %}>Todos</option>
-                    <option value="True" {% ifequal params.profile__vaccinated 'True' %}selected{% endifequal %}>Sim</option>
-                    <option value="False" {% ifequal params.profile__vaccinated 'False' %}selected{% endifequal %}>Não</option>
+                    <option value="True" {% ifequal params.profile__vaccinated 'True' %}selected{% endifequal %}>Sim
+                    </option>
+                    <option value="False" {% ifequal params.profile__vaccinated 'False' %}selected{% endifequal %}>Não
+                    </option>
                 </select>
             </div>
 
@@ -116,60 +123,92 @@
         </form>
     </div>
 
-    <div id="map" class="border" style="overflow-x: scroll">
-        <svg></svg>
-    </div>
-    <div id="forecast" class="float-left text-light rounded bg-dark p-3 text-center"
-             style="position:relative;top: 0;left: 0;">
-            <p>Previsão para os próximos 4 dias</p>
-            <table>
-                <thead>
-                <tr>
-                    <th class="px-3"></th>
-                    <th class="px-3">30/03</th>
-                    <th class="px-3">31/03</th>
-                    <th class="px-3">01/04</th>
-                    <th class="px-3">02/04</th>
-                    <th class="px-3">03/04</th>
-                </tr>
-                </thead>
-                <tbody>
-                <tr>
-                    <td>RETs disponíveis</td>
-                    <td>0</td>
-                    <td>0</td>
-                    <td>0</td>
-                    <td>0</td>
-                    <td>0</td>
-                </tr>
-                <tr>
-                    <td>RETs ocupados</td>
-                    <td>0</td>
-                    <td>0</td>
-                    <td>0</td>
-                    <td>0</td>
-                    <td>0</td>
-                </tr>
-                <tr>
-                    <td>UTIs disponíveis</td>
-                    <td>0</td>
-                    <td>0</td>
-                    <td>0</td>
-                    <td>0</td>
-                    <td>0</td>
-                </tr>
-                <tr>
-                    <td>UTIs ocupadas</td>
-                    <td>0</td>
-                    <td>0</td>
-                    <td>0</td>
-                    <td>0</td>
-                    <td>0</td>
-                </tr>
-                </tbody>
-            </table>
+    <div id="map row" class="border">
+        <svg class="col-7 float-left"></svg>
+        <div class="col-5 float-right">
+            <div id="forecast" class="text-light rounded bg-dark p-3 text-center">
+                <strong id="location-name">Alagoas</strong>
+                <div class="mb-2">
+                    <table class="w-100">
+                        <thead>
+                        <tr class="row">
+                            <th class="px-3 col-4"></th>
+                            <th class="px-3 col-4">Total</th>
+                            <th class="px-3 col-4">%</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr class="row">
+                            <td class="col-4">Suspeitos</td>
+                            <td class="col-4">0</td>
+                            <td class="col-4">0</td>
+                        </tr>
+                        <tr class="row">
+                            <td class="col-4">Confirmados</td>
+                            <td class="col-4">0</td>
+                            <td class="col-4">0</td>
+                        </tr>
+                        <tr class="row">
+                            <td class="col-4">Mortes</td>
+                            <td class="col-4">0</td>
+                            <td class="col-4">0</td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <hr>
+                <strong>Previsão para os próximos 4 dias</strong>
+                <div>
+                    <table class="">
+                        <thead>
+                        <tr>
+                            <th class="px-3"></th>
+                            <th class="px-3">30/03</th>
+                            <th class="px-3">31/03</th>
+                            <th class="px-3">01/04</th>
+                            <th class="px-3">02/04</th>
+                            <th class="px-3">03/04</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr>
+                            <td>RETs disponíveis</td>
+                            <td>0</td>
+                            <td>0</td>
+                            <td>0</td>
+                            <td>0</td>
+                            <td>0</td>
+                        </tr>
+                        <tr>
+                            <td>RETs ocupados</td>
+                            <td>0</td>
+                            <td>0</td>
+                            <td>0</td>
+                            <td>0</td>
+                            <td>0</td>
+                        </tr>
+                        <tr>
+                            <td>UTIs disponíveis</td>
+                            <td>0</td>
+                            <td>0</td>
+                            <td>0</td>
+                            <td>0</td>
+                            <td>0</td>
+                        </tr>
+                        <tr>
+                            <td>UTIs ocupadas</td>
+                            <td>0</td>
+                            <td>0</td>
+                            <td>0</td>
+                            <td>0</td>
+                            <td>0</td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
         </div>
-
+    </div>
 
     {{ stats|json_script:'data' }}
 
