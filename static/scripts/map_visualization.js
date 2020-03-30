@@ -106,15 +106,11 @@ function tooltipMouseover(t, d, options) {
         .duration(10)
         .style("opacity", .9);
 
-    var tooltipText;
-    if (!centered) {
-        tooltipText = tooltipTextFocused(cities, options.featureName, d, data.total);
-    } else {
-        tooltipText = tooltipTextFocused(cities, options.featureName, d, data.total);
-    }
+    var tooltipText = tooltipTextFocused(cities, options.featureName, d, data.total);
+
     tooltipDiv.html(tooltipText)
         .style("left", (d3.event.pageX + 25) + "px")
-        .style("top", (d3.event.pageY - 100) + "px")
+        .style("top", (d3.event.pageY - 100) + "px");
 }
 
 function tooltipMouseout(t) {
@@ -143,7 +139,7 @@ function cityFill(d, options) {
     }
 }
 
-var width = 960,
+var width = 800,
     height = 500,
     centered;
 
@@ -154,6 +150,7 @@ var svg;
 var g;
 // Define the div for the tooltip
 var tooltipDiv;
+var legend;
 
 const municipios = {
     "type": "FeatureCollection", "features": [
@@ -1336,9 +1333,6 @@ function plotMap(territoryData, healthCentersOptions) {
         .attr("height", height);
     g = svg.append("g");
 
-    tooltipDiv = d3.select("body").append("div")
-        .attr("class", "tooltip");
-
     data = JSON.parse($("#data").text());
     cities = data.cities;
 
@@ -1360,7 +1354,7 @@ function plotMap(territoryData, healthCentersOptions) {
     const circle_radius = 5;
 
     tooltipDiv = d3.select("body").append("div")
-        .attr("class", "tooltip");
+        .attr("class", "tooltipa");
 
     g.append("g")
         .selectAll(".mark") //adding mark in the group
@@ -1392,10 +1386,7 @@ function plotMap(territoryData, healthCentersOptions) {
                 });
 
             tooltipMouseout(this, d, healthCentersOptions);
->>>>>>> master
         });
-
-    //g.append(function() { return document.getElementById("forecast"); });
 }
 
 function getTranslation(transform) {
@@ -1418,7 +1409,7 @@ function getTranslation(transform) {
 
 state = {
     dataSrc: "data/geojs-27-mun.geojson",
-    center: [-36.3, -9.5],
+    center: [-36.4, -9.6],
     featureName: "name",
     scale: 13000
 };

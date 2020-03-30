@@ -26,12 +26,14 @@
             stroke-width: 1px;
         }
 
-        .tooltip {
+        .tooltipa {
             color: white;
             background-color: black;
             padding: 8px;
             border-radius: 8px;
             pointer-events: none;
+            position: absolute;
+            left: 0;
         }
 
         .low {
@@ -114,7 +116,9 @@
         </form>
     </div>
 
-    <div style="overflow-x: scroll">
+    <div id="map" class="border" style="overflow-x: scroll">
+        <svg></svg>
+    </div>
     <div id="forecast" class="float-left text-light rounded bg-dark p-3 text-center"
              style="position:relative;top: 0;left: 0;">
             <p>Previsão para os próximos 4 dias</p>
@@ -165,9 +169,6 @@
                 </tbody>
             </table>
         </div>
-        <svg class="float-right"></svg>
-    </div>
-
 
 
     {{ stats|json_script:'data' }}
