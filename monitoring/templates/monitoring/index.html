@@ -4,8 +4,6 @@
 {% load crispy_forms_filters %}
 
 {% block content %}
-    <a class="btn btn-primary" href="{% url 'monitoring:profile-create' %}">Novo paciente</a>
-    <button class="btn btn-primary" data-toggle="modal" data-target="#monitoring-create">Novo atendimento</button>
     <div id="monitoring-create" class="modal" role="dialog">
         <div class="modal-dialog">
             <div class="modal-content">
@@ -40,54 +38,67 @@
         </div>
     </div>
 
-    <div class="row justify-content-between">
-        <div class="col-4">
+    <div class="row justify-content-between my-2">
+        <div class="col-2 my-auto">
             <h4>Pacientes</h4>
         </div>
-        <form method="get" class="row-col justify-content-end form-inline">
+        <form method="get" class="row-col col-8 justify-content form-inline">
             <input type="hidden" name="search-target" value="profile">
-
             <label for="search-query"></label>
-            <input id="search-query" class="form-control mr-2" name="term"
+            <input id="search-query" class="form-control col-9 mr-2" name="term"
                    value="{{ params.term|capfirst }}" placeholder="Nome, CPF, RG...">
 
-            <input type="submit" class="btn btn-primary" value="Pesquisar">
+            <input type="submit" class="btn btn-secondary col-2" value="Pesquisar">
         </form>
+        <div class="col-2 my-auto">
+            <a class="btn btn-primary float-right" href="{% url 'monitoring:profile-create' %}">Novo paciente</a>
+        </div>
     </div>
 
-    <ul>
+    <ul class="list-group">
         {% for profile in profile_list %}
-            <li><a href="{% url 'monitoring:profile-detail' profile.id %}">{{ profile }}</a></li>
+            <li class="list-group-item"><a href="{% url 'monitoring:profile-detail' profile.id %}">{{ profile }}</a>
+            </li>
         {% empty %}
             <p>Nenhum paciente cadastrado</p>
         {% endfor %}
     </ul>
 
-    <h1>Últimos atendimentos</h1>
-    <div style="overflow-x: auto;">
-        <table class="table table-hover">
-            <thead>
-            <tr>
-                <th>ID</th>
-                <th>Paciente</th>
-                <th>Foi confirmado?</th>
-                <th>Apresenta sintomas?</th>
-                <th>Viajou recentemente?</th>
-                <th>Apresenta comorbidades?</th>
-            </tr>
-            </thead>
-            <tbody>
-            {% for monitoring in monitorings.all %}
+    <hr>
+
+    <div class="row justify-content-between">
+        <h4 class="col-auto">Últimos atendimentos</h4>
+        <div class="col-auto">
+            <button class="btn btn-primary" data-toggle="modal" data-target="#monitoring-create">Novo atendimento</button>
+        </div>
+    </div>
+    <div class="row-col my-2">
+        <div style="overflow-x: auto;">
+            <table class="table table-hover">
+                <thead>
                 <tr>
-                    <td><a href="{% url 'monitoring:monitoring-detail' monitoring.id %}">{{ monitoring.id }}</a></td>
-                    <td>{{ monitoring.profile }}</td>
-                    <td>{{ monitoring.confirmed|yesno }}</td>
-                    <td>{{ monitoring.symptom_set.all|yesno }}</td>
-                    <td>{{ monitoring.profile.trip_set.all|yesno }}</td>
-                    <td>{{ monitoring.profile.comorbidity_set.all|yesno }}</td>
+                    <th>ID</th>
+                    <th>Paciente</th>
+                    <th>Foi confirmado?</th>
+                    <th>Apresenta sintomas?</th>
+                    <th>Viajou recentemente?</th>
+                    <th>Apresenta comorbidades?</th>
                 </tr>
-            {% endfor %}
-            </tbody>
-        </table>
+                </thead>
+                <tbody>
+                {% for monitoring in monitorings.all %}
+                    <tr>
+                        <td><a href="{% url 'monitoring:monitoring-detail' monitoring.id %}">{{ monitoring.id }}</a>
+                        </td>
+                        <td>{{ monitoring.profile }}</td>
+                        <td>{{ monitoring.confirmed|yesno }}</td>
+                        <td>{{ monitoring.symptom_set.all|yesno }}</td>
+                        <td>{{ monitoring.profile.trip_set.all|yesno }}</td>
+                        <td>{{ monitoring.profile.comorbidity_set.all|yesno }}</td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
     </div>
 {% endblock %}
