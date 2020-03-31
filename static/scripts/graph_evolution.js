@@ -39,7 +39,8 @@ function verGrafico() {
         'UF':uf,
         'CIDADE':cidade,
         'BAIRRO':bairro,
-        'STATUS': status
+        'STATUS': status,
+        'ver_grafico':'ok'
     }
 
     //Read the data

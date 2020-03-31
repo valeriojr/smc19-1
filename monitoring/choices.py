@@ -89,3 +89,18 @@ status = (
     ('M', 'Morto'),
     ('R', 'Recuperado')
 )
+
+action_choices = (
+    ('C','CREATE'),
+    ('D','DELETE'),
+    ('U','UPDATE'),
+)
+
+model_choices = (
+    ('PR','PROFILE'),
+    ('AD','ADDRESS'),
+    ('MO','MONITORING'),
+    ('SY','SYMPTOM'),
+    ('TR','TRIP'),
+    ('RE','REQUEST'),
+)
