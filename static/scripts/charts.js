@@ -1,21 +1,42 @@
+const defaultOptions = {
+    margin: {
+        left: 20,
+        top: 20,
+        right: 20,
+        bottom: 20,
+    },
+    xAxis: {
+        label: ""
+    },
+    yAxis: {
+        label: ""
+    },
+    innerRadius: 0,
+    colors: ["steelblue"]
+};
+
 function barChart(selector, data, options) {
     const element = $(selector);
     d3.selectAll(`${selector} > *`).remove();
 
-    options.width = options.width === undefined ? element.width() -
-        2 * (options.margin.left + options.margin.right) : options.width;
-    options.height = options.height === undefined ? element.height() -
-        2 * (options.margin.top + options.margin.bottom) : options.height;
+    options = {...defaultOptions, ...options};
 
-    const x = d3.scaleBand().range([0, options.width]).padding(0.5);
-    const y = d3.scaleLinear().range([options.height, 0]);
+    const totalWidth = element.width();
+    const totalHeight = element.height();
+    const margin = options.margin;
+
+    const width = (options.width === undefined) ? totalWidth - (margin.left + 2 * margin.right) : options.width;
+    const height = (options.height === undefined) ? totalHeight - 2 * (margin.top + margin.bottom) : options.height;
+
+    const x = d3.scaleBand().range([0, width]).padding(0.5);
+    const y = d3.scaleLinear().range([height, 0]);
     const color = d3.scaleOrdinal().range(options.colors);
     const svg = d3.select(selector)
-        .attr("width", options.width + options.margin.left + options.margin.right)
-        .attr("height", options.height + 2 * (options.margin.top + options.margin.bottom))
+        .attr("width", width)
+        .attr("height", height)
         .append("g")
-        .attr("transform", `translate(${options.margin.left + (options.yAxis.label ? 10 : 0)}, ` +
-            `${options.margin.top + (options.title ? options.margin.top : 0)})`);
+        .attr("transform", `translate(${margin.left + (options.yAxis.label ? 10 : 0)}, ` +
+            `${margin.top + (options.title ? margin.top : 0)})`);
 
     x.domain(data.map(function (d) {
         return d.label;
@@ -28,17 +49,17 @@ function barChart(selector, data, options) {
         .data(data)
         .enter()
         .append("rect")
-        .attr("width", options.width + 2 * (options.margin.left + options.margin.right))
-        .attr("height", options.height + 2 * (options.margin.top + options.margin.bottom))
+        .attr("width", width - margin.left - 2 * margin.right)
+        .attr("height", height - margin.top - 2 * margin.bottom)
         .attr("class", options.barCssClass)
         .attr("x", function (d) {
-            return x(d.label) + options.margin.left;
+            return x(d.label) + margin.left;
         })
         .attr("width", x.bandwidth())
-        .attr("y", options.height)
+        .attr("y", height)
         .attr("height", 0)
-        .style("fill", function (d) {
-            return color(d.value);
+        .style("fill", function (d, i) {
+            return color(i);
         })
         .transition()
         .duration(1000)
@@ -46,30 +67,33 @@ function barChart(selector, data, options) {
             return y(d.value);
         })
         .attr("height", function (d) {
-            return options.height - y(d.value);
+            return height - y(d.value);
         });
 
     svg.append("g")
-        .attr("transform", `translate(${options.margin.left}, ${options.height})`)
+        .attr("transform", `translate(${margin.left}, ${height})`)
         .call(d3.axisBottom(x));
 
     svg.append("text")
-        .attr("transform", `translate(${(options.width + (options.margin.left + options.margin.right)) / 2}, ${options.height + 2 * options.margin.bottom})`)
+        .attr("transform", `translate(${(width + (margin.left + margin.right)) / 2}, ${height + 2 * margin.bottom})`)
         .style("text-anchor", "middle")
         .text(options.xAxis.label);
 
     svg.append("g")
-        .attr("transform", `translate(${options.margin.left}, 0)`)
+        .attr("transform", `translate(${margin.left}, 0)`)
         .call(d3.axisLeft(y));
 
     svg.append("text")
-        .attr("transform", "rotate(-90)")
-        .attr("x", -(options.height + 2 * (options.margin.top + options.margin.bottom)) / 2)
-        .attr("y", -options.margin.left / 4)
+        .attr("transform", `rotate(-90)`)
+        .attr("y", -margin.left / 2)
+        .attr("x", -(height / 2 + margin.top))
+        .attr("dx", "1em")
+        .style("text-anchor", "middle")
         .text(options.yAxis.label);
 
+    // Title
     svg.append("text")
-        .attr("transform", `translate(${options.width / 2}, -${options.margin.top})`)
+        .attr("transform", `translate(${width / 2}, -${margin.top})`)
         .style("font-weight", "bold")
         .style("text-anchor", "middle")
         .text(options.title);
@@ -79,32 +103,39 @@ function barChart(selector, data, options) {
 function pieChart(selector, data, options) {
     const element = $(selector);
     d3.selectAll(`${selector} > *`).remove();
+    options = {...defaultOptions, ...options};
 
-    console.log(options);
+    const totalWidth = element.width();
+    const totalHeight = element.height();
+    const margin = options.margin;
 
-    options.width = options.width === undefined ? element.width() - 2 * (options.margin.left + options.margin.right) : options.width;
-    options.height = options.height === undefined ? element.height() - 2 * (options.margin.top + options.margin.bottom) : options.height;
-    options.innerRadius = options.innerRadius === undefined ? 0 : options.innerRadius;
-    options.outerRadius = options.outerRadius === undefined ? (Math.min(options.width, options.height) -.5 * (options.margin.left + options.margin.top)) / 2 : options.outerRadius;
+    const width = (options.width === undefined) ?
+        totalWidth - (margin.left + margin.right) : options.width;
+    const height = (options.height === undefined) ?
+        totalHeight -  (2 * margin.top + margin.bottom) : options.height;
+    const outerRadius = options.outerRadius === undefined ?
+        (Math.min(width, height) - (2 * margin.top + margin.bottom)) / 2 : options.outerRadius;
 
     const color = d3.scaleOrdinal().range(options.colors);
     const arc = d3.arc()
-        .outerRadius(options.outerRadius)
+        .outerRadius(outerRadius)
         .innerRadius(options.innerRadius);
     const labelArc = d3.arc()
-        .innerRadius((options.innerRadius + options.outerRadius) / 2)
-        .outerRadius((options.innerRadius + options.outerRadius) / 2);
+        .innerRadius((options.innerRadius + outerRadius) / 2)
+        .outerRadius((options.innerRadius + outerRadius) / 2);
     const pie = d3.pie()
         .sort(null)
         .value(function (d) {
             return d.value;
         });
-    const percentage = d3.scaleLinear().range([0, 1]).domain([0, d3.sum(data, function(d){return d.value;})]);
+    const percentage = d3.scaleLinear().range([0, 1]).domain([0, d3.sum(data, function (d) {
+        return d.value;
+    })]);
     const svg = d3.select(selector)
-        .attr("width", options.width + 2 * (options.margin.left + options.margin.right))
-        .attr("height", options.height + 2 * (options.margin.left + options.margin.right))
+        .attr("width", width + 2 * (margin.left + margin.right))
+        .attr("height", height + 2 * (margin.left + margin.right))
         .append("g")
-        .attr("transform", `translate(${options.outerRadius + options.margin.left}, ${options.outerRadius + 2 * (options.margin.top + (options.title ? options.margin.top : 0))})`);
+        .attr("transform", `translate(${outerRadius + margin.left}, ${outerRadius + 2 * (margin.top + (options.title ? margin.top : 0))})`);
 
     const g = svg.selectAll("arc")
         .data(pie(data))
@@ -145,21 +176,28 @@ function pieChart(selector, data, options) {
             return `${(100 * percentage(d.data.value)).toFixed(1)}%`;
         });
 
+    // Legend
     g.append("rect")
-        .attr("transform", function(d, i){ return `translate(${options.height / 2 + options.margin.bottom}, ${-options.height / data.length + 30 * i})`;})
+        .attr("transform", function (d, i) {
+            return `translate(${outerRadius + margin.right}, ${-height / data.length + 30 * i})`;
+        })
         .attr("width", 20)
         .attr("height", 10)
-        .style("fill", function(d){return color(d.index);});
+        .style("fill", function (d) {
+            return color(d.index);
+        });
 
     g.append("text")
-        .attr("transform", function(d, i){ return `translate(${25 + options.height / 2 + options.margin.bottom}, ${-options.height / data.length + 10 + 30 * i})`;})
-        .text(function(d){
+        .attr("transform", function (d, i) {
+            return `translate(${25 + outerRadius + margin.bottom}, ${-height / data.length + 10 + 30 * i})`;
+        })
+        .text(function (d) {
             return d.data.label
         });
 
     // Title
     svg.append("text")
-        .attr("transform", `translate(${0}, -${options.height / 2 + 0.5 * options.margin.top})`)
+        .attr("transform", `translate(${width / 4}, -${outerRadius + 2 * margin.top})`)
         .style("text-anchor", "middle")
         .style("font-weight", "bold")
         .text(options.title);

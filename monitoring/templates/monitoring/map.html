@@ -127,11 +127,6 @@
         <svg class="col"></svg>
     </div>
 
-    <svg id="bar" class="row-col" style="width: 400px; height: 250px;"></svg>
-    <svg id="pie" class="row-col" style="width: 400px; height: 250px;"></svg>
-
-    <p><br><br><br><br></p>
-
     {{ stats|json_script:'data' }}
 
     <script>
@@ -139,7 +134,6 @@
     </script>
 
     <script src="{% static 'scripts/map_visualization.js' %}"></script>
-    <script src="{% static 'scripts/charts.js' %}"></script>
 
     <!-- Filtro de faixa etária -->
     <script>
@@ -198,32 +192,5 @@
                 }
             });
         });
-    </script>
-
-    <script>
-        const data = [
-            {label: "Aquario", value: 10},
-            {label: "Bola", value: 15},
-            {label: "Cancer", value: 6},
-            {label: "Dromedário", value: 9.6}
-        ];
-        const options = {
-            barCssClass: "bar",
-            margin: {
-                left: 20,
-                top: 20,
-                right: 20,
-                bottom: 20,
-            },
-            xAxis: {label: "Classes"},
-            yAxis: {label: "Frequência"},
-            innerRadius: 50,
-            outerRadius: 100,
-            colors: ["red", "green", "blue", "orange"],
-            title: "Chart"
-        };
-
-        barChart("#bar", data, options);
-        pieChart("#pie", data, options);
     </script>
 {% endblock %}
