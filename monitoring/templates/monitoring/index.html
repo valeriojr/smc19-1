@@ -63,9 +63,14 @@
     <ul class="list-group">
         {% for profile in profile_list %}
             <hr>
-            <li class="list-group-item"><a style="font-size: large;" href="{% url 'monitoring:profile-detail' profile.id %}">{{ profile }}</a></li>
-            <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#update-status">Editar Status</button>
-
+            <li class="list-group-item p-0">
+                <div class="row-col p-0">
+                    <a class="my-auto" href="{% url 'monitoring:profile-detail' profile.id %}">{{ profile }}</a>
+                    <button type="button" class="btn btn-primary float-right" data-toggle="modal"
+                            data-target="#update-status">Editar Status
+                    </button>
+                </div>
+            </li>
             <div id="update-status" class="modal" role="dialog">
                 <div class="modal-dialog">
                     <div class="modal-content">
@@ -74,7 +79,9 @@
                             <button type="button" class="close" data-dismiss="modal">&times;</button>
                         </div>
                         <div class="modal-body">
-                            <form id="update-status-form" method="post" class="row-col col-8 justify-content form-inline" action="{% url 'monitoring:profile-status' profile.id %}">
+                            <form id="update-status-form" method="post"
+                                  class="row-col col-8 justify-content form-inline"
+                                  action="{% url 'monitoring:profile-status' profile.id %}">
                                 {% csrf_token %}
                                 {{ status_form|crispy }}
                             </form>
