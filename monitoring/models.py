@@ -151,3 +151,6 @@ class ActionLog(models.Model):
     user = models.ForeignKey(Account, models.SET_NULL, null=True)
     ip = models.CharField(max_length=20)
     created = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return 'Action: ' + self.action + ', Model: ' + self.model + ', Account: ' + self.user.__str__()

@@ -3,29 +3,73 @@
 {% load static %}
 
 {% block content %}
-    <div class="row" style="height: 400px">
-        <svg id="pie-1" class="col-sm-12 col-md col-lg-4 border"></svg>
-        <svg id="pie-2" class="col-sm-12 col-md-8 col-lg-5 border"></svg>
+    <div class="row">
+        <svg id="pie-1" class="col-sm-12 col-md-6 col-lg-4 p-3 border shadow-sm" style="height: 300px"></svg>
+        <svg id="pie-2" class="col-sm-12 col-md-6 col-lg-4 border shadow-sm" style="height: 300px"></svg>
+        <div id="forecast" class="text-center bg-dark text-light  rounded col-sm-12 col-md-6 col-lg-4" style="height: 300px">
+            <p>Previsão para os próximos 4 dias</p>
+            <table class="table table-dark mb-0">
+                <thead>
+                <tr>
+                    <th class="px-1"></th>
+                    <th class="px-1">31/03</th>
+                    <th class="px-1">01/04</th>
+                    <th class="px-1">02/04</th>
+                    <th class="px-1">03/04</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr>
+                    <td>RETs disponíveis</td>
+                    <td>0</td>
+                    <td>0</td>
+                    <td>0</td>
+                    <td>0</td>
+                </tr>
+                <tr>
+                    <td>RETs ocupados</td>
+                    <td>0</td>
+                    <td>0</td>
+                    <td>0</td>
+                    <td>0</td>
+                </tr>
+                <tr>
+                    <td>UTIs disponíveis</td>
+                    <td>0</td>
+                    <td>0</td>
+                    <td>0</td>
+                    <td>0</td>
+                </tr>
+                <tr>
+                    <td>UTIs ocupadas</td>
+                    <td>0</td>
+                    <td>0</td>
+                    <td>0</td>
+                    <td>0</td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
     </div>
+
+
+    {{ stats|json_script:'stats' }}
 
     <script src="{% static 'scripts/charts.js' %}"></script>
     <script>
+        const stats = JSON.parse(document.getElementById("stats").textContent);
+        const total = stats.total;
+
         barChart("#pie-1", [
-            {label: "Saudáveis", value: 10},
-            {label: "Suspeitos", value: 29},
-            {label: "Confirmados", value: 17},
-            {label: "Mortes", value: 0},
-            {label: "Recuperados", value: 2}
+            {label: "Suspeitos", value: total.suspect_cases},
+            {label: "Confirmados", value: total.confirmed_cases},
+            {label: "Mortes", value: total.deaths},
+            {label: "Recuperados", value: total.recovered || 0}
         ], {
-            margin: {left: 20, top: 20, right: 20, bottom: 20},
-            title: "Casos em Alagoas",
-            colors: ["steelblue", "yellow", "red", "black", "green"],
-            xAxis: {
-                label: "Status",
-            },
-            yAxis: {
-                label: "Casos"
-            }
+            title: "Casos de COVID-19 em Alagoas",
+            colors: ["khaki", "salmon", "black", "lightgreen"],
+            xAxis: {label: "Status",},
+            yAxis: {label: "Casos"},
         });
         pieChart("#pie-2", [
             {label: "RETs disponíveis", value: 29},
@@ -33,7 +77,6 @@
             {label: "UTIs disponíveis", value: 17},
             {label: "UTIs ocupados", value: 17},
         ], {
-            margin: {left: 20, top: 20, right: 20, bottom: 20},
             title: "Ocupação de leitos",
             colors: ["lightgreen", "khaki", "salmon", "firebrick"],
             innerRadius: 30,
