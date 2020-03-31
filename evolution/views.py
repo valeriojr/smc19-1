@@ -11,6 +11,7 @@ from monitoring.models import State,City,Neighbourhood
 
 class DataGraphEvolution(mixins.LoginRequiredMixin, View):
     def get(self, request):
+        print(request.GET)
         state = request.GET.get('UF','')
         city = request.GET.get('CIDADE','')
         neighbourhood = request.GET.get('BAIRRO','')
@@ -33,16 +34,15 @@ class DataGraphEvolution(mixins.LoginRequiredMixin, View):
             FETCHED = [{'value':u.name, 'text': u.name} for u in get_list_or_404(Neighbourhood,city=city)]
             return JsonResponse(TODOS + FETCHED, safe=False)
         
-        if 'ver_grafico' in request.GET:
-            response = HttpResponse(content_type='text/csv')
-            response['Content-Disposition'] = 'attachment; filename="dataset.csv"'
+        response = HttpResponse(content_type='text/csv')
+        response['Content-Disposition'] = 'attachment; filename="dataset.csv"'
 
-            writer = csv.writer(response)
-            writer.writerow(['date','value'])
-            for i in range(1,32):
-                writer.writerow(['2019-03-{}'.format(i),1.2**i])
-            
-            return response
+        writer = csv.writer(response)
+        writer.writerow(['date','value'])
+        for i in range(1,32):
+            writer.writerow(['2019-03-{}'.format(i),1.2**i])
+        
+        return response
 
 class GraphEvolution(mixins.LoginRequiredMixin, generic.TemplateView):
     template_name = 'evolution/graph_evolution.html'

@@ -3,6 +3,8 @@ from django.core.validators import MinValueValidator
 from django.db import models
 from django.urls import reverse
 
+from accounts.models import Account
+
 import validators
 from . import choices
 
@@ -142,3 +144,10 @@ class Neighbourhood(models.Model):
 
     def __str__(self):
         return self.city.__str__() + ', ' + self.name
+
+class ActionLog(models.Model):
+    action = models.CharField(max_length=1, choices=choices.action_choices)
+    model = models.CharField(max_length=2, choices=choices.model_choices)
+    user = models.ForeignKey(Account, models.SET_NULL, null=True)
+    ip = models.CharField(max_length=20)
+    created = models.DateTimeField(auto_now_add=True)
