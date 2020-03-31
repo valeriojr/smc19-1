@@ -90,11 +90,15 @@ class ProfileForm(forms.ModelForm):
             'status': forms.HiddenInput()
         }
 
+class ProfileStatusForm(forms.ModelForm):
+    class Meta:
+        model = models.Profile
+        fields = ['status']
 
 class RequestForm(forms.ModelForm):
     class Meta:
         model=models.Request
-        fields='__all__'
+        fields= '__all__'
         # widgets={
         #     'profile': forms.HiddenInput()
         # }

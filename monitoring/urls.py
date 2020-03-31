@@ -11,6 +11,7 @@ urlpatterns = [
     path('pacientes/<int:pk>/', views.ProfileDetail.as_view(), name='profile-detail'),
     path('pacientes/cadastrar/', views.ProfileCreate.as_view(), name='profile-create'),
     path('pacientes/<int:pk>/editar/', views.ProfileUpdate.as_view(), name='profile-update'),
+    path('pacientes/<int:pk>/editar/status', views.ProfileStatusUpdate.as_view(), name='profile-status'),
     path('pacientes/<int:pk>/remover/', views.ProfileDelete.as_view(), name='profile-delete'),
     # Address
     path('pacientes/<int:profile>/enderecos/cadastrar/', views.AddressCreate.as_view(), name='address-create'),
