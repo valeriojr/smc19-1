@@ -72,6 +72,10 @@ class Map(mixins.LoginRequiredMixin, generic.TemplateView):
         return context
 
 
+class Dashboard(mixins.LoginRequiredMixin, generic.TemplateView):
+    template_name = 'monitoring/dashboard.html'
+
+
 # Profile
 
 class ProfileCreate(mixins.LoginRequiredMixin, generic.CreateView):

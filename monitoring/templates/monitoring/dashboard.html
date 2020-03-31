@@ -1,0 +1,42 @@
+{% extends 'base.html' %}
+
+{% load static %}
+
+{% block content %}
+    <div class="row" style="height: 400px">
+        <svg id="pie-1" class="col-sm-12 col-md col-lg-4 border"></svg>
+        <svg id="pie-2" class="col-sm-12 col-md-8 col-lg-5 border"></svg>
+    </div>
+
+    <script src="{% static 'scripts/charts.js' %}"></script>
+    <script>
+        barChart("#pie-1", [
+            {label: "Saudáveis", value: 10},
+            {label: "Suspeitos", value: 29},
+            {label: "Confirmados", value: 17},
+            {label: "Mortes", value: 0},
+            {label: "Recuperados", value: 2}
+        ], {
+            margin: {left: 20, top: 20, right: 20, bottom: 20},
+            title: "Casos em Alagoas",
+            colors: ["steelblue", "yellow", "red", "black", "green"],
+            xAxis: {
+                label: "Status",
+            },
+            yAxis: {
+                label: "Casos"
+            }
+        });
+        pieChart("#pie-2", [
+            {label: "RETs disponíveis", value: 29},
+            {label: "RETs ocupados", value: 10},
+            {label: "UTIs disponíveis", value: 17},
+            {label: "UTIs ocupados", value: 17},
+        ], {
+            margin: {left: 20, top: 20, right: 20, bottom: 20},
+            title: "Ocupação de leitos",
+            colors: ["lightgreen", "khaki", "salmon", "firebrick"],
+            innerRadius: 30,
+        })
+    </script>
+{% endblock %}

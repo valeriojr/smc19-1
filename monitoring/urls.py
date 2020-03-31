@@ -6,6 +6,7 @@ app_name = 'monitoring'
 urlpatterns = [
     path('', views.Index.as_view(), name='index'),
     path('mapa/', views.Map.as_view(), name='map'),
+    path('dashboard/', views.Dashboard.as_view(), name='dashboard'),
     # Profile
     path('pacientes/<int:pk>/', views.ProfileDetail.as_view(), name='profile-detail'),
     path('pacientes/cadastrar/', views.ProfileCreate.as_view(), name='profile-create'),

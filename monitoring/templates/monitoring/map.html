@@ -123,92 +123,14 @@
         </form>
     </div>
 
-    <div id="map row" class="border">
-        <svg class="col-7 float-left"></svg>
-        <div class="col-5 float-right">
-            <div id="forecast" class="text-light rounded bg-dark p-3 text-center">
-                <strong id="location-name">Alagoas</strong>
-                <div class="mb-2">
-                    <table class="w-100">
-                        <thead>
-                        <tr class="row">
-                            <th class="px-3 col-4"></th>
-                            <th class="px-3 col-4">Total</th>
-                            <th class="px-3 col-4">%</th>
-                        </tr>
-                        </thead>
-                        <tbody>
-                        <tr class="row">
-                            <td class="col-4">Suspeitos</td>
-                            <td class="col-4">0</td>
-                            <td class="col-4">0</td>
-                        </tr>
-                        <tr class="row">
-                            <td class="col-4">Confirmados</td>
-                            <td class="col-4">0</td>
-                            <td class="col-4">0</td>
-                        </tr>
-                        <tr class="row">
-                            <td class="col-4">Mortes</td>
-                            <td class="col-4">0</td>
-                            <td class="col-4">0</td>
-                        </tr>
-                        </tbody>
-                    </table>
-                </div>
-                <hr>
-                <strong>Previsão para os próximos 4 dias</strong>
-                <div>
-                    <table class="">
-                        <thead>
-                        <tr>
-                            <th class="px-3"></th>
-                            <th class="px-3">30/03</th>
-                            <th class="px-3">31/03</th>
-                            <th class="px-3">01/04</th>
-                            <th class="px-3">02/04</th>
-                            <th class="px-3">03/04</th>
-                        </tr>
-                        </thead>
-                        <tbody>
-                        <tr>
-                            <td>RETs disponíveis</td>
-                            <td>0</td>
-                            <td>0</td>
-                            <td>0</td>
-                            <td>0</td>
-                            <td>0</td>
-                        </tr>
-                        <tr>
-                            <td>RETs ocupados</td>
-                            <td>0</td>
-                            <td>0</td>
-                            <td>0</td>
-                            <td>0</td>
-                            <td>0</td>
-                        </tr>
-                        <tr>
-                            <td>UTIs disponíveis</td>
-                            <td>0</td>
-                            <td>0</td>
-                            <td>0</td>
-                            <td>0</td>
-                            <td>0</td>
-                        </tr>
-                        <tr>
-                            <td>UTIs ocupadas</td>
-                            <td>0</td>
-                            <td>0</td>
-                            <td>0</td>
-                            <td>0</td>
-                            <td>0</td>
-                        </tr>
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-        </div>
+    <div id="map" class="border row">
+        <svg class="col"></svg>
     </div>
+
+    <svg id="bar" class="row-col" style="width: 400px; height: 250px;"></svg>
+    <svg id="pie" class="row-col" style="width: 400px; height: 250px;"></svg>
+
+    <p><br><br><br><br></p>
 
     {{ stats|json_script:'data' }}
 
@@ -217,6 +139,8 @@
     </script>
 
     <script src="{% static 'scripts/map_visualization.js' %}"></script>
+    <script src="{% static 'scripts/charts.js' %}"></script>
+
     <!-- Filtro de faixa etária -->
     <script>
         $(document).ready(function () {
@@ -274,5 +198,32 @@
                 }
             });
         });
+    </script>
+
+    <script>
+        const data = [
+            {label: "Aquario", value: 10},
+            {label: "Bola", value: 15},
+            {label: "Cancer", value: 6},
+            {label: "Dromedário", value: 9.6}
+        ];
+        const options = {
+            barCssClass: "bar",
+            margin: {
+                left: 20,
+                top: 20,
+                right: 20,
+                bottom: 20,
+            },
+            xAxis: {label: "Classes"},
+            yAxis: {label: "Frequência"},
+            innerRadius: 50,
+            outerRadius: 100,
+            colors: ["red", "green", "blue", "orange"],
+            title: "Chart"
+        };
+
+        barChart("#bar", data, options);
+        pieChart("#pie", data, options);
     </script>
 {% endblock %}
