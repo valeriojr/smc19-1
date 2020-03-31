@@ -84,10 +84,11 @@ results = [
 
 status = (
     ('N', 'Normal'),
+    ('T', 'Testado'),
     ('S', 'Suspeito'),
     ('C', 'Confirmado'),
     ('M', 'Morto'),
-    ('R', 'Recuperado')
+    ('I', 'Imune'),
 )
 
 action_choices = (

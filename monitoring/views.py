@@ -37,6 +37,7 @@ class Index(mixins.LoginRequiredMixin, generic.ListView):
         context['monitoring_create_form'] = forms.MonitoringForm()
         symptoms_initial = [{'symptom': symptom[0], 'label': symptom[1]} for symptom in choices.symptoms]
         context['symptom_formset'] = forms.SymptomInlineFormset(initial=symptoms_initial)
+        context['status_form'] = forms.ProfileStatusForm()
 
         return context
 
@@ -121,6 +122,11 @@ class ProfileUpdate(mixins.LoginRequiredMixin, generic.UpdateView):
 
     def get_success_url(self):
         return reverse('monitoring:profile-detail', args=[self.kwargs['pk']])
+
+class ProfileStatusUpdate(mixins.LoginRequiredMixin, generic.UpdateView):
+    model = models.Profile
+    form_class = forms.ProfileStatusForm
+    success_url = reverse_lazy('monitoring:index')
 
 
 class ProfileDelete(mixins.LoginRequiredMixin, generic.DeleteView):

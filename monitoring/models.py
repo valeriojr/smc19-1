@@ -14,7 +14,7 @@ from . import choices
 class Profile(models.Model):
     full_name = models.CharField(verbose_name='Nome completo', max_length=100, blank=True, default='')
     mother_name = models.CharField(verbose_name='Nome da mãe', max_length=100, blank=True, default='')
-    birth_date = models.DateField(verbose_name='Data de nascimento', blank=True, default='',
+    birth_date = models.DateField(verbose_name='Data de nascimento', default='',
                                   validators=[validators.prevent_future_date])
     cns = models.CharField(verbose_name='Cartão do SUS', max_length=15, blank=True, default='000000000000000')
     id_document = models.CharField(verbose_name='RG', max_length=15, blank=True, default='000000000')
@@ -23,7 +23,7 @@ class Profile(models.Model):
     phone_number = models.CharField(verbose_name='Número de telefone', max_length=20, blank=True, default='')
     gender = models.CharField(verbose_name='Sexo biológico', max_length=1, choices=choices.genders, blank=True,
                               default='')
-    age = models.PositiveIntegerField(verbose_name='Idade', blank=True)
+    age = models.PositiveIntegerField(verbose_name='Idade', default=0)
     weight = models.FloatField(verbose_name='Peso (Kg)', blank=True, default=0,
                                validators=[MinValueValidator(0)])
     height = models.FloatField(verbose_name='Altura (m)', blank=True, default=0, validators=[MinValueValidator(0)])
@@ -34,7 +34,7 @@ class Profile(models.Model):
 
     comorbidities = BitField(verbose_name='Comorbidades', flags=choices.comorbidities, default=0)
 
-    status = models.CharField(verbose_name='Status', max_length=1, blank=True, choices=choices.status, default='N')
+    status = models.CharField(verbose_name='Status', max_length=1, choices=choices.status, default='N')
 
     def __str__(self):
         return self.full_name
@@ -49,7 +49,7 @@ class Address(models.Model):
     street_name = models.CharField(verbose_name='Logradouro', max_length=100, blank=True, default='')
     number = models.PositiveIntegerField(verbose_name='Número', blank=True, null=True, default=0)
     complement = models.CharField(verbose_name='Complemento', max_length=100, blank=True, default='')
-    city = models.CharField(verbose_name='Cidade', max_length=100, blank=True, default='')
+    city = models.CharField(verbose_name='Cidade', max_length=100, default='')
     people = models.PositiveIntegerField(verbose_name='Quantidade de pessoas', blank=True, null=True, default=1)
 
     def delete(self, using=None, keep_parents=False):
