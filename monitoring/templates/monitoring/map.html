@@ -123,91 +123,8 @@
         </form>
     </div>
 
-    <div id="map row" class="border">
-        <svg class="col-7 float-left"></svg>
-        <div class="col-5 float-right">
-            <div id="forecast" class="text-light rounded bg-dark p-3 text-center">
-                <strong id="location-name">Alagoas</strong>
-                <div class="mb-2">
-                    <table class="w-100">
-                        <thead>
-                        <tr class="row">
-                            <th class="px-3 col-4"></th>
-                            <th class="px-3 col-4">Total</th>
-                            <th class="px-3 col-4">%</th>
-                        </tr>
-                        </thead>
-                        <tbody>
-                        <tr class="row">
-                            <td class="col-4">Suspeitos</td>
-                            <td class="col-4">0</td>
-                            <td class="col-4">0</td>
-                        </tr>
-                        <tr class="row">
-                            <td class="col-4">Confirmados</td>
-                            <td class="col-4">0</td>
-                            <td class="col-4">0</td>
-                        </tr>
-                        <tr class="row">
-                            <td class="col-4">Mortes</td>
-                            <td class="col-4">0</td>
-                            <td class="col-4">0</td>
-                        </tr>
-                        </tbody>
-                    </table>
-                </div>
-                <hr>
-                <strong>Previsão para os próximos 4 dias</strong>
-                <div>
-                    <table class="">
-                        <thead>
-                        <tr>
-                            <th class="px-3"></th>
-                            <th class="px-3">30/03</th>
-                            <th class="px-3">31/03</th>
-                            <th class="px-3">01/04</th>
-                            <th class="px-3">02/04</th>
-                            <th class="px-3">03/04</th>
-                        </tr>
-                        </thead>
-                        <tbody>
-                        <tr>
-                            <td>RETs disponíveis</td>
-                            <td>0</td>
-                            <td>0</td>
-                            <td>0</td>
-                            <td>0</td>
-                            <td>0</td>
-                        </tr>
-                        <tr>
-                            <td>RETs ocupados</td>
-                            <td>0</td>
-                            <td>0</td>
-                            <td>0</td>
-                            <td>0</td>
-                            <td>0</td>
-                        </tr>
-                        <tr>
-                            <td>UTIs disponíveis</td>
-                            <td>0</td>
-                            <td>0</td>
-                            <td>0</td>
-                            <td>0</td>
-                            <td>0</td>
-                        </tr>
-                        <tr>
-                            <td>UTIs ocupadas</td>
-                            <td>0</td>
-                            <td>0</td>
-                            <td>0</td>
-                            <td>0</td>
-                            <td>0</td>
-                        </tr>
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-        </div>
+    <div id="map" class="border row">
+        <svg class="col"></svg>
     </div>
 
     {{ stats|json_script:'data' }}
@@ -217,6 +134,7 @@
     </script>
 
     <script src="{% static 'scripts/map_visualization.js' %}"></script>
+
     <!-- Filtro de faixa etária -->
     <script>
         $(document).ready(function () {

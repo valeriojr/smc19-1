@@ -73,6 +73,28 @@ class Map(mixins.LoginRequiredMixin, generic.TemplateView):
         return context
 
 
+class Dashboard(mixins.LoginRequiredMixin, generic.TemplateView):
+    template_name = 'monitoring/dashboard.html'
+
+    def get_context_data(self):
+        context = super(Dashboard, self).get_context_data()
+
+        query = {
+            'suspect_cases': Count('profile__status', filter=Q(profile__status='S')),
+            'confirmed_cases': Count('profile__status', filter=Q(profile__status='C')),
+            'deaths': Count('profile__status', filter=Q(profile__status='M')),
+            'people_average': Avg('people'),
+            'smokers': Count('profile__smoker', filter=Q(profile__smoker=True)),
+            'vaccinated': Count('profile__vaccinated', filter=Q(profile__vaccinated=True)),
+        }
+
+        context['stats'] = {
+            'total': models.Address.objects.filter(primary=True).aggregate(**query),
+        }
+
+        return context
+
+
 # Profile
 
 class ProfileCreate(mixins.LoginRequiredMixin, generic.CreateView):
@@ -378,6 +400,7 @@ class RequestIndex(mixins.LoginRequiredMixin, generic.ListView):
 
     def get_queryset(self):
         return models.Request.objects.all()
+
 
 class RequestDelete(mixins.LoginRequiredMixin, generic.DeleteView):
     model = models.Request
