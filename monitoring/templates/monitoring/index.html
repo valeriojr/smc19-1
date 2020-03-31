@@ -39,28 +39,33 @@
     </div>
 
     <div class="row justify-content-between my-2">
-        <div class="col-2 my-auto">
-            <h4>Pacientes</h4>
-        </div>
-        <form method="get" class="row-col col-8 justify-content form-inline">
-            <input type="hidden" name="search-target" value="profile">
-            <label for="search-query"></label>
-            <input id="search-query" class="form-control col-9 mr-2" name="term"
-                   value="{{ params.term|capfirst }}" placeholder="Nome, CPF, RG...">
-
-            <input type="submit" class="btn btn-secondary col-2" value="Pesquisar">
-        </form>
-        <div class="col-2 my-auto">
+        <h4 class="col-4">Pacientes</h4>
+        <div class="col-3">
             <a class="btn btn-primary float-right" href="{% url 'monitoring:profile-create' %}">Novo paciente</a>
         </div>
     </div>
+
+    <div class="">
+        <form method="get" class="form-inline mb-2">
+            <input type="hidden" name="search-target" value="profile">
+            <label for="search-query"></label>
+            <input id="search-query" class="form-control col-10 mr-2 " name="term"
+                   value="{{ params.term|capfirst }}" placeholder="Nome, CPF, RG...">
+            <div class="col">
+                <input type="submit" class="btn btn-secondary" value="Pesquisar">
+            </div>
+
+        </form>
+    </div>
+
+
 
     <ul class="list-group">
         {% for profile in profile_list %}
             <li class="list-group-item"><a href="{% url 'monitoring:profile-detail' profile.id %}">{{ profile }}</a>
             </li>
         {% empty %}
-            <p>Nenhum paciente cadastrado</p>
+            <p class="text-muted">Nenhum paciente cadastrado</p>
         {% endfor %}
     </ul>
 
@@ -69,7 +74,8 @@
     <div class="row justify-content-between">
         <h4 class="col-auto">Últimos atendimentos</h4>
         <div class="col-auto">
-            <button class="btn btn-primary" data-toggle="modal" data-target="#monitoring-create">Novo atendimento</button>
+            <button class="btn btn-primary" data-toggle="modal" data-target="#monitoring-create">Novo atendimento
+            </button>
         </div>
     </div>
     <div class="row-col my-2">
