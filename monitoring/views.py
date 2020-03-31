@@ -8,6 +8,7 @@ from django.views import generic
 from monitoring import choices
 from . import forms
 from . import models
+from . import utils
 
 
 # Create your views here.
@@ -79,6 +80,10 @@ class ProfileCreate(mixins.LoginRequiredMixin, generic.CreateView):
     template_name = 'monitoring/new_profile.html'
     success_url = reverse_lazy('monitoring:index')
 
+    def form_valid(self, form):
+        utils.create_log(self.request, 'C', 'PR')
+        return super(ProfileCreate, self).form_valid(form)
+
 
 class ProfileDetail(mixins.LoginRequiredMixin, generic.DetailView):
     model = models.Profile
@@ -111,6 +116,10 @@ class ProfileUpdate(mixins.LoginRequiredMixin, generic.UpdateView):
     model = models.Profile
     form_class = forms.ProfileForm
 
+    def form_valid(self, form):
+        utils.create_log(self.request, 'U', 'PR')
+        return super(ProfileUpdate, self).form_valid(form)
+
     def form_invalid(self, form):
         messages.error(self.request, form.errors)
         return HttpResponseRedirect(self.get_success_url())
@@ -122,6 +131,10 @@ class ProfileUpdate(mixins.LoginRequiredMixin, generic.UpdateView):
 class ProfileDelete(mixins.LoginRequiredMixin, generic.DeleteView):
     model = models.Profile
     success_url = reverse_lazy('monitoring:index')
+
+    def form_valid(self, form):
+        utils.create_log(self.request, 'D', 'PR')
+        return super(ProfileDelete, self).form_valid(form)
 
 
 # Address
@@ -135,6 +148,7 @@ class AddressCreate(mixins.LoginRequiredMixin, generic.CreateView):
             self.object.primary = True
         self.object.save()
 
+        utils.create_log(self.request, 'C', 'AD')
         return super(AddressCreate, self).form_valid(form)
 
     def get_success_url(self):
@@ -145,12 +159,20 @@ class AddressUpdate(mixins.LoginRequiredMixin, generic.UpdateView):
     model = models.Address
     form_class = forms.AddressForm
 
+    def form_valid(self, form):
+        utils.create_log(self.request, 'U', 'AD')
+        return super(AddressUpdate, self).form_valid(form)
+
     def get_success_url(self):
         return reverse('monitoring:profile-detail', args=[self.kwargs['profile']])
 
 
 class AddressDelete(mixins.LoginRequiredMixin, generic.DeleteView):
     model = models.Address
+
+    def form_valid(self, form):
+        utils.create_log(self.request, 'D', 'AD')
+        return super(AddressDelete, self).form_valid(form)
 
     def get_success_url(self):
         return reverse('monitoring:profile-detail', args=[self.kwargs['profile']])
@@ -230,6 +252,7 @@ class MonitoringCreate(mixins.LoginRequiredMixin, generic.CreateView):
 
             messages.success(self.request, 'Atendimento cadastrado com sucesso!')
 
+            utils.create_log(self.request, 'C', 'MO')
             return HttpResponseRedirect(self.get_success_url())
         else:
             return self.form_invalid(form)
@@ -280,6 +303,7 @@ class MonitoringUpdate(mixins.LoginRequiredMixin, generic.UpdateView):
 
             messages.success(self.request, 'Atendimento atualizado com sucesso!')
 
+            utils.create_log(self.request, 'U', 'MO')
             return HttpResponseRedirect(self.get_success_url())
         else:
             return self.form_invalid(form)
@@ -291,6 +315,10 @@ class MonitoringUpdate(mixins.LoginRequiredMixin, generic.UpdateView):
 class MonitoringDelete(mixins.LoginRequiredMixin, generic.DeleteView):
     model = models.Monitoring
 
+    def form_valid(self, form):
+        utils.create_log(self.request, 'D', 'MO')
+        return super(MonitoringDelete, self).form_valid(form)
+
     def get_success_url(self):
         return reverse('monitoring:index')
 
@@ -299,6 +327,10 @@ class MonitoringDelete(mixins.LoginRequiredMixin, generic.DeleteView):
 
 class TripCreate(mixins.LoginRequiredMixin, generic.CreateView):
     form_class = forms.TripForm
+
+    def form_valid(self, form):
+        utils.create_log(self.request, 'C', 'TR')
+        return super(TripCreate, self).form_valid(form)
 
     def form_invalid(self, form):
         messages.error(self.request, form.errors)
@@ -312,12 +344,20 @@ class TripUpdate(mixins.LoginRequiredMixin, generic.UpdateView):
     model = models.Trip
     form_class = forms.TripForm
 
+    def form_valid(self, form):
+        utils.create_log(self.request, 'U', 'TR')
+        return super(TripUpdate, self).form_valid(form)
+
     def get_success_url(self):
         return reverse_lazy('monitoring:index')
 
 
 class TripDelete(mixins.LoginRequiredMixin, generic.DeleteView):
     model = models.Trip
+
+    def form_valid(self, form):
+        utils.create_log(self.request, 'D', 'TR')
+        return super(TripDelete, self).form_valid(form)
 
     def get_success_url(self):
         return reverse('monitoring:profile-detail', args=[self.kwargs['profile']])
@@ -327,6 +367,10 @@ class RequestCreate(mixins.LoginRequiredMixin, generic.CreateView):
     form_class = forms.RequestForm
     template_name = 'monitoring/new_request.html'
     success_url = reverse_lazy('monitoring:request')
+
+    def form_valid(self, form):
+        utils.create_log(self.request, 'C', 'RE')
+        return super(RequestCreate, self).form_valid(form)
 
 class RequestIndex(mixins.LoginRequiredMixin, generic.ListView):
     template_name = 'monitoring/request_index.html'
@@ -338,3 +382,7 @@ class RequestIndex(mixins.LoginRequiredMixin, generic.ListView):
 class RequestDelete(mixins.LoginRequiredMixin, generic.DeleteView):
     model = models.Request
     success_url = reverse_lazy('monitoring:request')
+
+    def form_valid(self, form):
+        utils.create_log(self.request, 'D', 'RE')
+        return super(RequestDelete, self).form_valid(form)
