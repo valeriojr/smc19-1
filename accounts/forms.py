@@ -33,7 +33,6 @@ class AccountCreationForm(forms.ModelForm):
         for key in ['password', 'confirm_password', 'health_center', 'user_profile']:
             if key not in cleaned_data:
                 return cleaned_data
-        print(dir(self))
         password = cleaned_data['password']
         confirm_password = cleaned_data['confirm_password']
         health_center = cleaned_data['health_center']
