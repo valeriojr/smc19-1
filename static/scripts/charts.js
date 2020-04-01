@@ -12,7 +12,8 @@ const defaultOptions = {
         label: ""
     },
     innerRadius: 0,
-    colors: ["steelblue"]
+    colors: ["steelblue"],
+
 };
 
 function barChart(selector, data, options) {
@@ -145,6 +146,7 @@ function pieChart(selector, data, options) {
 
     g.append("path")
         .attr("d", arc)
+        .attr("class", options.arcCssClass ? options.arcCssClass : "")
         .style("fill", function (d, i) {
             return color(d.index)
         })
@@ -186,7 +188,6 @@ function pieChart(selector, data, options) {
         .style("fill", function (d) {
             return color(d.index);
         });
-
     g.append("text")
         .attr("transform", function (d, i) {
             return `translate(${25 + outerRadius + margin.bottom}, ${-height / data.length + 10 + 30 * i})`;

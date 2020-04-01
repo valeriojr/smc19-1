@@ -42,17 +42,30 @@
             <select class="form-control" id="status_id" name="status">
                 <option value="TODOS">TODOS</option>
                 <option value="N">NORMAL</option>
+                <option value="T">TESTADO</option>
                 <option value="S">SUSPEITO</option>
                 <option value="C">CONFIRMADO</option>
                 <option value="M">MORTO</option>
-                <option value="R">RECUPERADO</option>
+                <option value="I">IMUNE</option>
             </select>
         </div>
     </div>
     <div class="col-auto">
+        <div class="input-group mb-2">
+            <div class="input-group-prepend">
+                <div class="input-group-text">PERÍODO</div>
+            </div>
+            <input type="date" id="inicial_id" name="inicial">
+            <input type="date" id="final_id" name="final">
+        </div>
+    </div>
+</div>
+
+<div class="form-row align-items-center">
+    <div class="col-auto">
         <button class="btn btn-primary mb-2" id="ver_grafico_id" name="ver_grafico">Ver Gráfico</button>
     </div>
-  </div>
+</div>
 
 <!-- Initialize a select button -->
 <div class="mt-4" id="my_dataviz"></div>
