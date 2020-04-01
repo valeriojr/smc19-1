@@ -34,12 +34,16 @@ function verGrafico() {
     let cidade = $('#cidade_id').val()
     let bairro = $('#bairro_id').val()
     let status = $('#status_id').val()
+    let data_inicial = $('#inicial_id').val()
+    let data_final = $('#final_id').val()
 
     params = {
         'UF':uf,
         'CIDADE':cidade,
         'BAIRRO':bairro,
         'STATUS': status,
+        'INICIAL': data_inicial,
+        'FINAL': data_final,
         'ver_grafico':'ok'
     }
 
@@ -158,7 +162,7 @@ window.onload = function () {
     $('#ver_grafico_id').click(verGrafico)
     $('#ver_grafico_id').click()
 
-    $.getJSON('http://127.0.0.1:8000/evolution/data?'.concat(encodeQueryData({'UF':'ELEMENTOS'})), function(data) {
+    $.getJSON('http://127.0.0.1:8000/evolution/data?'.concat(encodeQueryData({'UF':'ELEMENTOS', 'popular_select': 'ok'})), function(data) {
         //data is the JSON string
         for(var i = 0; i < data.length; i++) {
             var obj = data[i];
@@ -171,7 +175,7 @@ window.onload = function () {
             $("#cidade_id").empty()
             $("#bairro_id").empty()
 
-            params = {'UF':$("#uf_id").val(), 'CIDADE': 'ELEMENTOS'}
+            params = {'UF':$("#uf_id").val(), 'CIDADE': 'ELEMENTOS', 'popular_select': 'ok'}
 
             $.getJSON('http://127.0.0.1:8000/evolution/data?'.concat(encodeQueryData(params)), function(data) {
             //data is the JSON string
@@ -186,7 +190,7 @@ window.onload = function () {
     $("#cidade_id").on("change", function() {
         $("#bairro_id").empty()
 
-        params = {'UF':$("#uf_id").val(), 'CIDADE': $("#cidade_id").val(), 'BAIRRO': 'ELEMENTOS'}
+        params = {'UF':$("#uf_id").val(), 'CIDADE': $("#cidade_id").val(), 'BAIRRO': 'ELEMENTOS', 'popular_select': 'ok'}
 
         $.getJSON('http://127.0.0.1:8000/evolution/data?'.concat(encodeQueryData(params)), function(data) {
         //data is the JSON string

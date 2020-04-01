@@ -6,43 +6,60 @@ from django.contrib.auth import mixins
 import csv
 from django.http import HttpResponse, JsonResponse
 
-from monitoring.models import State,City,Neighbourhood
+from monitoring.models import State,City,Neighbourhood, Monitoring
+
+from django.utils import dateparse, timezone
 
 
 class DataGraphEvolution(mixins.LoginRequiredMixin, View):
     def get(self, request):
-        print(request.GET)
-        state = request.GET.get('UF','')
-        city = request.GET.get('CIDADE','')
-        neighbourhood = request.GET.get('BAIRRO','')
-        status = request.GET.get('STATUS','')
+        if 'popular_select' in request.GET:
+            state = request.GET.get('UF','')
+            city = request.GET.get('CIDADE','')
+            neighbourhood = request.GET.get('BAIRRO','')
 
-        TODOS = [{'value':'TODOS', 'text':'TODOS'}]
+            TODOS = [{'value':'TODOS', 'text':'TODOS'}]
+            FETCHED = []
 
-        if state == 'ELEMENTOS':
-            FETCHED = [{'value':u.name, 'text': u.name} for u in State.objects.all()]
-            return JsonResponse(TODOS + FETCHED, safe=False)
+            if state == 'ELEMENTOS':
+                FETCHED = [{'value':u.name, 'text': u.name} for u in State.objects.all()]
+                return JsonResponse(TODOS + FETCHED, safe=False)
 
-        elif city == 'ELEMENTOS':
-            state = get_object_or_404(State, name=state)
-            FETCHED = [{'value':u.name, 'text': u.name} for u in get_list_or_404(City,state=state)]
-            return JsonResponse(TODOS + FETCHED, safe=False)
+            elif city == 'ELEMENTOS':
+                state = get_object_or_404(State, name=state)
+                FETCHED = [{'value':u.name, 'text': u.name} for u in get_list_or_404(City,state=state)]
 
-        elif neighbourhood == 'ELEMENTOS':
-            state = get_object_or_404(State, name=state)
-            city = get_object_or_404(City, state=state, name=city)
-            FETCHED = [{'value':u.name, 'text': u.name} for u in get_list_or_404(Neighbourhood,city=city)]
+            elif neighbourhood == 'ELEMENTOS':
+                state = get_object_or_404(State, name=state)
+                city = get_object_or_404(City, state=state, name=city)
+                FETCHED = [{'value':u.name, 'text': u.name} for u in get_list_or_404(Neighbourhood,city=city)]
+            
             return JsonResponse(TODOS + FETCHED, safe=False)
         
-        response = HttpResponse(content_type='text/csv')
-        response['Content-Disposition'] = 'attachment; filename="dataset.csv"'
+        if 'ver_grafico' in request.GET:
+            state = request.GET.get('UF','')
+            city = request.GET.get('CIDADE','')
+            neighbourhood = request.GET.get('BAIRRO','')
+            status = request.GET.get('STATUS','')
+            initial_date = dateparse.parse_date(request.GET.get('INICIAL','2020-01-01'))
+            final_date = request.GET.get('FINAL', str(timezone.now().date()))
 
-        writer = csv.writer(response)
-        writer.writerow(['date','value'])
-        for i in range(1,32):
-            writer.writerow(['2019-03-{}'.format(i),1.2**i])
-        
-        return response
+            initial_date = request.GET.get('INICIAL')
+            if not len(initial_date):
+                initial_date = Monitoring.objects.all().order_by('id')[0].created.date().__str__()
+            final_date = request.GET.get('FINAL')
+            if not len(final_date):
+                final_date = Monitoring.objects.all().order_by('-id')[0].created.date().__str__()
+
+            response = HttpResponse(content_type='text/csv')
+            response['Content-Disposition'] = 'attachment; filename="dataset.csv"'
+
+            writer = csv.writer(response)
+            writer.writerow(['date','value'])
+            for i in range(1,32):
+                writer.writerow(['2019-03-{}'.format(i),1.2**i])
+            
+            return response
 
 class GraphEvolution(mixins.LoginRequiredMixin, generic.TemplateView):
     template_name = 'evolution/graph_evolution.html'
