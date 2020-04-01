@@ -66,13 +66,15 @@ class ProfileCreationForm(forms.ModelForm):
             'birth_date': forms.DateInput(format='%d/%m/%Y', attrs={'type': 'date'}),
         }
 
-
 class AddressForm(forms.ModelForm):
     class Meta:
         model = models.Address
         exclude = ['primary']
         widgets = {
             'postal_code': forms.TextInput(attrs={'class': 'postal-code-field'}),
+            'street_name': forms.TextInput(attrs={'class': 'street-name-field'}),
+            'city': forms.TextInput(attrs={'class': 'city-field'}),
+            'neighbourhood': forms.TextInput(attrs={'class': 'neighbourhood-field'}),
             'complement': forms.Textarea(attrs={'rows': 2}),
             'profile': forms.HiddenInput(),
         }
@@ -80,6 +82,7 @@ class AddressForm(forms.ModelForm):
             'people': 'Número de pessoas residindo nesse endereço'
         }
 
+AddressInlineFormset = inlineformset_factory(models.Profile, model=models.Address, extra=1, form=AddressForm, can_delete=False)
 
 class ProfileForm(forms.ModelForm):
     class Meta:

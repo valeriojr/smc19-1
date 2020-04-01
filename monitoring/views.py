@@ -103,10 +103,40 @@ class ProfileCreate(mixins.LoginRequiredMixin, generic.CreateView):
     template_name = 'monitoring/new_profile.html'
     success_url = reverse_lazy('monitoring:index')
 
+    def get_context_data(self, **kwargs):
+        context = super(ProfileCreate, self).get_context_data(**kwargs)
+
+        if self.request.POST:
+            context['primary_address_form'] = forms.AddressInlineFormset(self.request.POST)
+        else:
+            context['primary_address_form'] = forms.AddressInlineFormset()
+
+        return context
+
     def form_valid(self, form):
+        context = self.get_context_data()
+
+        self.object = form.save(commit=True)
+        address_form = context['primary_address_form']
+        address = address_form.save(commit=False)[0]
+        address.profile = self.object
+
+        if address_form.is_valid():
+            if address.profile.address_set.count() == 1:
+                address.primary = True
+
+            utils.create_log(self.request, 'C', 'AD')
+            address.save()
+        else:
+            print(address_form.errors)
+            return self.form_invalid(form)
+
         utils.create_log(self.request, 'C', 'PR')
         return super(ProfileCreate, self).form_valid(form)
 
+    def form_invalid(self, form):
+        messages.error(self.request, form.errors)
+        return super(ProfileCreate, self).form_invalid(form)
 
 class ProfileDetail(mixins.LoginRequiredMixin, generic.DetailView):
     model = models.Profile
@@ -174,7 +204,7 @@ class AddressCreate(mixins.LoginRequiredMixin, generic.CreateView):
         self.object = form.save(commit=True)
         if self.object.profile.address_set.count() == 1:
             self.object.primary = True
-        self.object.save()
+            self.object.save()
 
         utils.create_log(self.request, 'C', 'AD')
         return super(AddressCreate, self).form_valid(form)

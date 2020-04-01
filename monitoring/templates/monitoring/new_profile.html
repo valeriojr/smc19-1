@@ -4,11 +4,16 @@
 {% load crispy_forms_filters %}
 
 {% block content %}
-    <form onsubmit="f()" method="post">{% csrf_token %}
+    <form method="post">{% csrf_token %}
         {{ form|crispy }}
+        <hr>
+        <h4>Endereço principal</h4>
+        {{ primary_address_form|crispy }}
+        {{ primary_address_form.management_form }}
         <div class="form-row justify-content-end">
             <div class="form-group"><input type="submit" class="btn btn-primary" value="Cadastrar paciente"></div>
         </div>
+
     </form>
     <script>
         $("#id_birth_date").on('change', () => {
@@ -21,4 +26,6 @@
         });
 
     </script>
+
+    <script src="{% static 'scripts/calc_cep.js' %}"></script>
 {% endblock %}
