@@ -3,6 +3,7 @@ from django.http import HttpResponseRedirect
 from django.urls import reverse_lazy, reverse
 from django.views import generic
 from django.shortcuts import  redirect
+
 from . import forms
 
 
@@ -29,5 +30,6 @@ class SignUp(generic.CreateView):
         elif (user.user_profile == 'AD') and (health_center != user.health_center):#tentou criar usuário de outra unidade
             messages.error(self.request, "Você não pode criar usuários de outras unidades.")
         else:
+            form.save()
             messages.success(self.request, "Usuário criado com sucesso.")
         return redirect('accounts:sign-up')

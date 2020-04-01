@@ -32,7 +32,7 @@ class Account(AbstractUser):
     first_name = None
     last_name = None
     cpf = models.CharField(verbose_name='CPF', max_length=11, unique=True, validators=[validators.validate_cpf])
-    user_profile = models.CharField(verbose_name='Tipo de usuário', max_length=2, choices = choices.user_profiles, default='AU')
+    user_profile = models.CharField(verbose_name='Tipo de usuário', max_length=2, choices = choices.user_profiles, default='SS')
     health_center = models.ForeignKey(HealthCenter,verbose_name='Unidade de Saúde', on_delete= models.CASCADE, blank=True, null=True)
 
     USERNAME_FIELD = 'cpf'
