@@ -76,6 +76,11 @@ class Monitoring(models.Model):
     created = models.DateTimeField(auto_now_add=True)
 
 
+    def save(self, force_insert=False, force_update=False, using=None,
+             update_fields=None):
+        self.update_profile_status()
+        super(Monitoring, self).save(force_insert, force_update, using, update_fields)
+
     def update_profile_status(self):
         if self.result == 'PO':
             self.profile.status = 'C'

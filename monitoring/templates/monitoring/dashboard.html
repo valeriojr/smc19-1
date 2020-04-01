@@ -3,10 +3,39 @@
 {% load static %}
 
 {% block content %}
+    <style>
+        .tooltip {
+            pointer-events: none;
+            position: absolute;
+        }
+
+        .arc.dimmed {
+            opacity: 0.5;
+        }
+
+        .arc path {
+            opacity: 75%;
+        }
+
+        .arc text {
+            opacity: 100%;
+        }
+
+        .arc:hover path {
+            opacity: 50%;
+        }
+
+        .arc.active:hover path {
+            opacity: 100% !important;
+        }
+
+    </style>
+
     <div class="row">
-        <svg id="pie-1" class="col-sm-12 col-md-6 col-lg-4 p-3 border shadow-sm" style="height: 300px"></svg>
-        <svg id="pie-2" class="col-sm-12 col-md-6 col-lg-4 border shadow-sm" style="height: 300px"></svg>
-        <div id="forecast" class="text-center bg-dark text-light  rounded col-sm-12 col-md-6 col-lg-4" style="height: 300px">
+        <svg id="bar-1" class="col-sm-12 col-md-6 col-lg-4 p-3 border shadow-sm" style="height: 300px"></svg>
+        <svg id="pie-1" class="pie-chart col-sm-12 col-md-6 col-lg-4 border shadow-sm mx-auto" style="height: 300px"></svg>
+        <div id="forecast" class="text-center bg-dark text-light  rounded col-sm-12 col-md-6 col-lg-4"
+             style="height: 300px">
             <p>Previsão para os próximos 4 dias</p>
             <table class="table table-dark mb-0">
                 <thead>
@@ -60,26 +89,31 @@
         const stats = JSON.parse(document.getElementById("stats").textContent);
         const total = stats.total;
 
-        barChart("#pie-1", [
-            {label: "Suspeitos", value: total.suspect_cases},
-            {label: "Confirmados", value: total.confirmed_cases},
-            {label: "Mortes", value: total.deaths},
-            {label: "Recuperados", value: total.recovered || 0}
-        ], {
-            title: "Casos de COVID-19 em Alagoas",
-            colors: ["khaki", "salmon", "black", "lightgreen"],
-            xAxis: {label: "Status",},
-            yAxis: {label: "Casos"},
-        });
-        pieChart("#pie-2", [
-            {label: "RETs disponíveis", value: 29},
-            {label: "RETs ocupados", value: 10},
-            {label: "UTIs disponíveis", value: 17},
-            {label: "UTIs ocupados", value: 17},
-        ], {
-            title: "Ocupação de leitos",
-            colors: ["lightgreen", "khaki", "salmon", "firebrick"],
-            innerRadius: 30,
-        })
+        function draw() {
+            barChart("#bar-1", [
+                {label: "Suspeitos", value: total.suspect_cases},
+                {label: "Confirmados", value: total.confirmed_cases},
+                {label: "Mortes", value: total.deaths},
+                {label: "Recuperados", value: total.recovered || 0}
+            ], {
+                title: "Casos de COVID-19 em Alagoas",
+                colors: ["khaki", "salmon", "black", "lightgreen"],
+                xAxis: {label: "Status",},
+                yAxis: {label: "Casos"},
+            });
+            pieChart("#pie-1", [
+                {label: "RETs disponíveis", value: 29},
+                {label: "RETs ocupados", value: 10},
+                {label: "UTIs disponíveis", value: 17},
+                {label: "UTIs ocupados", value: 17},
+            ], {
+                title: "Ocupação de leitos",
+                colors: ["lightgreen", "khaki", "salmon", "firebrick"],
+                innerRadius: 30,
+            });
+        }
+
+        draw();
+        window.addEventListener("resize", draw);
     </script>
 {% endblock %}
