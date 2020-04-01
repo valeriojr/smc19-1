@@ -40,9 +40,12 @@
                 <a class="nav-item nav-link" href="{% url 'monitoring:index' %}">Atendimento <span class="sr-only">(current)</span></a>
                 <a class="nav-item nav-link" href="{% url 'monitoring:map' %}">Mapa</a>
                 <a class="nav-item nav-link" href="{% url 'prediction:prediction_hub' %}">Previsão de Leitos</a>
-                <a class="nav-item nav-link" href="{% url 'evolution:graph_evolution' %}">Gráfico de evolução</a>
+                <a class="nav-item nav-link" href="{% url 'evolution:graph_evolution' %}">Gráfico de Evolução</a>
                 <a class="nav-item nav-link" href="{% url 'monitoring:request' %}">Pedidos</a>
                 <a class="nav-item nav-link" href="{% url 'monitoring:dashboard' %}">Dashboard</a>
+                {% if user.user_profile == 'AD' or user.user_profile == 'SS'%}
+                <a class="nav-item nav-link" href="{% url 'accounts:sign-up' %}">Criar Usuários</a>
+                {% endif %}
                 <a class="btn btn-primary" href="{% url 'logout' %}">Sair</a>
             </div>
         </div>
