@@ -3,56 +3,12 @@
 {% block content %}
 <script src="https://d3js.org/d3-scale-chromatic.v1.min.js"></script>
 
-<h1>Previsão de Leitos</h1>
+<h1>Informações da Unidade de Saúde</h1>
 
-<div class="card">
-    <div class="card-header">
-        Formulário de Ocupação Diária
-    </div>
-    <div class="card-body">
-        <div class="row">
-            <div class="col-8">
-                <label class="sr-only" for="inlineFormInputGroup">Username</label>
-                <div class="input-group mb-2">
-                    <div class="input-group-prepend">
-                        <div class="input-group-text">Nome da Unidade de Saúde</div>
-                    </div>
-                    <select class="form-control" id="uf_id" name="uf">
-                        <option>SAMU - Central Regional de Maceió</option>
-                        <option>SAMU - Central Regional de Arapiraca</option>
-                        <option>Hospital Geral do Estado Professor Osvaldo Brandão Vilela</option>
-                    </select>
-                </div>
-                <div class="input-group mb-2">
-                    <div class="input-group-prepend">
-                        <span class="input-group-text" id="basic-addon3">Capacidade da Unidade de Saúde</span>
-                    </div>
-                    <input type="text" class="form-control" id="basic-url" aria-describedby="basic-addon3">
-                </div>
-                <button type="button" class="btn btn-success btn-lg">Confirmar</button>
-            </div>
-            <div class="col-4">
-                <div class="card">
-                    <div class="card-header">Disponibilidade de Leitos</div>
-                    <div class="card-body">
-                        <div class="input-group mb-2">
-                            <input type="text" class="form-control" placeholder="vagas" aria-label="Leitos de UTI"
-                                aria-describedby="basic-addon2">
-                            <div class="input-group-append">
-                                <span class="input-group-text" id="basic-addon2">UTI</span>
-                            </div>
-                        </div>
-                        <div class="input-group mb-2">
-                            <input type="text" class="form-control" placeholder="vagas" aria-label="Leitos Gerais"
-                                aria-describedby="basic-addon2">
-                            <div class="input-group-append">
-                                <span class="input-group-text" id="basic-addon2">Normais</span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
+<form method="POST">
+    {% csrf_token %}
+    {{ form.as_p }}
+</form>
+
+
 {% endblock content %}
