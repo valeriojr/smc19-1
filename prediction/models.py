@@ -14,7 +14,7 @@ class HealthCenter(models.Model):
 class HealthCenterStatus(models.Model):
     health_center = models.ForeignKey(HealthCenter, on_delete=models.CASCADE)
     
-    date = models.DateTimeField(verbose_name='Data da atualização')
+    date = models.DateTimeField(verbose_name='Data da atualização', auto_now_add=True)
     
     beds = models.PositiveIntegerField(verbose_name='Leitos RET total', blank=False)
     occupied_beds = models.PositiveIntegerField(verbose_name='Leitos RET ocupados', blank=False)
@@ -25,9 +25,9 @@ class HealthCenterStatus(models.Model):
     respirators = models.PositiveIntegerField(verbose_name='Respiradores total', blank=False)
     occupied_respirators = models.PositiveIntegerField(verbose_name='Respiradores ocupados', blank=False)
 
-    necessary_beds = models.PositiveIntegerField(verbose_name='Leitos RET necessários', blank=False)
-    necessary_icus = models.PositiveIntegerField(verbose_name='Leitos UTIs necessários', blank=False)
-    necessary_respirators = models.PositiveIntegerField(verbose_name='Respiradores necessários', blank=False)
+    necessary_beds = models.PositiveIntegerField(verbose_name='Leitos RET necessários', blank=True, default=0)
+    necessary_icus = models.PositiveIntegerField(verbose_name='Leitos UTIs necessários', blank=True, default=0)
+    necessary_respirators = models.PositiveIntegerField(verbose_name='Respiradores necessários', blank=True, default=0)
 
     def __str__(self):
         return 'Status da unidade ' + str(self.health_center.center_name) + ' em ' + str(self.date) 

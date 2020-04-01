@@ -1,0 +1,15 @@
+{% extends 'base.html' %}
+
+{% load static %}
+{% load crispy_forms_filters %}
+
+{% block content %}
+    <h4>Unidade: {{ request.user.health_center.center_name }} - Data: {% now 'd/m/y' %} </h4>
+    <form method="post">
+        {% csrf_token %}
+        {{ form|crispy }}
+        <div class="form-row justify-content-end">
+            <div class="form-group"><input type="submit" class="btn btn-primary" value="Atualizar Informações"></div>
+        </div>
+    </form>
+{% endblock %}

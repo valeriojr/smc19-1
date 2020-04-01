@@ -113,7 +113,7 @@ function pieChart(selector, data, options) {
     const width = (options.width === undefined) ?
         totalWidth - (margin.left + margin.right) : options.width;
     const height = (options.height === undefined) ?
-        totalHeight -  (2 * margin.top + margin.bottom) : options.height;
+        totalHeight - (2 * margin.top + margin.bottom) : options.height;
     const outerRadius = options.outerRadius === undefined ?
         (Math.min(width, height) - (2 * margin.top + margin.bottom)) / 2 : options.outerRadius;
 
@@ -132,17 +132,37 @@ function pieChart(selector, data, options) {
     const percentage = d3.scaleLinear().range([0, 1]).domain([0, d3.sum(data, function (d) {
         return d.value;
     })]);
+    const tooltip = d3.select("body").append("div")
+        .attr("class", "tooltip text-light bg-dark rounded p-2")
+        .style("opacity", 0);
+
     const svg = d3.select(selector)
         .attr("width", width + 2 * (margin.left + margin.right))
         .attr("height", height + 2 * (margin.left + margin.right))
         .append("g")
-        .attr("transform", `translate(${outerRadius + margin.left}, ${outerRadius + 2 * (margin.top + (options.title ? margin.top : 0))})`);
+        .attr("transform", `translate(${outerRadius + margin.left}, ${outerRadius + 2 * (margin.top + (options.title ? margin.top : 0))})`)
 
     const g = svg.selectAll("arc")
         .data(pie(data))
         .enter()
         .append("g")
-        .attr("class", options.arcCssClass);
+        .attr("class", "arc")
+        .on("mouseover", function (d) {
+            d3.select(this)
+                .classed("active", true);
+            tooltip.transition()
+                .style("opacity", .9);
+            tooltip.html(`${d.value} leitos`)
+                .style("left", `${d3.event.pageX}px`)
+                .style("top", `${d3.event.pageY}px`);
+        })
+        .on("mouseout", function (d) {
+            d3.select(this)
+                .classed("active", false);
+            tooltip.transition()
+                .style("opacity", 0);
+            tooltip.html("");
+        });
 
     g.append("path")
         .attr("d", arc)
