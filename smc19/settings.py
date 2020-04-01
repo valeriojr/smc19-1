@@ -30,7 +30,8 @@ DEBUG = True
 ALLOWED_HOSTS = [
     '192.168.92.128',
     'smc19.herokuapp.com',
-    '127.0.0.1'
+    '127.0.0.1',
+    'smc19-272719.appspot.com'
 ]
 
 # Application definition
