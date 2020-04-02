@@ -46,6 +46,7 @@ class HealthCenterStatusCreate(mixins.LoginRequiredMixin, generic.CreateView):
         init['health_center'] = self.request.user.health_center
         return init
 
+<<<<<<< HEAD
     def form_valid(self, form):      
         query_set = []
 
@@ -62,4 +63,9 @@ class HealthCenterStatusCreate(mixins.LoginRequiredMixin, generic.CreateView):
         utils.create_log(self.request, 'C', 'RE')
         messages.success(self.request, 'Registro diário da unidade atualizado.')
 
+=======
+    def form_valid(self, form):
+        utils.create_log(self.request, 'C', 'HC')
+        messages.success(self.request, 'Status da unidade atualizado.')
+>>>>>>> 9bf0d405a630bb04ca80dda59bb19882186cc7b2
         return super(HealthCenterStatusCreate, self).form_valid(form)
