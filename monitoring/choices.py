@@ -104,4 +104,5 @@ model_choices = (
     ('SY','SYMPTOM'),
     ('TR','TRIP'),
     ('RE','REQUEST'),
+    ('HC', 'HEALTH CARE STATUS')
 )

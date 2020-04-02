@@ -34,6 +34,6 @@ class HealthCenterStatusCreate(mixins.LoginRequiredMixin, generic.CreateView):
         return init
 
     def form_valid(self, form):
-        utils.create_log(self.request, 'C', 'RE')
+        utils.create_log(self.request, 'C', 'HC')
         messages.success(self.request, 'Status da unidade atualizado.')
         return super(HealthCenterStatusCreate, self).form_valid(form)
