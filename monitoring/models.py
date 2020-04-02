@@ -140,11 +140,10 @@ class Request(models.Model):
 
 
 class City(models.Model):
-    state = models.ForeignKey(State, on_delete=models.CASCADE)
     name = models.CharField(max_length=50)
 
     def __str__(self):
-        return self.state.__str__() + ', ' + self.name
+        return self.name
 
 class Neighbourhood(models.Model):
     city = models.ForeignKey(City, on_delete=models.CASCADE)

@@ -6,7 +6,7 @@ from django.contrib.auth import mixins
 import csv
 from django.http import HttpResponse, JsonResponse
 
-from monitoring.models import State,City,Neighbourhood, Monitoring
+from monitoring.models import City,Neighbourhood, Monitoring
 
 from django.utils import dateparse, timezone
 
