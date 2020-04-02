@@ -14,7 +14,7 @@ class HealthCenter(models.Model):
 class HealthCenterStatus(models.Model):
     health_center = models.ForeignKey(HealthCenter, on_delete=models.CASCADE)
     
-    date = models.DateTimeField(verbose_name='Data da atualização', auto_now_add=True)
+    date = models.DateField(verbose_name='Data da atualização', auto_now_add=True)
     
     beds = models.PositiveIntegerField(verbose_name='Leitos RET total', blank=False)
     occupied_beds = models.PositiveIntegerField(verbose_name='Leitos RET ocupados', blank=False)

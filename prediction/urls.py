@@ -5,5 +5,6 @@ from . import views
 
 app_name = 'prediction'
 urlpatterns = [
-    path('', views.HealthCenterStatusCreate.as_view(), name='prediction_hub'),
+    path('', views.HealthCenterStatusList.as_view(), name='current_status'),
+    path('status_create', views.HealthCenterStatusCreate.as_view(), name='status_create')
 ]
