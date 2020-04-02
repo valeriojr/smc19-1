@@ -89,6 +89,8 @@ status = (
     ('C', 'Confirmado'),
     ('M', 'Morto'),
     ('I', 'Imune'),
+    ('H', 'Hospitalizado'),
+    ('U', 'UTI')
 )
 
 action_choices = (

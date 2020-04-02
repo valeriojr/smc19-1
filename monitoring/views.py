@@ -34,7 +34,7 @@ class Index(mixins.LoginRequiredMixin, generic.ListView):
         context = super(Index, self).get_context_data(**kwargs)
 
         context['params'] = self.request.GET
-        context['monitorings'] = models.Monitoring.objects
+        context['monitorings'] = models.Monitoring.objects.all().order_by('-created')[:20]
         context['monitoring_create_form'] = forms.MonitoringForm()
         symptoms_initial = [{'symptom': symptom[0], 'label': symptom[1]} for symptom in choices.symptoms]
         context['symptom_formset'] = forms.SymptomInlineFormset(initial=symptoms_initial)
