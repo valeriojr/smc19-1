@@ -13,7 +13,7 @@ from . import choices
 
 class Profile(models.Model):
     class Meta:
-        ordering = ['full_name']
+        ordering = ['-id']
 
     full_name = models.CharField(verbose_name='Nome completo', max_length=100, blank=True, default='')
     mother_name = models.CharField(verbose_name='Nome da mãe', max_length=100, blank=True, default='')
