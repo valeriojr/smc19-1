@@ -52,7 +52,7 @@ class Address(models.Model):
     street_name = models.CharField(verbose_name='Logradouro', max_length=100, blank=True, default='')
     number = models.PositiveIntegerField(verbose_name='Número', blank=True, null=True, default=0)
     complement = models.CharField(verbose_name='Complemento', max_length=100, blank=True, default='')
-    city = models.CharField(verbose_name='Cidade', max_length=100, default='')
+    city = models.CharField(verbose_name='Cidade', max_length=30, default='', choices=choices.cities)
     people = models.PositiveIntegerField(verbose_name='Quantidade de pessoas', blank=True, null=True, default=1)
 
     def save(self, force_insert=False, force_update=False, using=None,

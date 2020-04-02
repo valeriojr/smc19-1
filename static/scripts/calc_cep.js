@@ -11,9 +11,9 @@ function addressQuery(form, input) {
                 const response = JSON.parse(xhr.responseText);
                 console.log(xhr.responseText);
 
-                $('.street-name-field').val(response.logradouro)
-                $('.neighbourhood-field').val(response.bairro)
-                $('.city-field').val(response.cidade)
+                $('.street-name-field').val(response.logradouro);
+                $('.neighbourhood-field').val(response.bairro);
+                $('.city-field').val(response.cidade);
 
                 // form.find(`#id_street_name`).val(response.logradouro);
                 // form.find(`#id_neighbourhood`).val(response.bairro);
