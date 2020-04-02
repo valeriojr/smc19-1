@@ -4,6 +4,7 @@ monitoring/migrations
 smcovid19/migrations
 evolution/migrations
 prediction/migrations
+mathmodels/migrations
 
 # ---> Python
 # Byte-compiled / optimized / DLL files
@@ -12,6 +13,8 @@ __pycache__/
 *$py.class
 .idea/
 
+# vim
+*.swp
 
 # vscode files
 .vscode/

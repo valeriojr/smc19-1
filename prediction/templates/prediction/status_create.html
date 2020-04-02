@@ -4,7 +4,12 @@
 {% load crispy_forms_filters %}
 
 {% block content %}
-    <h4>Unidade: {{ request.user.health_center.center_name }} - Data: {% now 'd/m/y' %} </h4>
+    <h2>Novo Registro de Unidade</h2>
+    <ul>
+        {% for status in health_center_status %}
+            <li>{{ status.health_center.center_name }}</li>
+        {% endfor %}
+    </ul>
     <form method="post">
         {% csrf_token %}
         {{ form|crispy }}

@@ -12,6 +12,9 @@ from . import choices
 # Create your models here.
 
 class Profile(models.Model):
+    class Meta:
+        ordering = ['-id']
+
     full_name = models.CharField(verbose_name='Nome completo', max_length=100, blank=True, default='')
     mother_name = models.CharField(verbose_name='Nome da mãe', max_length=100, blank=True, default='')
     birth_date = models.DateField(verbose_name='Data de nascimento', default='',
@@ -75,6 +78,9 @@ class Address(models.Model):
 
 
 class Monitoring(models.Model):
+    class Meta:
+        ordering = ['-created']
+
     profile = models.ForeignKey(Profile, models.CASCADE)
     tested = models.BooleanField(verbose_name='Já foi testado', blank=True, default=False)
     date = models.DateField(verbose_name='Data', auto_now_add=True)
@@ -82,7 +88,6 @@ class Monitoring(models.Model):
     virus_exposure = BitField(verbose_name='Exposição COVID-19', flags=choices.exposure, blank=True, default=0)
     result = models.CharField(verbose_name='Resultado do exame', max_length=2, choices=choices.results, default='SR')
     created = models.DateTimeField(auto_now_add=True)
-
 
     def save(self, force_insert=False, force_update=False, using=None,
              update_fields=None):
@@ -140,11 +145,10 @@ class Request(models.Model):
 
 
 class City(models.Model):
-    state = models.ForeignKey(State, on_delete=models.CASCADE)
     name = models.CharField(max_length=50)
 
     def __str__(self):
-        return self.state.__str__() + ', ' + self.name
+        return self.name
 
 class Neighbourhood(models.Model):
     city = models.ForeignKey(City, on_delete=models.CASCADE)
