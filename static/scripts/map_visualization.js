@@ -1366,16 +1366,16 @@ function plotMap(territoryData, healthCentersOptions) {
         .append("circle")
         .attr("class", "mark")
         .attr("r", circle_radius)
-        .style("fill", "red")
+        .style("fill", "white")
         .attr("transform", function (d) {
             return "translate(" + projection(d.geometry.coordinates) + ")";
         })
         .on("mouseover", function (d) {
             d3.select(this)
                 .transition()
-                .duration(750)
+                .duration(50)
                 .attr("r", function (d) {
-                    return 3 * circle_radius;
+                    return 2 * circle_radius;
                 });
 
             tooltipMouseover(this, d, healthCentersOptions);
@@ -1383,7 +1383,7 @@ function plotMap(territoryData, healthCentersOptions) {
         .on("mouseout", function (d) {
             d3.select(this)
                 .transition()
-                .duration(750)
+                .duration(50)
                 .attr("r", function (d) {
                     return circle_radius;
                 });

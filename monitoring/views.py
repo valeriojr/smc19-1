@@ -122,8 +122,7 @@ class ProfileCreate(mixins.LoginRequiredMixin, generic.CreateView):
         address.profile = self.object
 
         if address_form.is_valid():
-            if address.profile.address_set.count() == 1:
-                address.primary = True
+            address.primary = True
 
             utils.create_log(self.request, 'C', 'AD')
             address.save()
@@ -137,6 +136,7 @@ class ProfileCreate(mixins.LoginRequiredMixin, generic.CreateView):
     def form_invalid(self, form):
         messages.error(self.request, form.errors)
         return super(ProfileCreate, self).form_invalid(form)
+
 
 class ProfileDetail(mixins.LoginRequiredMixin, generic.DetailView):
     model = models.Profile
@@ -180,6 +180,7 @@ class ProfileUpdate(mixins.LoginRequiredMixin, generic.UpdateView):
     def get_success_url(self):
         return reverse('monitoring:profile-detail', args=[self.kwargs['pk']])
 
+
 class ProfileStatusUpdate(mixins.LoginRequiredMixin, generic.UpdateView):
     model = models.Profile
     form_class = forms.ProfileStatusForm
@@ -201,11 +202,6 @@ class AddressCreate(mixins.LoginRequiredMixin, generic.CreateView):
     form_class = forms.AddressForm
 
     def form_valid(self, form):
-        self.object = form.save(commit=True)
-        if self.object.profile.address_set.count() == 1:
-            self.object.primary = True
-            self.object.save()
-
         utils.create_log(self.request, 'C', 'AD')
         return super(AddressCreate, self).form_valid(form)
 
@@ -429,6 +425,7 @@ class RequestCreate(mixins.LoginRequiredMixin, generic.CreateView):
     def form_valid(self, form):
         utils.create_log(self.request, 'C', 'RE')
         return super(RequestCreate, self).form_valid(form)
+
 
 class RequestIndex(mixins.LoginRequiredMixin, generic.ListView):
     template_name = 'monitoring/request_index.html'

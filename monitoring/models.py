@@ -52,6 +52,13 @@ class Address(models.Model):
     city = models.CharField(verbose_name='Cidade', max_length=100, default='')
     people = models.PositiveIntegerField(verbose_name='Quantidade de pessoas', blank=True, null=True, default=1)
 
+    def save(self, force_insert=False, force_update=False, using=None,
+             update_fields=None):
+        if self.profile.address_set.count() == 0:
+            self.primary = True
+
+        return super(Address, self).save(force_insert, force_update, using, update_fields)
+
     def delete(self, using=None, keep_parents=False):
         if self.primary:
             for address in self.profile.address_set.exclude(id=self.id).order_by('type'):
@@ -59,6 +66,7 @@ class Address(models.Model):
                     address.primary = True
                     address.save()
                     break
+
         super(Address, self).delete(using, keep_parents)
 
     def __str__(self):
