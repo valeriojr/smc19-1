@@ -14,30 +14,22 @@ from django.utils import dateparse, timezone
 class DataGraphEvolution(mixins.LoginRequiredMixin, View):
     def get(self, request):
         if 'popular_select' in request.GET:
-            state = request.GET.get('UF','')
             city = request.GET.get('CIDADE','')
             neighbourhood = request.GET.get('BAIRRO','')
 
             TODOS = [{'value':'TODOS', 'text':'TODOS'}]
             FETCHED = []
 
-            if state == 'ELEMENTOS':
-                FETCHED = [{'value':u.name, 'text': u.name} for u in State.objects.all()]
-                return JsonResponse(TODOS + FETCHED, safe=False)
-
-            elif city == 'ELEMENTOS':
-                state = get_object_or_404(State, name=state)
-                FETCHED = [{'value':u.name, 'text': u.name} for u in get_list_or_404(City,state=state)]
+            if city == 'ELEMENTOS':
+                FETCHED = [{'value':u.name, 'text': u.name} for u in City.objects.all()]
 
             elif neighbourhood == 'ELEMENTOS':
-                state = get_object_or_404(State, name=state)
-                city = get_object_or_404(City, state=state, name=city)
+                city = get_object_or_404(City, name=city)
                 FETCHED = [{'value':u.name, 'text': u.name} for u in get_list_or_404(Neighbourhood,city=city)]
             
             return JsonResponse(TODOS + FETCHED, safe=False)
         
         if 'ver_grafico' in request.GET:
-            state = request.GET.get('UF','')
             city = request.GET.get('CIDADE','')
             neighbourhood = request.GET.get('BAIRRO','')
             status = request.GET.get('STATUS','')
