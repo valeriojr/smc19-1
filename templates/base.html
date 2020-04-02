@@ -39,7 +39,7 @@
             <div class="navbar-nav">
                 <a class="nav-item nav-link" href="{% url 'monitoring:index' %}">Atendimento <span class="sr-only">(current)</span></a>
                 <a class="nav-item nav-link" href="{% url 'monitoring:map' %}">Mapa</a>
-                <a class="nav-item nav-link" href="{% url 'prediction:prediction_hub' %}">Previsão de Leitos</a>
+                <a class="nav-item nav-link" href="{% url 'prediction:current_status' %}">Previsão de Leitos</a>
                 <!-- <a class="nav-item nav-link" href="{% url 'evolution:graph_evolution' %}">Gráfico de Evolução</a>-->
                 <a class="nav-item nav-link" href="{% url 'mathmodels:sir_seir_math_model' %}">Modelos Matemáticos</a>
                 <a class="nav-item nav-link" href="{% url 'monitoring:request' %}">Pedidos</a>
@@ -64,5 +64,6 @@
     {% endfor %}
     {% block content %}{% endblock %}
 </div>
+<p align="center"><a href="https://github.com/LED-UFAL-Covid-19/smc19/raw/master/projeto/covid-19_alagoas.pdf" target="_blank">Sobre o projeto</a></p>
 </body>
 </html>
