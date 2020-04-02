@@ -1,0 +1,48 @@
+{% extends "base.html" %}
+
+{% load static %}
+{% load crispy_forms_filters %}
+
+{% block content %}
+
+<h1>Histórico de Lotação</h1>
+<h3>{{ request.user.health_center.center_name }}</h3>
+<table class="table">
+    <thead>
+        <tr>
+            <th scope="col">RET</th>
+            <th scope="col">UTI</th>
+            <th scope="col">RES</th>
+            <th scope="col">RET OCUPADO</th>
+            <th scope="col">UTI OCUPADO</th>
+            <th scope="col">RES OCUPADO</th>
+            <th scope="col">DATA</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for status in health_center_status %}
+        <tr>
+            <td>{{ status.beds }}</td>
+            <td>{{ status.icus }}</td>
+            <td>{{ status.respirators }}</td>
+            <td>{{ status.occupied_beds }}</td>
+            <td>{{ status.occupied_icus }}</td>
+            <td>{{ status.occupied_respirators }}</td>
+            <td>{{ status.date }}</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+<div class="row">
+    <div class="col">
+        <form>
+            <button class="btn btn-primary" formaction="{% url 'prediction:status_create' %}">Novo Registro</button>
+        </form>
+    </div>
+    <div class="col">
+        <form>
+            <button class="btn btn-secondary" formaction="{% url 'prediction:status_create' %}">Editar Registro</button>
+        </form>
+    </div>
+</div>
+{% endblock %}
