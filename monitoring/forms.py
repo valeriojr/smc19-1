@@ -90,7 +90,6 @@ class ProfileForm(forms.ModelForm):
         fields = '__all__'
         widgets = {
             'birth_date': forms.DateInput(format='%Y-%m-%d', attrs={'type': 'date'}),
-            'status': forms.HiddenInput()
         }
 
 class ProfileStatusForm(forms.ModelForm):
