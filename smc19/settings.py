@@ -142,6 +142,7 @@ if DEBUG:
     STATIC_URL = '/static/'
 else:
     STATIC_URL = 'https://adrianobarbosa.xyz/smc19-static/'
+    STATIC_ROOT = 'static/'
 
 # Extra places for collectstatic to find static files.
 
