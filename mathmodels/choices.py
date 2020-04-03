@@ -1,5 +1,5 @@
 model_type = (
-    ('sir', 'SIR'),
+    ('seir', 'SEIR c/ dist.'),
     ('basic_seir', 'SEIR básico'),
-    ('seir', 'SEIR'),
+    ('sir', 'SIR'),
 )

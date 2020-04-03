@@ -21,7 +21,7 @@ class SirSeirMathModel(mixins.LoginRequiredMixin, generic.TemplateView):
     template_name = 'mathmodels/sir_seir_math_model.html'
 
     def sir(self, N, S0, I0, R0, beta, gamma, days):
-        fig = plt.figure(figsize=(16, 8), edgecolor='k')
+        fig = plt.figure(figsize=(8, 4), edgecolor='k')
 
         S, I, R = mathmodels.compute_sir(N=N, S0=N*S0, I0=N*I0, R0=N*R0, beta=beta, gamma=gamma, days=days)
         mathmodels.plot_sir(S, I, R, days)
@@ -29,15 +29,14 @@ class SirSeirMathModel(mixins.LoginRequiredMixin, generic.TemplateView):
         tmp = six.StringIO()
         fig.savefig(tmp, format='svg', bbox_inches='tight', dpi=250)
 
-        return tmp.getvalue()
+        return (tmp.getvalue(), np.max(I), np.argmax(I))
 
     def basic_seir(self, N, S0, E0, I0, R0, alpha, beta, gamma, days):
-        fig = plt.figure(figsize=(16, 8), edgecolor='k')
+        fig = plt.figure(figsize=(8, 4), edgecolor='k')
 
         t_max = days ## supus q é a quantidade de dias
         dt = 1
         t = np.linspace(0, t_max, int(t_max/dt) + 1)
-        N = N
         init_vals = S0, E0, I0, R0
         params = alpha, beta, gamma
 
@@ -47,10 +46,10 @@ class SirSeirMathModel(mixins.LoginRequiredMixin, generic.TemplateView):
         tmp = six.StringIO()
         fig.savefig(tmp, format='svg', bbox_inches='tight', dpi=250)
 
-        return tmp.getvalue()
+        return (tmp.getvalue(), np.max(I), np.argmax(I))
 
     def seir(self, N, S0, E0, I0, R0, alpha, beta, gamma, rho, days):
-        fig = plt.figure(figsize=(16, 8), edgecolor='k')
+        fig = plt.figure(figsize=(8, 4), edgecolor='k')
 
         t_max = days ## supus que é a quantidade de dias
         dt = 1
@@ -65,7 +64,7 @@ class SirSeirMathModel(mixins.LoginRequiredMixin, generic.TemplateView):
         tmp = six.StringIO()
         fig.savefig(tmp, format='svg', bbox_inches='tight', dpi=250)
 
-        return tmp.getvalue()
+        return (tmp.getvalue(), np.max(I), np.argmax(I))
 
     def get(self, request):
         form = forms.SirSeirForm(request.GET)
@@ -85,17 +84,19 @@ class SirSeirMathModel(mixins.LoginRequiredMixin, generic.TemplateView):
 
             if model == 'sir':
                 title = 'SIR'
-                graph = self.sir(N=N, S0=S0, I0=I0, R0=R0, beta=beta, gamma=gamma, days=days)
+                graph, max_infected, day_D = self.sir(N=N, S0=S0, I0=I0, R0=R0, beta=beta, gamma=gamma, days=days)
             elif model == 'basic_seir':
                 title = 'SEIR básico'
-                graph = self.basic_seir(N=N, S0=S0, E0=E0, I0=I0, R0=R0, alpha=alpha, beta=beta, gamma=gamma, days=days)
+                graph, max_infected, day_D = self.basic_seir(N=N, S0=S0, E0=E0, I0=I0, R0=R0, alpha=alpha, beta=beta, gamma=gamma, days=days)
             else:
-                title = 'SEIR'
-                graph = self.seir(N=N, S0=S0, E0=E0, I0=I0, R0=R0, alpha=alpha, beta=beta, gamma=gamma, rho=rho, days=days)
+                title = 'SEIR c/ dist. social'
+                graph, max_infected, day_D = self.seir(N=N, S0=S0, E0=E0, I0=I0, R0=R0, alpha=alpha, beta=beta, gamma=gamma, rho=rho, days=days)
 
             context = {
                 'form': form,
                 'graph': graph,
+                'max_infected': int(max_infected),
+                'day_D': day_D,
                 'title':title
             }
 
