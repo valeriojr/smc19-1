@@ -56,10 +56,21 @@ class HealthCenterStatusCreate(mixins.LoginRequiredMixin, generic.CreateView):
             )
 
         if len(query_set) > 0:
-            messages.error(self.request, 'O registro de hoje para esta unidade já está cadastrado. Para editar um registro, volte para página de Previsão de Leitos.')
+            messages.error(self.request, 'O registro de hoje para esta unidade já está cadastrado.')
             return super(HealthCenterStatusCreate, self).form_invalid(form)
         
         utils.create_log(self.request, 'C', 'RE')
         messages.success(self.request, 'Registro diário da unidade atualizado.')
 
         return super(HealthCenterStatusCreate, self).form_valid(form)
+
+def delete(request, pk):
+    query_set = models.HealthCenterStatus.objects.filter(pk=pk)
+    query_set[0].delete()
+    context = {
+        'health_center_status': models.HealthCenterStatus.objects.filter(
+            health_center__id=request.user.health_center.id
+        )
+    }
+    return render(request, 'prediction/current_status.html', context)
+
