@@ -59,6 +59,17 @@ class HealthCenterStatusCreate(mixins.LoginRequiredMixin, generic.CreateView):
             messages.error(self.request, 'O registro de hoje para esta unidade já está cadastrado.')
             return super(HealthCenterStatusCreate, self).form_invalid(form)
         
+        resource_list = [
+            (self.request.POST['occupied_beds'], self.request.POST['beds']),
+            (self.request.POST['occupied_icus'], self.request.POST['icus']),
+            (self.request.POST['occupied_respirators'], self.request.POST['respirators'])
+        ]
+
+        for occupied_resource, resource in resource_list:
+            if occupied_resource > resource:
+                messages.error(self.request, 'As quantidades de recursos ocupados não pode ser maior que a de recursos totais.')
+                return super(HealthCenterStatusCreate, self).form_invalid(form)
+
         utils.create_log(self.request, 'C', 'RE')
         messages.success(self.request, 'Registro diário da unidade atualizado.')
 
