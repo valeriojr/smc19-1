@@ -4,6 +4,7 @@ from django.db.models import Count, Q, Avg
 from django.http import HttpResponseRedirect
 from django.urls import reverse_lazy, reverse
 from django.views import generic
+from django.http import JsonResponse
 
 from monitoring import choices
 from . import forms
@@ -42,7 +43,6 @@ class Index(mixins.LoginRequiredMixin, generic.ListView):
 
         return context
 
-
 class Map(mixins.LoginRequiredMixin, generic.TemplateView):
     template_name = 'monitoring/map.html'
 
@@ -73,7 +73,6 @@ class Map(mixins.LoginRequiredMixin, generic.TemplateView):
 
         return context
 
-
 class Dashboard(mixins.LoginRequiredMixin, generic.TemplateView):
     template_name = 'monitoring/dashboard.html'
 
@@ -96,7 +95,16 @@ class Dashboard(mixins.LoginRequiredMixin, generic.TemplateView):
         return context
 
 
-# Profile
+#Profile
+class ProfileSearch(mixins.LoginRequiredMixin, generic.CreateView):
+    model = models.Profile
+    def get(self, request, *args, **kwargs):
+        search_term = self.kwargs['term']
+        profiles = list(models.Profile.objects.filter(Q(full_name__startswith=search_term) |
+                                                    Q(id_document__startswith=search_term) |
+                                                    Q(cpf__startswith=search_term) |
+                                                    Q(cns__startswith=search_term)).values())
+        return JsonResponse(profiles, safe=False)
 
 class ProfileCreate(mixins.LoginRequiredMixin, generic.CreateView):
     form_class = forms.ProfileForm

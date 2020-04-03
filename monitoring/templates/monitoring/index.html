@@ -13,10 +13,30 @@
                 </div>
 
                 <div class="modal-body">
+                    <!-- >Essa parte ficou aqui por que quando apertava o botão ele enviava o form<!-->
+                    <label for="id_profile_0" class=" requiredField">
+                       Paciente <span class="asteriskField">*</span>
+                    </label>
+                    <div class="form-inline mb-2">
+                        <input id="search-profile" class="form-control col-6 mr-2 " name="term"
+                           placeholder="Nome, CPF, RG...">
+                        <div class="col-4">
+                            <button id="search_profile_button" class="btn btn-secondary">Pesquisar</button>
+                        </div>
+                    </div>
                     <form id="monitoring-create-form" method="post"
                           action="{% url 'monitoring:monitoring-create' %}">
                         {% csrf_token %}
-                        {{ monitoring_create_form|crispy }}
+                        <div id="div_id_profile" class="form-group">
+                                <!-- aqui vem os profiles encontrados><!-->
+                                <div id="profiles">
+
+                                </div>
+                        </div>
+                        {{ monitoring_create_form.tested|as_crispy_field }}
+                        {{ monitoring_create_form.suspect|as_crispy_field }}
+                        {{ monitoring_create_form.virus_exposure|as_crispy_field }}
+                        {{ monitoring_create_form.result|as_crispy_field }}
                         <hr>
                         <h6>Sintomas</h6>
                         {{ symptom_formset.management_form }}
@@ -54,7 +74,6 @@
             <div class="col">
                 <input type="submit" class="btn btn-secondary" value="Pesquisar">
             </div>
-
         </form>
     </div>
 
@@ -135,4 +154,51 @@
             </table>
         </div>
     </div>
+
+    <script>
+        //faz a busca de pacientes pelo nome, cpf, rg... durante a criação de atendimetos
+        var div_profiles = $("#profiles");//aqui onde ele vai mostrar os pacientes encontrados
+        var button = $("#search_profile_button");//aqui o botão onde clicka pra buscar
+        var search_input = $("#search-profile");//aqui o valor informado pra busca
+
+        button.on('click', () => {
+            var term = search_input.val();
+            $.get("/pacientes/" + term +"/buscar", (profiles, status) => {
+
+                div_profiles.html("");
+
+                if (profiles.length == 0) {//não achou pacientes
+                    //Aqui é uns html pra deixar no padrão do crispy form...
+                    var div = $("<div class='form-check'></div>");
+                    var input = $('<input type="radio" class="form-check-input" name="profile" id="id_profile_1" hidden value="">');
+
+                    var span = $('<label for="id_profile_1" class="form-check-label"></label')
+                            .text("-----");
+
+                    div.append(input);
+                    div.append(span);
+
+                    div_profiles.append(div);
+                    div_profiles.html("Não foi encontrado pacientes.")
+                }
+                else {
+                    profiles.forEach( (profile) => {//achou pacientes
+                        //Aqui é uns html pra deixar no padrão do crispy form...
+                        var div = $("<div class='form-check'></div>");
+                        var input = $('<input type="radio" class="form-check-input" name="profile" id="id_profile_' +profile.id +' ">');
+
+                        var span = $('<label for="id_profile_' +profile.id +' " class="form-check-label"></label')
+                            .text(profile.full_name + ", cpf: "+profile.cpf);
+
+                        input.val(profile.id);
+                        div.append(input);
+                        div.append(span);
+
+                        div_profiles.append(div);
+                    });
+                }
+            })
+        });
+
+    </script>
 {% endblock %}
